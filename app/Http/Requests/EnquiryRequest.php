@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class EnquiryRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'name' => 'required|string',
+            'email' => 'email:rfc,dns|nullable',
+            'service' => 'required|exists:services,id',
+            'subject' => 'required',
+            'message' => 'required|min:10|max:500|',
+            'phone_no' => 'numeric|required|digits:10'
+        ];
+    }
+}

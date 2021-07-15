@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'Aswini' => 'அசுவினி (Aswini)',
+    'Bharani' => 'பரணி (Bharani)',
+    'Krithika' => 'கிருத்திகை (Krithika)',
+    'Rohini' => 'ரோகிணி (Rohini)',
+    'Mrigashirsha' => 'மிருகசிரீஷம் (Mrigashirsha)',
+    'Aardhra_Arudra' => 'திருவாதிரை (Aardhra / Arudra )',
+    'Punarvasu' => 'புனர்பூசம் (Punarvasu)',
+    "Pushyami" => "பூசம் (Pushyami)"  ,
+    "Ashlesha" => "ஆயில்யம் (Ashlesha)"  ,
+    "Magha" => "மகம் (Magha)"  ,
+    "Poorva_Phalguni" => "பூரம் (Poorva Phalguni)"  ,
+    "Uthra_phalguni" => "உத்திரம் (Uthra phalguni)"  ,
+    "Hastha" => "ஹஸ்தம் (Hastha)"  ,
+    "Chitra" => "சித்திரை (Chitra)"  ,
+    "Swaathi" => "சுவாதி (Swaathi)"  ,
+    "Vishaakha" => "விசாகம் (Vishaakha)"  ,
+    "Anuraadha" => "அனுஷம் (Anuraadha)"  ,
+    "Jyeshta" => "கேட்டை (Jyeshta)"  ,
+    "Moola" => "மூலம் (Moola)"  ,
+    "Poorva_Ashaada" => "பூராடம் (Poorva Ashaada)"  ,
+    "Uthra_Ashaada" => "உத்திராடம் (Uthra Ashaada)"  ,
+    "Shraavan" => "திருவோணம் (Shraavan)"  ,
+    "Dhanishta" => "அவிட்டம் (Dhanishta)",
+    "Shathabhisha" => "சதயம் (Shathabhisha)"  ,
+    "Poorva_bhadrapada" => "பூரட்டாதி (Poorva bhadrapada)"  ,
+    "Uthra_bhadrapada" => "உத்திரட்டாதி (Uthra bhadrapada)"  ,
+    "Revathi" => "ரேவதி (Revathi)"
+];
