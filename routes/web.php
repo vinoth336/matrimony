@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Members'], function () {
     Route::get('/', 'PublicController@index')->name('public.index');
+    Route::post('enquiry', 'SaveEnquiryController@store')->name('enquiry.store');
     Route::get('/login', 'MemberLoginController@showLoginForm')->name('public.login');
     Route::post('/login', 'MemberLoginController@login');
     Route::post('/logout', 'MemberLoginController@logout')->name('public.logout');

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enquiries;
+use App\Models\Enquiries;
 use App\Http\Requests\EnquiryRequest;
 use Exception;
 use Illuminate\Http\Request;

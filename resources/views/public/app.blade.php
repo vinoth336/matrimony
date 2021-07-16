@@ -11,18 +11,13 @@
 <meta property="og:description" content="{{ $siteInformation->meta_description }}">
 <meta property="og:url" content="https://www.rajusgroup.com">
 <meta property="og:site_name" content="{{ $siteInformation->site_name }}">
-<meta property="article:publisher" content="Rajus Group">
+<meta property="article:publisher" content="{{ config('app.url') }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:creator" content="{{ __("@") }}{{ str_replace(" ", "",$siteInformation->site_name) }}">
 <meta name="twitter:site" content="{{ __("@") }}{{ str_replace(" ", "",$siteInformation->site_name) }}">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-
-
-
-	<link
-		href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&amp;display=swap"
-        rel="stylesheet" type="text/css" />
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&amp;display=swap" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="{{ asset('site/style.css') }}" type="text/css" />
     <link rel="stylesheet" href="{{ asset('site/css/dark.css') }}" type="text/css">
@@ -41,7 +36,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <title>{{-- $siteInformation->site_name --}}</title>
+    <title>{{ $siteInformation->site_name }}</title>
     <script src="{{  asset('site/js/jquery.js') }}"></script>
     <style>
         .list-groupt {
@@ -88,10 +83,11 @@
                     <div class="row justify-content-between align-items-center">
                             <div class="col-12">
                                     <p class="mb-0 py-2 text-right text-md-right">
-                                            <strong>Call:</strong>
+
+                                        {{-- <strong>Call:</strong>
                                             <a href="tel:{{ $siteInformation->phone_no }}">
                                                 {{ $siteInformation->phone_no }}
-                                            </a>|
+                                            </a>| --}}
                                             <strong>Email:</strong>
                                             <a href="mailto:{{ $siteInformation->email_id }}" class="__cf_email__">
                                                 {{ $siteInformation->email_id }}
@@ -110,8 +106,8 @@
 							<a href="{{-- route('home') --}}" class="standard-logo"
                                 data-dark-logo="{{-- asset('site/images/logo/'.$siteInformation->logo) --}}">
                                 <p >
-                                    <label style="color:#cc2c26">Rajus</label>
-                                    <label style="color: #c46a35">Matrimonial</label>
+                                    <label style="color:#cc2c26">Yadava</label>
+                                    <label style="color: #c46a35">Match</label>
                                 </p>
 
                             </a>
