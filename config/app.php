@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'PROFIT_BASED_MATRIMONY' => env('PROFIT_BASED_MATRIMONY', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

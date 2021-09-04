@@ -2082,6 +2082,12 @@ pre code {
 }
 
 @media(max-width:575.98px) {
+    .team-image img,
+    .team-image>a {
+        display: block;
+        width: 73%;
+        margin: auto;
+    }
     .table-responsive-sm {
         display: block;
         width: 100%;
@@ -2094,6 +2100,12 @@ pre code {
 }
 
 @media(max-width:767.98px) {
+    .team-image img,
+    .team-image>a {
+        display: block;
+        width: 73% !important;
+        margin: auto;
+    }
     .table-responsive-md {
         display: block;
         width: 100%;

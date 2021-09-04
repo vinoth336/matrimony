@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Traits;
 
+use App\Models\Degree;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Models\MemberEducation;
@@ -8,21 +10,28 @@ use App\Models\MemberFamily;
 use App\Models\MemberHoroscope;
 use App\Models\MemberLocation;
 use App\Models\MemberOccupation;
-trait SaveMemberDetails {
+use App\Models\MemberProfilePhoto;
+
+trait SaveMemberDetails
+{
 
     public function saveEducation(Request $request, $member)
     {
         $memberEducation = $member->educations();
         $ids = [];
-        $degrees = $request->input('degree') ?? [];
 
-        foreach($degrees as $key => $degree) {
-            $degreeId = $request->input('degree.' . $key);
+        if($request->input('degree') && !is_array($request->input('degree'))) {
+            $degrees[] = $request->degree;
+        } else {
+            $degrees = $request->input('degree') ?? [];
+        }
+        foreach ($degrees as $key => $degree) {
+            $degreeId = $degrees[$key];
             $education = $memberEducation->where("degree_id", $degreeId)->first() ?? new MemberEducation();
             $education->member_id = $member->id;
             $education->degree_id = $degreeId;
 
-            if($degreeId == DEGREE_OTHERS) {
+            if ($degreeId == DEGREE_OTHERS) {
                 $education->remarks = $request->input('degree_remarks');
             }
             $education->save();
@@ -55,9 +64,13 @@ trait SaveMemberDetails {
         $family->member_id = $member->id;
         $family->family_type_id = $request->input('family_type');
         $family->father_name = $request->input('father_name');
+        $family->about_father = $request->input('about_father');
         $family->mother_name = $request->input('mother_name');
+        $family->about_mother = $request->input('about_mother');
         $family->brothers = $request->input('brothers');
+        $family->about_brothers = $request->input('about_brothers');
         $family->sisters = $request->input('sisters');
+        $family->about_sisters = $request->input('about_sisters');
         $family->remarks = $request->input('family_remarks');
         $family->save();
 
@@ -85,6 +98,7 @@ trait SaveMemberDetails {
         $memberHoroscope->rasi_id = $request->input('rasi');
         $memberHoroscope->star_id = $request->input('star');
         $memberHoroscope->lagnam = $request->input('lagnam');
+        $memberHoroscope->remarks = $request->input('horoscope_remark');
         $memberHoroscope->save();
 
         $image = $request->has('horoscope_image') ? $request->file('horoscope_image') : null;
@@ -92,5 +106,53 @@ trait SaveMemberDetails {
         $memberHoroscope->save();
 
         return $memberHoroscope;
+    }
+
+    public function createDegree($degreeName)
+    {
+        if($degreeName == null) {
+            return null;
+        }
+        $degrees = explode(",", $degreeName);
+        $ids = [];
+        $totalRecord = Degree::count() + 1;
+        foreach($degrees as $degree) {
+            $degree = Degree::firstOrCreate([
+                    'name' => $degree
+                ], [
+                    'order' => $totalRecord++
+                ]);
+            $ids[] = $degree->id;
+        }
+        return $ids;
+    }
+
+    public function updateMemberPhotos($request, $member)
+    {
+            $portfolioImageCount = $member->member_photos()->count() + 1;
+            $images = $request->file('profile_photos');
+            $isProfilePhoto = $request->input('is_profile_photo');
+            $removeImage = $request->input('remove_photos');
+            $totalRows = $request->input('rowno');
+            foreach ($totalRows as $key => $value) {
+                $image = $images[$key] ?? null;
+                $existingFileName = '';
+                $ProfileImage = MemberProfilePhoto::find($key) ?? new MemberProfilePhoto();
+                if($ProfileImage->id) {
+                    $existingFileName = $ProfileImage->profile_photo;
+                }
+                if (!isset($removeImage[$key])) {
+                    if($image) {
+                        $ProfileImage->storeImage($image, ['width' => 500, 'height' => 500]);
+                        $ProfileImage->is_profile_photo = $isProfilePhoto == $key ? true : false;
+                        $member->member_photos()->save($ProfileImage);
+                    }
+                } else {
+                    if ($existingFileName) {
+                        $ProfileImage->unlinkExistingImage($existingFileName);
+                    }
+                        $ProfileImage->delete();
+                }
+            }
     }
 }

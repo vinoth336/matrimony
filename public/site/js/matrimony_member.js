@@ -37,6 +37,15 @@ var MemberDashboard = {
             memberDashboard.deleteMyRequest(this);
         });
 
+        $(".profile_container").on('click', '.accept_phone_number_request', function() {
+            memberDashboard.acceptPhoneNumberRequest(this);
+        });
+
+        $(".profile_container").on('click', '.reject_phone_number_request', function() {
+            memberDashboard.rejectPhoneNumberRequest(this);
+        });
+
+
 
     },
 
@@ -166,6 +175,36 @@ var MemberDashboard = {
         var profileContainer = $(profile).closest('.member_profile');
         $.ajax({
             url: "/block_profile/" + profileContainer.find('[name="member_code"]').val(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                alert('success');
+                profileContainer.fadeOut().remove();
+            },
+            error: function(jqXHR, exception) {
+                alert(jqXHR.responseText);
+            }
+        });
+    },
+    acceptPhoneNumberRequest: function(profile) {
+        var profileContainer = $(profile).closest('.member_profile');
+        $.ajax({
+            url: "/accept_phone_number_request/" + profileContainer.find('[name="member_code"]').val(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                alert('success');
+                profileContainer.fadeOut().remove();
+            },
+            error: function(jqXHR, exception) {
+                alert(jqXHR.responseText);
+            }
+        });
+    },
+    rejectPhoneNumberRequest: function(profile) {
+        var profileContainer = $(profile).closest('.member_profile');
+        $.ajax({
+            url: "/reject_phone_number_request/" + profileContainer.find('[name="member_code"]').val(),
             type: "post",
             dataType: "json",
             success: function(data) {

@@ -42,6 +42,11 @@
                         </a>
                     </li>
                     <li class="menu-item">
+                        <a class="menu-link" href="Javascript:void(0);" onclick="Javascript:$('#changePasswordModal').modal('show');">
+                            <div>Change Password</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
                         <a class="menu-link" href=""
                             onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
                     </li>

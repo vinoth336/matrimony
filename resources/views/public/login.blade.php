@@ -19,6 +19,12 @@
                             <form id="login-form" name="login-form" class="row" action="{{ route('public.login') }}"
                                 method="post">
                                 @csrf
+                                @if(request()->input('redirectTo') ?? false)
+                                    <input type="hidden" name="redirectTo" value="{{ old('redirectTo', request()->input('redirectTo')) }}" />
+                                @endif
+                                @if(request()->input('successNavigation') ?? false)
+                                    <input type="hidden" name="successNavigation" value="{{ old('successNavigation', request()->input('successNavigation')) }}" />
+                                @endif
                                 <div class="col-12">
                                     <h3>Login to your Account</h3>
                                 </div>

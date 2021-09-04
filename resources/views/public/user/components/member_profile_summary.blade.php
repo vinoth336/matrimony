@@ -1,6 +1,6 @@
 @if(!empty($profile))
 @php
-    $isInterestAccepted = false;
+    $showProfilePhoto = false;
     $profileInterestReceived = $profile->current_user_interest_received()->first();
     $responseStatus = $profileInterestReceived->request_status ?? null;
 
@@ -8,17 +8,17 @@
     ->where('profile_status', PROFILE_INTEREST)->first();
     $requestStatus = $profileInterestRequest->request_status ?? null;
     if($responseStatus == PROFILE_REQUEST_APPROVED ||
-        $requestStatus == PROFILE_REQUEST_APPROVED) {
-        $isInterestAccepted = true;
+        $requestStatus == PROFILE_REQUEST_APPROVED || $profile->profilePhotoIsPubliclyVisible()) {
+        $showProfilePhoto = true;
     }
 @endphp
 
 <div class="entry event col-12 member_profile ">
     <input type="hidden" name="member_code" value="{{ $profile->member_code }}" />
     <div class="grid-inner row align-items-center no-gutters p-4">
-        <div class="entry-image col-md-4 mb-md-0">
+        <div class="entry-image col-md-4 mb-md-0 col-sm-6">
             <a href="#">
-                @if($isInterestAccepted)
+                @if($showProfilePhoto)
                     <img src="{{ $profile->secureProfilePhoto() }}" alt="{{ $profile->fullName }}">
                 @else
                     <img src="{{ $profile->getDefaultProfilePhoto() }}" alt="{{ $profile->fullName }}">
@@ -46,6 +46,9 @@
                         $memberAnnualIncome = array_search($profileOccupation->annual_income, ANNUAL_INCOME_RANGE_KEY_VALUE);
                         $annualIncome = ANNUAL_INCOME_RANGE[$memberAnnualIncome] ?? null;
                     @endphp
+                    @if($member->isAdminUser())
+                        <li>Gender : {{ $profile->genderName }}</li>
+                    @endif
                     <li>Age : {{ $profile->age }}</li>
                     <li>Mother Tongue : {{ $profile->mother_tongue->name }}</li>
                     <li>Education : {{ $profileDegrees }}</li>
@@ -116,19 +119,56 @@
                                 $showIgnoreButton = true;
                             @endphp
                     @endif
-
-                    @php
-                        //info("------------- ENDED------------------");
-                    @endphp
                 @endif
+                {{-- This Section For Phone Request Section --}}
+                @if($requestFrom ?? false)
+                  @if($requestFrom == 'phone_request_section')
+                    @if($profile->phone_number_request_status && $profile->phone_number_request_status->request_status == PROFILE_PHONE_NUMBER_REQUEST)
+                        @php
+                            $showPhoneNumberRequestAcceptButton = true;
+                        @endphp
+                    @endif
+                    @if($profile->phone_number_request_status && $profile->phone_number_request_status->request_status != PROFILE_PHONE_NUMBER_REJECT)
+                        @php
+                            $showPhoneNumberRequestRejectButton = true;
+                        @endphp
+                    @endif
+                    @if($profile->phone_number_request_status && $profile->phone_number_request_status->request_status == PROFILE_PHONE_NUMBER_REJECT)
+                        @php
+                            $showPhoneNumberRequestAcceptButton = true;
+                        @endphp
+                    @endif
+                  @endif
+                @endif
+                {{-- This Section For Phone Request Section Ended --}}
             </div>
             <div class="entry-content">
                 @if($showCreatedOn ?? false)
-                <h5 class="text font-italic font-normal float-right text-dark" style="margin-bottom:  0px">
+                <h6 class="text font-italic font-normal float-right text-dark" style="margin-bottom:  0px">
                     <i class="icon-time text-success"></i> {{ $profileViewInfo->created_at }}
-                </h5>
+                </h6>
                 <br>
             @endif
+            @if($member->isAdminUser())
+            <a class="btn btn-success" href="whatsapp://send?text={{ whatsappShareContent($profile) }}"
+                    data-action="share/whatsapp/share"
+                    target="_blank">
+                    <i class="icon-whatsapp"></i>
+                    Share to whatsapp
+                </a>
+            @elseif($requestFrom ?? false)
+                @if($showPhoneNumberRequestAcceptButton ?? false)
+                    <button type="button" class="btn btn-success accept_phone_number_request">
+                        Accept Request
+                    </button>
+                @endif
+
+                @if($showPhoneNumberRequestRejectButton ?? false)
+                    <button type="button" class="btn btn-danger reject_phone_number_request">
+                        Reject Request
+                    </button>
+                @endif
+            @else
                 @if($showInterestAcceptButton ?? false)
                     <button type="button" class="btn btn-success btn-sm mb-1 accept_profile_interest">
                         <i class="icon-line-check"></i>&nbsp;Accept
@@ -174,6 +214,7 @@
                         <i class="icon-line-ban"></i>&nbsp;Block Profile
                     </button>
                 @endif
+            @endif
             </div>
         </div>
     </div>

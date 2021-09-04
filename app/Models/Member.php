@@ -18,9 +18,10 @@ class Member extends Authenticatable
 
     protected $guard = 'member';
 
-    protected $redirectTo = '/';
+    protected $redirectTo = '/login';
 
     protected $fillable = [
+        'represent_by_id',
         'first_name',
         'last_name',
         'username',
@@ -45,20 +46,6 @@ class Member extends Authenticatable
     ];
 
     //protected $primaryKey = 'username';
-
-    protected $fileParamName = 'profile_photo';
-
-    protected $storeFileName = '';
-
-    protected $storeFileNameAsUploadName = '';
-
-    protected $storagePath = 'profile_photo';
-
-    protected $imageFieldName = 'profile_photo';
-
-    protected $resize = true;
-
-    public $addWaterMark = true;
 
     protected $casts = ['dob' => 'date'];
 
@@ -113,6 +100,16 @@ class Member extends Authenticatable
         return $this->hasOne(MemberHoroscope::class, 'member_id', 'id');
     }
 
+    public function member_photos()
+    {
+        return $this->hasMany(MemberProfilePhoto::class, 'member_id', 'id');
+    }
+
+    public function member_profile_photo()
+    {
+        return $this->hasOne(MemberProfilePhoto::class, 'member_id', 'id')->where('is_profile_photo', 1);
+    }
+
     public function marital_status()
     {
         return $this->belongsTo(MaritalStatus::class, 'marital_status_id', 'id');
@@ -137,6 +134,16 @@ class Member extends Authenticatable
     public function interested_profiles()
     {
         return $this->hasMany(MemberInterestedProfile::class, 'member_id', 'id')->where('profile_status', PROFILE_INTEREST);
+    }
+
+    public function phoneNumber_request()
+    {
+        return $this->hasMany(MemberRequestPhoneNumber::class, 'member_id', 'id');
+    }
+
+    public function horoscope_request()
+    {
+        return $this->hasMany(MemberRequestHoroscope::class, 'member_id', 'id');
     }
 
     public function shortlisted_profiles()
@@ -190,13 +197,9 @@ class Member extends Authenticatable
         return date("d-m-Y", strtotime($this->attributes['created_at']));
     }
 
-    public function secureProfilePhoto()
+    public function IsAdminUser()
     {
-        if ($this->attributes['profile_photo']) {
-            return asset('site/images/profile_photo/thumbnails/' . $this->profile_photo);
-        } else {
-            return $this->getDefaultProfilePhoto();
-        }
+        return $this->is_admin_user;
     }
 
     public function getDefaultProfilePhoto()
@@ -331,5 +334,69 @@ class Member extends Authenticatable
         ->where('member_id', auth()->user()->id);
     }
 
+    public function represent_by()
+    {
+        return $this->belongsTo(RepresentBy::class, 'represent_by_id', 'id');
+    }
 
+    public function phone_number_request_received()
+    {
+        return $this->hasMany(MemberRequestPhoneNumber::class, 'profile_member_id', 'id');
+    }
+
+    public function phone_number_request_sent()
+    {
+        return $this->hasMany(MemberRequestPhoneNumber::class, 'member_id', 'id');
+    }
+
+    public function add_phone_number_request()
+    {
+        return $this->hasMany(MemberRequestPhoneNumber::class, 'member_id', 'id');
+    }
+
+    public function phone_number_request_status()
+    {
+        return $this->belongsTo(MemberRequestPhoneNumber::class, 'id', 'member_id')
+        ->where('profile_member_id', auth()->user()->id);
+    }
+
+    public function horoscopeRequestStatus()
+    {
+        return $this->belongsTo(Member::class, 'profile_member_id', 'id')
+        ->where('member_id', auth()->user()->id);
+    }
+
+    public function secureProfilePhoto()
+    {
+            if($this->member_profile_photo()->count()) {
+                return $this->member_profile_photo->secureProfilePhoto();
+            } else {
+                return $this->getDefaultProfilePhoto();
+            }
+    }
+
+    public function secureFullSizeProfilePhoto()
+    {
+            if($this->member_profile_photo()->count()) {
+                return $this->member_profile_photo->secureFullSizeProfilePhoto();
+            } else {
+                return null;
+            }
+    }
+
+    public function profilePhotoIsPubliclyVisible()
+    {
+        if($this->profile_photo_lock == VISIBLE_TO_ALL) {
+            return true;
+        }
+        return false;
+    }
+
+    public function horoscopeIsPubliclyVisible()
+    {
+        if($this->horoscope_lock == VISIBLE_TO_ALL) {
+            return true;
+        }
+            return false;
+    }
 }

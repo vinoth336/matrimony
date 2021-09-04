@@ -12,5 +12,7 @@ return [
     'Sagittarius' => 'தனுசு - Sagittarius',
     'Capricorn' => 'மகரம் - Capricorn',
     'Aquarius' => 'கும்பம் - Aquarius',
-    'Pisces' => 'மீனம் - Pisces'
+    'Pisces' => 'மீனம் - Pisces',
+    'Dhanishta' => 'அவிட்டம் - Dhanishta',
+    'Kanni' => 'கன்னிராசி - Kanni'
 ];

@@ -7,7 +7,7 @@
                     @include('public.user.quick_filter')
                     <div class="col-md-6 profile_container scrollit" style="min-height:100vh;">
                         <div class="row">
-                            <h4 class="text-center px-3"><br>Shortlisted Profiles By You</h4>
+                            <h4 class="px-3"><br>Shortlisted Profiles By You</h4>
                         </div>
                         <div class="row">
                             <div class="col-md-12">

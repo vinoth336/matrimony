@@ -31,21 +31,31 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        ini_set('memory_limit', -1);
         Schema::defaultStringLength(191);
         if(true) {
             DB::listen(function($query) {
                 Log::info(
-                    $query->sql,
-                    $query->bindings,
-                    $query->time
+                     $this->getEloquentSqlWithBindings($query)
                 );
             });
         }
 
         View::composer('*', function ($view) {
             $siteInformation = SiteInformation::first();
+            $version = '1.0.8';
             $view->with('siteInformation', $siteInformation);
+            $view->with('version', $version);
         });
 
     }
+
+    public static function getEloquentSqlWithBindings($query)
+    {
+        return vsprintf(str_replace('?', '%s', $query->sql), collect($query->bindings)->map(function ($binding) {
+            $binding = addslashes($binding);
+            return is_numeric($binding) ? $binding : "'{$binding}'";
+        })->toArray());
+    }
 }
+

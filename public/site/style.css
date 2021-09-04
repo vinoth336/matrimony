@@ -50,7 +50,7 @@ ul {
 body {
     line-height: 1.5;
     color: #555;
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 a {
@@ -86,7 +86,7 @@ h6 {
     font-weight: 600;
     line-height: 1.5;
     margin: 0 0 30px;
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 h5,
@@ -166,7 +166,7 @@ ul {
 }
 
 small {
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 #wrapper {
@@ -370,11 +370,11 @@ span.middot {
 }
 
 .font-body {
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .font-primary {
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .font-secondary {
@@ -2665,7 +2665,8 @@ html[xmlns] .slider-wrap {
 
 #logo a {
     color: #000;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     font-size: 36px
 }
 
@@ -2872,7 +2873,7 @@ body:not(.top-search-open) .top-search-parent #primary-menu-trigger {
     font-size: .8125rem;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .menu-link span {
@@ -2914,7 +2915,7 @@ body:not(.top-search-open) .top-search-parent #primary-menu-trigger {
     font-weight: 400;
     color: #666;
     letter-spacing: 0;
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .sub-menu-container .menu-item:hover>.menu-link {
@@ -3290,7 +3291,8 @@ body:not(.top-search-open) .top-search-parent #primary-menu-trigger {
     .mega-menu-style-2 .mega-menu-title>.menu-link {
         font-size: .8125rem;
         font-weight: 700;
-        font-family: Poppins, sans-serif;
+        font-family: 'Open Sans', sans-serif;
+        ;
         letter-spacing: 1px;
         text-transform: uppercase!important;
         margin-bottom: 15px;
@@ -3936,7 +3938,8 @@ body:not(.top-search-open) .top-search-parent #primary-menu-trigger {
     color: #333;
     font-weight: 700;
     margin-top: 0!important;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     letter-spacing: 2px
 }
 
@@ -6646,7 +6649,8 @@ body:not(.device-touch) .portfolio {
     padding: 30px 0;
     text-align: center;
     color: #444;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     text-transform: uppercase;
     letter-spacing: 1px;
     font-size: 1.5rem;
@@ -6810,7 +6814,7 @@ body:not(.device-touch) .entry-link {
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 @media(min-width:992px) {
@@ -7457,6 +7461,12 @@ body:not(.device-touch):not(.device-sm):not(.device-xs) .product-image>a {
 }
 
 @media(max-width:767.98px) {
+    .team-image img,
+    .team-image>a {
+        display: block;
+        width: 73% !important;
+        margin: auto;
+    }
     .cart-product-quantity .quantity {
         -ms-flex-direction: column;
         flex-direction: column
@@ -7817,7 +7827,7 @@ body:not(.device-touch) .button {
     font-size: 1.25rem;
     height: auto;
     line-height: 1;
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .button.button-desc span {
@@ -8614,7 +8624,8 @@ body:not(.device-touch) .button.button-full strong {
 .fbox-content h3 {
     font-size: 1rem;
     font-weight: 600;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     text-transform: uppercase;
     margin-bottom: 0;
     color: #333
@@ -8882,7 +8893,7 @@ body:not(.device-touch) .button.button-full strong {
 
 .fbox-center.fbox-italic p {
     font-style: italic;
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .fbox-bg.fbox-center {
@@ -10628,7 +10639,8 @@ body:not(.device-touch) .social-icon i {
 .tab-nav-lg li a {
     display: inline-block;
     color: #444;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
@@ -11470,7 +11482,7 @@ body:not(.device-touch) .clients-grid .grid-item a {
 .counter {
     font-size: 42px;
     font-weight: 600;
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .counter.counter-small {
@@ -11601,7 +11613,7 @@ body:not(.device-touch) .rounded-skill {
 
 .skills li .progress-percent .counter {
     font-weight: 400;
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .progress-percent::after,
@@ -12361,7 +12373,8 @@ label {
     display: inline-block;
     font-size: 13px;
     font-weight: 700;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #555;
@@ -13806,7 +13819,8 @@ body:not(.device-touch) .tagcloud a {
 .widget-filter-links li a {
     display: block;
     color: #444;
-    font-family: Poppins, sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    ;
     font-weight: 500
 }
 
@@ -13865,7 +13879,7 @@ body:not(.device-touch) .tagcloud a {
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 2px;
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .nav-tree li i {
@@ -13904,7 +13918,7 @@ body:not(.device-touch) .tagcloud a {
     font-size: 12px;
     padding: 6px 0;
     letter-spacing: 1px;
-    font-family: Lato, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .nav-tree ul ul a i.icon-angle-down {
@@ -13932,7 +13946,7 @@ body:not(.device-touch) .tagcloud a {
     line-height: 1;
     font-size: 80px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .15);
-    font-family: Poppins, sans-serif
+    font-family: 'Open Sans', sans-serif;
 }
 
 .wedding-head .and,
@@ -15925,16 +15939,22 @@ label.radio {
 
 @media(min-width:991.98px) {
     .fixed {
-        position: fixed;
-        width: 23%;
-        margin-bottom: 20px;
+        position: fixed !important;
+        width: 23% !important;
+        margin-bottom: 20px !important;
     }
     .scrollit {
         margin-left: 25%;
     }
     .right_side_bar_fixed {
-        position: fixed;
-        margin-left: 75%;
-        width: 23%;
+        position: fixed !important;
+        margin-left: 75% !important;
+        width: 23% !important;
     }
+}
+
+.error {
+    margin-top: 5px;
+    color: #e42c3e;
+    font-weight: 400
 }

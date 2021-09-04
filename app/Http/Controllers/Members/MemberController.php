@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Members;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangeMemberPasswordRequest;
 use App\Http\Requests\UpdateProfilePhotoRequest;
+use App\Jobs\SendNotificationToUser;
 use App\Models\Blood;
 use App\Models\City;
 use App\Models\Degree;
@@ -16,10 +18,13 @@ use App\Models\Member;
 use App\Models\MemberViewedProfile;
 use App\Models\Star;
 use App\Models\State;
+use App\Models\User;
 use App\Models\Zodiac;
 use App\Traits\SaveMemberDetails;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class MemberController extends Controller
@@ -43,7 +48,7 @@ class MemberController extends Controller
         $states = State::get();
         $rasies = Zodiac::get();
         $stars = Star::get();
-        $profiles = $this->getProfiles($request, $member)->get();
+        $profiles = $this->getProfiles($request, $member)->paginate(10)->withQueryString();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
         $dhosams = Dhosam::orderBy('sequence')->get();
@@ -73,15 +78,15 @@ class MemberController extends Controller
     {
         $profiles = Member::whereNotIn('members.id', [$member->id])
             ->doesnthave('interest_sent_profiles')
-            ->doesnthave('current_user_interest_received')
-            ->where('gender', '!=', $member->gender)->with(['educations' => function ($model) {
+            ->doesnthave('current_user_interest_received');
+        if(!$member->isAdminUser()) {
+            $profiles->where('gender', '!=', $member->gender);
+        }
+        $profiles->with(['educations' => function ($model) {
                 $model->with('degree');
             }, 'occupation', 'location', 'dhosam', 'marital_status', 'horoscope']);
-
         $profiles = $this->whereCondition($request, $profiles);
-        $profiles->inRandomOrder();
-
-
+        ///$profiles->inRandomOrder();
         return $profiles;
     }
 
@@ -114,7 +119,7 @@ class MemberController extends Controller
         }
 
         if($request->has('dhosams')) {
-            $query->where('dhosam_id', $dhosams);
+            $query->whereIn('dhosam_id', $dhosams);
         }
 
         if($request->has('mother_tongues')) {
@@ -123,6 +128,11 @@ class MemberController extends Controller
 
         if($request->has('marital_status')) {
             $query->whereIn('marital_status_id', $maritalStatus);
+        }
+
+        if($request->has('gender') && auth()->user()->isAdminUser()) {
+            $gender = $request->input('gender') == 'male' ? MALE : FEMALE;
+            $query->where('gender', $gender);
         }
 
         return $query;
@@ -180,10 +190,11 @@ class MemberController extends Controller
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
         $dhosams = Dhosam::orderBy('sequence')->get();
 
-
-        $member->member_viewed_profiles()->updateOrCreate([
-            'profile_member_id' => $profile->id
-        ]);
+        if(!$member->isAdminUser()) {
+            $member->member_viewed_profiles()->updateOrCreate([
+                'profile_member_id' => $profile->id
+            ]);
+        }
 
         return view('public.user.view_profile')
             ->with('profile', $profile)
@@ -198,7 +209,20 @@ class MemberController extends Controller
             ->with('employeeIns', $employeeIns)
             ->with('maritalStatus', $maritalStatus)
             ->with('dhosams', $dhosams)
+            ->with('member', $member)
             ;
+    }
+
+    public function searchByProfileId(Request $request)
+    {
+        try {
+            $member = Member::where('member_code', '=', $request->input('profile_id'))->firstOrFail();
+            $url = route('member.view_profile', $member->member_code) . "?search=search_by_profile_id&profile_id=" . $member->member_code ."#profile_id_search";
+            return redirect()->to($url);
+        } catch (ModelNotFoundException $exception)
+        {
+            abort(404);
+        }
     }
 
     /**
@@ -456,6 +480,105 @@ class MemberController extends Controller
             ;
     }
 
+    public function viewPhoneNumberRequestReceived(Request $request)
+    {
+        $member = auth()->user();
+        $bloodGroup = Blood::orderBy('id')->get();
+        $degrees = Degree::get();
+        $familyType = FamilyType::get();
+        $cities = City::get();
+        $memberHoroscope = $member->horoscope ?? optional();
+        $states = State::get();
+        $rasies = Zodiac::get();
+        $stars = Star::get();
+        $profiles = $member->phone_number_request_received()->with('member');
+        if ($request->input('search')) {
+            $search = $request->input('search');
+            if ($search == 'accepted_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_APPROVED);
+            } elseif ($search == 'not_interested_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REJECT);
+            } else {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+            }
+        } else {
+            $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+        }
+        $profiles = $profiles->orderBy('updated_at', 'desc')->get();
+        $employeeIns = EmployeeIn::orderBy('name')->get();
+        $maritalStatus = MaritalStatus::orderBy('sequence')->get();
+        $dhosams = Dhosam::orderBy('sequence')->get();
+
+        return view('public.user.phone_number_request_received')
+            ->with('member', $member)
+            ->with('bloodGroup', $bloodGroup)
+            ->with('degrees', $degrees)
+            ->with('familyType', $familyType)
+            ->with('cities', $cities)
+            ->with('states', $states)
+            ->with('memberHoroscope', $memberHoroscope)
+            ->with('rasies', $rasies)
+            ->with('stars', $stars)
+            ->with('profiles', $profiles)
+            ->with('employeeIns', $employeeIns)
+            ->with('showCreatedOn', true)
+            ->with('activeTab', $request->input('search') ?? null)
+            ->with('checkProfileStatus', true)
+            ->with('maritalStatus', $maritalStatus)
+            ->with('dhosams', $dhosams)
+            ->with('selected_tab', 'phone_number_request_received')
+            ;
+    }
+
+    public function viewPhoneNumberRequestSent(Request $request)
+    {
+        $member = auth()->user();
+        $bloodGroup = Blood::orderBy('id')->get();
+        $degrees = Degree::get();
+        $familyType = FamilyType::get();
+        $cities = City::get();
+        $memberHoroscope = $member->horoscope ?? optional();
+        $states = State::get();
+        $rasies = Zodiac::get();
+        $stars = Star::get();
+        $profiles = $member->phone_number_request_sent()->with('member_profile');
+        if ($request->input('search')) {
+            $search = $request->input('search');
+            if ($search == 'accepted_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_APPROVED);
+            } elseif ($search == 'not_interested_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REJECT);
+            } else {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+            }
+        } else {
+            $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+        }
+        $profiles = $profiles->orderBy('updated_at', 'desc')->get();
+        $employeeIns = EmployeeIn::orderBy('name')->get();
+        $maritalStatus = MaritalStatus::orderBy('sequence')->get();
+        $dhosams = Dhosam::orderBy('sequence')->get();
+
+        return view('public.user.phone_number_request_sent')
+            ->with('member', $member)
+            ->with('bloodGroup', $bloodGroup)
+            ->with('degrees', $degrees)
+            ->with('familyType', $familyType)
+            ->with('cities', $cities)
+            ->with('states', $states)
+            ->with('memberHoroscope', $memberHoroscope)
+            ->with('rasies', $rasies)
+            ->with('stars', $stars)
+            ->with('profiles', $profiles)
+            ->with('employeeIns', $employeeIns)
+            ->with('showCreatedOn', true)
+            ->with('activeTab', $request->input('search') ?? null)
+            ->with('checkProfileStatus', true)
+            ->with('maritalStatus', $maritalStatus)
+            ->with('dhosams', $dhosams)
+            ->with('selected_tab', 'phone_number_request_sent')
+            ;
+    }
 
     public function updateProfile(Request $request)
     {
@@ -470,6 +593,7 @@ class MemberController extends Controller
             $this->saveLocation($request, $member);
             $this->saveHoroscope($request, $member);
             $member->checkIsUserCompletedIsProfileEntry();
+            $this->updateMemberPhotos($request, $member);
             DB::commit();
 
             return redirect()->route('member.profile')->with('status', 'Updated Successfully');
@@ -512,12 +636,52 @@ class MemberController extends Controller
             $interestedProfile = $member->interested_profiles()->updateOrCreate(['profile_member_id' => $intrestedMember->id]);
             $interestedProfile->request_status = PROFILE_REQUEST_PENDING;
             $interestedProfile->profile_status = PROFILE_INTEREST;
-
             $interestedProfile->save();
-
             DB::commit();
+            dispatch(new SendNotificationToUser('profile_request_send', $intrestedMember, auth()->user()));
 
             return response(['status' => 'success', 'msg' => 'Added Successfully']);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@addInterest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
+    public function addPhoneNumberRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $member->add_phone_number_request()->updateOrCreate(['profile_member_id' => $intrestedMember->id]);
+            $interestedProfile->request_status = PROFILE_PHONE_NUMBER_REQUEST;
+            $interestedProfile->save();
+            DB::commit();
+            dispatch(new SendNotificationToUser('profile_request_accept', $intrestedMember, auth()->user()));
+
+            return redirect()->back()->with(['status' => 'success', 'msg' => 'Added Successfully']);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@addInterest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
+    public function addHoroscopeRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $member->horoscope_request()->updateOrCreate(['profile_member_id' => $intrestedMember->id]);
+            $interestedProfile->request_status = PROFILE_HOROSCOPE_REQUEST;
+            $interestedProfile->save();
+            DB::commit();
+
+            dispatch(new SendNotificationToUser('horoscope_request_send', $intrestedMember, auth()->user()));
+
+            return redirect()->back()->with(['status' => 'success', 'msg' => 'Added Successfully']);
         } catch (Exception $e) {
             Log::error('Error Occurred in MemberController@addInterest - ' . $e->getMessage());
             return abort(500);
@@ -583,6 +747,7 @@ class MemberController extends Controller
             $interestedProfile->save();
 
             DB::commit();
+            dispatch(new SendNotificationToUser('profile_request_accept', $member, $intrestedMember));
 
             return response(['status' => 'success', 'msg' => 'Added Successfully']);
         } catch (Exception $e) {
@@ -674,6 +839,47 @@ class MemberController extends Controller
         }
     }
 
+    public function acceptPhoneNumberRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $intrestedMember->phone_number_request_status()->firstOrFail();
+            $interestedProfile->request_status = PROFILE_PHONE_NUMBER_APPROVED;
+            $interestedProfile->save();
+            DB::commit();
+
+            dispatch(new SendNotificationToUser('profile_request_accept', $member, $intrestedMember));
+
+            return response(['status' => 'success', 'msg' => 'Added Successfully']);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@acceptProfileInterest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
+    public function rejecPhoneNumberRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $intrestedMember->phone_number_request_status()->firstOrFail();
+            $interestedProfile->request_status = PROFILE_PHONE_NUMBER_REJECT;
+            $interestedProfile->save();
+            DB::commit();
+
+            return response(['status' => 'success', 'msg' => 'Added Successfully']);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@acceptProfileInterest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
 
 
     public function saveBasicMemberInformation(Request $request, Member $member)
@@ -681,7 +887,7 @@ class MemberController extends Controller
         $member->first_name = $request->first_name;
         $member->last_name = $request->last_name;
         $member->dob = $request->dob;
-        $member->blood_id = $request->blood;
+        $member->blood_id = $request->blood ?? null;
         $member->religion = $request->religion;
         $member->mother_tongue_id = $request->mother_tongue;
         $member->email = $request->email;
@@ -690,11 +896,13 @@ class MemberController extends Controller
         $member->marital_status_id = $maritalStatus->id ?? 1;
         $member->dhosam_id = $dhosam->id ?? 1;
         $member->dhosam_remarks = $request->dhosam_remarks;
+        $member->profile_photo_lock = $request->profile_photo_lock ?? ONLY_ACCEPTED_PROFILES;
+        $member->horoscope_lock = $request->horoscope_lock ?? ONLY_ACCEPTED_PROFILES;
         $member->save();
 
-        $image = $request->has('profile_photo') ? $request->file('profile_photo') : null;
-        $member->storeImage($image, ['width' => 192, 'height' => 192]);
-        $member->save();
+        //$image = $request->has('profile_photo') ? $request->file('profile_photo') : null;
+        //$member->storeImage($image, ['width' => 192, 'height' => 192]);
+        //$member->save();
 
         return $member;
     }
@@ -727,4 +935,30 @@ class MemberController extends Controller
             ->with('dhosams', $dhosams)
             ;
     }
+
+    public function changeMemberPassword(ChangeMemberPasswordRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+            $userId = auth()->user()->id;
+            $member = Member::where('id', $userId)->first();
+            if(!$member->show_change_password_popup) {
+                if (!Hash::check($request->input('password'), $member->password)) {
+                    DB::rollback();
+                    return redirect()->back()->withErrors(['password' => 'Entered Current Password Is Invalid']);
+                }
+            }
+            $member->password = Hash::make($request->input('new_password'));
+            $member->show_change_password_popup = false;
+            $member->save();
+            DB::commit();
+
+            return redirect()->back()->with('password_update_successfully', 'Password Update Successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Error Occurred in MemberController@changePassword - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
 }

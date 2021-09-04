@@ -1,5 +1,5 @@
-<div class="w-100 line d-block d-md-none d-none d-sm-block"></div>
-<div class="col-md-3 right_side_bar_fixed" id="">
+<div class="w-100 line d-none d-sm-block"></div>
+<div class="col-md-3 right_side_bar_fixed d-none d-sm-block" id="">
     <div class="title title-border" style="margin-top:2rem !important">
         <div class="row">
             <div class="col-md-5 bg-info text-white" style="margin-left:7%;height: 100px">
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="fancy-title title-border" style="margin-top:2rem !important">
+    <div class="fancy-title title-border" style="margin-top:1rem !important; margin-bottom: 1rem;">
         <h4>Quick Action</h4>
     </div>
     <ul class="sidenav ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
@@ -54,6 +54,11 @@
                 <label class="text-info float-right" style="font-size: 18px">
                     {{ $member->ignored_profiles()->count() }}
                 </label>
+            </a>
+        </li>
+        <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+            <a href="{{ route('member.phone_number_request_received') }}">
+                <i class="icon-forbidden"></i>Phone Number Request
             </a>
         </li>
         <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">

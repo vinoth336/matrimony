@@ -4,12 +4,12 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content="{{ $siteInformation->site_name }}" />
 <meta name="description" content="{{ $siteInformation->meta_description }}" />
-<link rel="canonical" href="https://www.rajusgroup.com" />
+<link rel="canonical" href="{{ config('app.url') }}" />
 <meta property="og:locale" content="en_US">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ $siteInformation->site_name }}">
 <meta property="og:description" content="{{ $siteInformation->meta_description }}">
-<meta property="og:url" content="https://www.rajusgroup.com">
+<meta property="og:url" content="h{{ config('app.url') }}">
 <meta property="og:site_name" content="{{ $siteInformation->site_name }}">
 <meta property="article:publisher" content="{{ config('app.url') }}">
 <meta name="twitter:card" content="summary_large_image">
@@ -19,25 +19,26 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&amp;display=swap" rel="stylesheet" type="text/css" />
 
-    <link rel="stylesheet" href="{{ asset('site/style.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('site/css/dark.css') }}" type="text/css">
-	<link rel="stylesheet" href="{{ asset('site/css/bootstrap.css') }} " type="text/css" />
-	<link rel="stylesheet" href="{{ asset('site/css/font-icons.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('site/css/animate.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('site/css/magnific-popup.css') }}" type="text/css" />
-	<link rel="stylesheet" href="{{ asset('site/css/custom.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('site/css/swiper.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('site/style.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('site/css/components/bs-filestyle.css') }}" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('site/css/components/bs-select.css') }}" type="text/css" />
-	<link rel="stylesheet" type="text/css" href="{{ asset('site/include/rs-plugin/css/settings.css') }}" media="screen" />
-	<link rel="stylesheet" type="text/css" href="{{ asset('site/include/rs-plugin/css/layers.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('site/include/rs-plugin/css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ asset('site/style.css') }}?v={{ $version }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('site/css/dark.css') }}?v={{ $version }}" type="text/css">
+	<link rel="stylesheet" href="{{ asset('site/css/bootstrap.css') }}?v={{ $version }}" type="text/css" />
+	<link rel="stylesheet" href="{{ asset('site/css/font-icons.css') }}?v={{ $version }}" type="text/css" />
+	<link rel="stylesheet" href="{{ asset('site/css/animate.css') }}?v={{ $version }}" type="text/css" />
+	<link rel="stylesheet" href="{{ asset('site/css/magnific-popup.css') }}?v={{ $version }}" type="text/css" />
+	<link rel="stylesheet" href="{{ asset('site/css/custom.css') }}?v={{ $version }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('site/css/swiper.css') }}?v={{ $version }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('site/css/components/bs-filestyle.css') }}?v={{ $version }}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('site/css/components/bs-select.css') }}?v={{ $version }}" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="{{ asset('site/include/rs-plugin/css/settings.css') }}?v={{ $version }}" media="screen" />
+	<link rel="stylesheet" type="text/css" href="{{ asset('site/include/rs-plugin/css/layers.css') }}?v={{ $version }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('site/include/rs-plugin/css/navigation.css') }}?v={{ $version }}">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="{{ asset('site/css/left_right_modal_box.css') }}?v={{ $version }}" type="text/css" />
+    @stack('css')
     <title>{{ $siteInformation->site_name }}</title>
-    <script src="{{  asset('site/js/jquery.js') }}"></script>
+    <script src="{{  asset('site/js/jquery.js') }}?v={{ $version }}"></script>
     <style>
         .list-groupt {
             border-radius : none;
@@ -103,25 +104,29 @@
 					<div class="header-row">
 
 						<div id="logo">
-							<a href="{{-- route('home') --}}" class="standard-logo"
+							<a @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="standard-logo"
                                 data-dark-logo="{{-- asset('site/images/logo/'.$siteInformation->logo) --}}">
                                 <p >
                                     <label style="color:#cc2c26">Yadava</label>
                                     <label style="color: #c46a35">Match</label>
                                 </p>
-
                             </a>
-							<a href="index.html" class="retina-logo" data-dark-logo="">
+							<a  @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="retina-logo" data-dark-logo="">
                                 <p style="width: 100%">
-                                    Rajus<br>Matrimonial</p>
-
-                                </a>
+                                    <label style="color:#cc2c26">Yadava</label>
+                                    <label style="color: #c46a35">Match</label>
+                                </p>
+                            </a>
 						</div>
 						<div class="header-misc">
-
+                            @if(auth()->guard('member')->check())
+                                <a href="{{ route('member.dashboard') }}">
+                                    <i class="icon-home2"></i>
+                                </a>
+                            @endif
 						</div>
-						<div id="primary-menu-trigger">
-							<svg class="svg-trigger" viewBox="0 0 100 100">
+						<div id="primary-menu-trigger" class="@if(auth()->guard('member')->check()) d-none d-sm-block @endif">
+							<svg class="svg-trigger " viewBox="0 0 100 100">
 								<path
 									d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20">
 								</path>
@@ -138,6 +143,8 @@
 			</div>
 			<div class="header-wrap-clone"></div>
         </header>
+
+
 
         @yield('content')
 

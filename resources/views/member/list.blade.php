@@ -7,7 +7,23 @@
                 <div class="col-md-12">
                     <div class="card ">
                         <div class="card-header card-header-primary">
-                            <h4 class="card-title">{{ __('Members') }}</h4>
+                                <h4 class="card-title float-left">{{ __('Members') }}</h4>
+                                <a href="{{ route('admin.member.add') }}" class="btn btn-success float-right"><i class="material-icons">add</i></a>
+                                <div class="btn-group float-right" role="group" aria-label="Button group with nested dropdown" style="margin-right: 10px;margin-top: 5px !important;">
+                                    <div class="btn-group" role="group">
+                                      <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Import
+                                      </button>
+                                      <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item" href="{{ route('member.import_member') }}">Import Member</a>
+                                        <a class="dropdown-item" href="{{ route('member.import_profile_photo') }}">Import Member Profile Photo</a>
+                                        <a class="dropdown-item" href="{{ route('member.import_horoscope') }}">Import Member Horscope</a>
+                                      </div>
+                                    </div>
+                                </div>
+                                <a href="{{ route('member.export') }}" class="btn btn-info float-right" style="margin-right: 10px;margin-top: 5px !important;">
+                                    Export Xls
+                                </a>
                         </div>
                         <div class="card-body ">
                             <form style="display: none" method="post" action="">
@@ -42,7 +58,7 @@
                                             <th>Phone No</th>
                                             <th>Gender</th>
                                             <th>Account Status</th>
-                                            <th>Payment Status</th>
+                                            <th>Represent By</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                             </tr>
@@ -56,7 +72,7 @@
                                                 <td>{{ $member->phone_no }}</td>
                                                 <td>{{ $member->genderName }}</td>
                                                 <td>{!! $member->accountStatusText !!}</td>
-                                                <td>{{ $member->paymentStatusText }}</td>
+                                                <td>{{ $member->represent_by->name ?? null }}</td>
                                                 <td>{{ $member->created_at }}</td>
                                                 <td class="text-center">
                                                     <a  class="" href="{{ route('admin.member.edit', $member->id) }}">

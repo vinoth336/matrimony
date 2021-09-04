@@ -6,11 +6,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberLoginRequest;
+use Illuminate\Support\Facades\Redirect;
 
 class MemberLoginController extends Controller
 {
+
     public function showLoginForm()
     {
+        if(auth()->guard('member')->check()) {
+            return Redirect::to('dashboard');
+        }
         return view('public.login');
     }
 
@@ -19,7 +24,13 @@ class MemberLoginController extends Controller
     {
         if (Auth::guard('member')->attempt($request->only('username', 'password'), $request->filled('remember'))) {
             //Authentication passed...
+            if($request->input('redirectTo')) {
+                $url = route('member.profile') . "?successNavigation=dashboard";
 
+                return redirect()
+                 ->to($url)
+                 ->with('status', 'You are Logged in Successfully');
+            }
             return redirect()
                  ->intended(route('member.dashboard'))
                  ->with('status', 'You are Logged in Successfully');

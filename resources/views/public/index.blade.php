@@ -5,8 +5,7 @@
     //$services = $servicesForEnquiries;
     ?>
     <section id="slider" class=""
-        style="background-image: url('{{ asset('/site/images/site_images/bg2.jpg') }}');background-repeat: no-repeat;background-size: cover;height: 80vh">
-
+        style="background-image: url('{{ asset('/site/images/site_images/bg.jpg') }}');background-repeat: no-repeat;background-size: cover;">
         <div class="container clearfix">
             <div class="row">
                 <div class="col-lg-6 ">
@@ -17,16 +16,235 @@
                         <div class="">
                             @if (session('status'))
 
-                                <div class="col-md-12">
-                                    <div class="alert alert-success">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <i class="material-icons">close</i>
-                                        </button>
-                                        <span>{{ session('status') }}</span>
+                            <div class="col-md-12">
+                                <div class="alert alert-success">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                    <span>{{ session('status') }}</span>
+                                </div>
+                            </div>
+
+                        @endif
+                            <form style="margin-top: 50px;background: #f5f8f9; padding:20px;border: 1px solid #ddd"
+                                action="{{ route('public.register') }}" id="myform" method="post">
+                                @csrf
+                                @method('post')
+
+
+                                <div class="form-group ">
+                                    <div class=" text-white  bg-danger p-3 text-center ">
+                                        Registration Form
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-md-4 col-sm-4" for="first_name">
+                                        Represent By
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        @php
+                                            $representByDefault = old('represent_by') ? old('represent_by') : request()->input()
+                                        @endphp
+                                        <select name="represent_by" class="form-control" required>
+                                                @foreach ($representBies as $representBy)
+                                                    <option value="{{ $representBy->slug }}" @if($representBy->slug == old('represent_by', request()->input('represent_by') ?? 'self'))
+                                                        selected
+                                                    @endif >{{ $representBy->name }}</option>
+                                                @endforeach
+                                        </select>
+                                        <span id="represent_byMsg" class="error">
+                                            @error('represent_by')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
                                     </div>
                                 </div>
 
-                            @endif
+                                <div class="form-group row">
+                                    <label class="control-label col-md-4 col-sm-4" for="first_name">
+                                        First name
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="text" class="form-control"  required name="first_name" placeholder="First name"
+                                            value="{{ old('first_name') }}">
+                                        <span id="first_nameMsg" class="error">
+                                            @error('first_name')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="last_name">
+                                        Last name
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="text" class="form-control"  required name="last_name" placeholder="Last name"
+                                            value="{{ old('last_name') }}">
+                                        <span id="last_nameMsg" class="error">
+                                            @error('last_name')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="dob">
+                                        Date of birth
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="text" class="form-control datepicker" autocomplete="off" data-provide="datepicker" name="dob" id="dob"
+                                            value="{{ old('dob') }}">
+                                        <span id="dobMsg" class="error">
+                                            @error('dob')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="gender">
+                                        Gender
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="gender" value="2" @if(old('gender') == 2) checked @endif>&nbsp; &nbsp; Female
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="gender" value="1" @if(old('gender') == 1) checked @endif>&nbsp; &nbsp; Male
+                                    </label>
+                                    <br>
+                                    <span id="genderMsg" class="error">
+                                        @error('gender')
+                                                {{ $message }}
+                                            @enderror
+                                    </span>
+                                </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="religion">
+                                        Religion
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="form-control"  required name="religion" id="religion">
+                                            <option value="1" selected>Hindu</option>
+                                        </select>
+                                        <span id="religionMsg" class="error">
+                                            @error('religion')
+                                                    {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="mother_tongue">
+                                        Mother Tongue
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="form-control"  required name="mother_tongue" id="mother_tongue">
+                                            <option value="1" @if(old('mother_tongue') == 1) selected @endif>Tamil</option>
+                                            <option value="2" @if(old('mother_tongue') == 2) selected @endif>Telugu</option>
+                                        </select>
+                                        <span id="mother_tongueMsg" class="error">
+                                            @error('mother_tongue')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="email">
+                                        Email
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="email" class="form-control"  required placeholder="Email" name="email"
+                                            value="{{ old('email') }}">
+                                        <span id="emailMsg" class="error">
+                                            @error('email')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="phone_no">
+                                        Mobile No
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="number" class="form-control"  required placeholder="Mobile No" name="phone_no"
+                                            value="{{ old('phone_no') }}">
+                                        <span id="phone_no_msg" class="error">
+                                            @error('phone_no')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="username">
+                                        User name
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="text" class="form-control"  required name="username" placeholder="User name"
+                                            value="{{ old('username') }}">
+                                        <span id="usernameMsg" class="error">
+                                            @error('username')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="passwords">
+                                        Password
+                                        <span class="text-danger">*</span>
+                                        <br>
+                                        <i style="font-size: 9px">(Min 6)</i>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="password" class="form-control"  required placeholder="Password" name="password" min="6">
+                                        <span id="passwordsMsg" class="error">
+                                            @error('password')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="cPassword">
+                                        Confirm Password
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input type="password" class="form-control"  required placeholder="Confirm Password"
+                                            name="confirm_password" min="6">
+                                        <span id="confirm_password_msg" class="error">
+                                            @error('confirm_password')
+                                                {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <input type="submit" class="btn btn-success btn-block" value="Signup">
+                                <input type="hidden" name="prefix" value="template-phone_noform-">
+                                <br>
+                                <div class="text-center">
+                                    Already Existing Customer, Click here for
+                                    <a href="{{ route('public.login') }}">Login</a>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -34,7 +252,6 @@
             </div>
         </div>
     </section>
-
     <section id="content">
         <div class="content-wrap" style="padding-bottom: 0px;">
             <div class="container clearfix">
@@ -71,72 +288,95 @@
         </div>
         <div class="container clearfix">
             <div class="row col-mb-50 mb-0">
-                <div class="col-lg-4">
-                    <div class="team team-list row align-items-center">
-                        <div class="team-image col-sm-6">
-                            <img src="{{ asset('site/images/site_images/Panneerselvam.jpeg') }}" alt="Panneerselvam">
-                        </div>
-                        <div class="team-desc col-sm-6">
-                            <div class="team-title">
-                                <h4>Panneerselvam</h4>
-                            </div>
-                            <div class="team-content">
-                            </div>
-                            <a href="#" class="social-icon si-rounded si-small si-facebook">
-                                <i class="icon-phone3"></i>
-                                <i class="icon-phone3"></i>
-                            </a>
-                            <a href="#" class="social-icon si-rounded si-small si-twitter">
-                                <i class="icon-whatsapp"></i>
-                                <i class="icon-whatsapp"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="team team-list row align-items-center">
-                        <div class="team-image col-sm-6">
-                            <img src="{{ asset('site/images/site_images/Kannan.jpeg') }}" alt="Kannan">
-                        </div>
-                        <div class="team-desc col-sm-6">
-                            <div class="team-title">
-                                <h4>Kannan</h4>
-                            </div>
-                            <div class="team-content">
-                            </div>
-                            <a href="#" class="social-icon si-rounded si-small si-facebook">
-                                <i class="icon-phone3"></i>
-                                <i class="icon-phone3"></i>
-                            </a>
-                            <a href="#" class="social-icon si-rounded si-small si-twitter">
-                                <i class="icon-whatsapp"></i>
-                                <i class="icon-whatsapp"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                     <div class="team team-list row align-items-center">
                         <div class="team-image col-sm-6">
                             <img src="{{ asset('site/images/site_images/Murugesan.jpeg') }}" alt="Murugesan">
                         </div>
-                        <div class="team-desc col-sm-6">
-                            <div class="team-title">
-                                <h4>Murugesan</h4>
+                        <div class="team-desc col-sm-6 text-center">
+                            <div class="team-title mt-1">
+                                <h4>R. Murugesan Yadav</h4>
+                                <span>
+                                    B.A (Astro) MA.M.PHIL SM.P
+                                </span>
                             </div>
                             <div class="team-content">
+                                தலைவர் மதுரை மாவட்ட யாதவ முன்னேற்ற நலச் சங்கம்
                             </div>
-                            <a href="#" class="social-icon si-rounded si-small si-facebook">
+                            <div class="mt-1">
                                 <i class="icon-phone3"></i>
-                                <i class="icon-phone3"></i>
-                            </a>
-                            <a href="#" class="social-icon si-rounded si-small si-twitter">
+                                <a href="tel:918870346377" class="mx-1">
+                                    +918870346377
+                                </a>
+                            </div>
+                            <div class="mt-1">
                                 <i class="icon-whatsapp"></i>
-                                <i class="icon-whatsapp"></i>
-                            </a>
+                                <a href="https://wa.me/918870346377?text=Hi Sir," class="mx-1">
+                                    +918870346377
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-6">
+                    <div class="team team-list row align-items-center">
+                        <div class="team-image col-sm-6">
+                            <img src="{{ asset('site/images/site_images/Panneerselvam.jpeg') }}" alt="Panneerselvam">
+                        </div>
+                        <div class="team-desc col-sm-6 text-center">
+                            <div class="team-title mt-1">
+                                <h4>K. Panneerselvam, M.com</h4>
+                                <span>
+                                    TNSTC (KUM) Retd
+                                </span>
+                            </div>
+                            <div class="team-content">
+                            </div>
+                            <div class="mt-1">
+                                <i class="icon-phone3"></i>
+                                <a href="tel:919442986826" class="mx-1">
+                                    +919442986826
+                                </a>
+                            </div>
+                            <div class="mt-1">
+                                <i class="icon-whatsapp"></i>
+                                <a href="https://wa.me/919442986826?text=Hi Sir," class="mx-1">
+                                    +919442986826
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="team team-list row align-items-center">
+                        <div class="team-image col-sm-6">
+                            <img src="{{ asset('site/images/site_images/Kannan.jpeg') }}" alt="Kannan">
+                        </div>
+                        <div class="team-desc col-sm-6 text-center mt-1">
+                            <div class="team-title">
+                                <h4>J. Kannan, </h4>
+                                <span>
+                                    B.sc
+                                </span>
+                            </div>
+                            <div class="team-content">
+                            </div>
+                            <div class="mt-1">
+                                <i class="icon-phone3"></i>
+                                <a href="tel:918220012717" class="mx-1">
+                                    +918220012717
+                                </a>
+                            </div>
+                            <div class="mt-1">
+                                <i class="icon-whatsapp"></i>
+                                <a href="https://wa.me/918220012717?text=Hi Sir," class="mx-1">
+                                    +918220012717
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="clear"></div>
         </div>
@@ -184,123 +424,36 @@
         </div>
     </section>
 
-    <section id="content">
+    <section id="content" class="d-none" >
         <div class="heading-block center">
-            <h2>Contact Us</h2>
-            <span>We Welcome Online Enquiry</span>
+            <h2>Faq's</h2>
         </div>
         <div id="contact_us" class="content-wrap page-section pt-0" style="padding-top: 0px" data-onepage-settings="{\"
             offset\":65,\"speed\":\"1250\",\"easing\":\"easeInOutExpo\"}">
             <div class="container clearfix">
-                <div class="row align-items-stretch col-mb-50 mb-0">
-                    <div class="col-lg-6">
-                        <!-- Enquiry Form Start Here -->
-                        <?php $enquiry_form_class = 'col-md-4';
-                        ?>
-                        @include('public.enquiry_form')
-                        <!-- Enquiry Form Ended Here -->
-                    </div>
-                    <!-- Enquiry Form Ended Here -->
-                    <div class="col-lg-6 min-vh-50">
-                        <div class="card overflow-hidden" style="border:none">
-                            <div class="card-body">
-                                <h4>Address</h4>
-                                <p>
-                                    396/4, Ramasamy House,<br>
-                                    Andankovil Puthur Keelpagam,<br>
-                                    Karur - 639002
-                                </p>
-                            </div>
-
-                            <div class="card-body">
-                                <h4>Opening Hours</h4>
-                                <p></p>
-                                <ul class="iconlist mb-0">
-                                    <li><i class="icon-time color"></i> <strong>Mondays-Fridays:</strong>
-                                        {{ $siteInformation->working_hours_mon_fri }}</li>
-                                    <li><i class="icon-time color"></i> <strong>Saturdays:</strong>
-                                        {{ $siteInformation->working_hours_sat }}</li>
-                                    <li><i class="icon-time text-danger"></i> <strong>Sundays:</strong>
-                                        {{ $siteInformation->working_hours_sun }}</li>
-                                </ul>
-                                <i class="icon-time bgicon"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row col-mb-50" id="faqs">
-                    <h4>Faq's</h4>
+                <div class="row col-mb-50 mb-0">
                     <div class="col-lg-12 min-vh-50">
                         <div class="postcontent col-lg-8">
                             <div class="clear"></div>
                             <div id="faqs" class="faqs">
-                                @foreach ($faqs as $faq)
-                                    <div class="toggle faq faq-marketplace faq-authors">
-                                        <div class="toggle-header">
-                                            <div class="toggle-icon">
-                                                <i class="toggle-closed icon-question-sign"></i>
-                                                <i class="toggle-open icon-question-sign"></i>
-                                            </div>
-                                            <div class="toggle-title">
-                                                {{ $faq->question }}
-                                            </div>
+                                @foreach($faqs as $faq)
+                                <div class="toggle faq faq-marketplace faq-authors">
+                                    <div class="toggle-header">
+                                        <div class="toggle-icon">
+                                            <i class="toggle-closed icon-question-sign"></i>
+                                            <i class="toggle-open icon-question-sign"></i>
                                         </div>
-                                        <div class="toggle-content">
-                                            <p style="text-align: justify">
-                                                {{ $faq->answer }}
-                                            </p>
+                                        <div class="toggle-title">
+                                           {{ $faq->question }}
                                         </div>
                                     </div>
+                                    <div class="toggle-content">
+                                        <p style="text-align: justify">
+                                            {{ $faq->answer }}
+                                        </p>
+                                    </div>
+                                </div>
                                 @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="row col-mb-50">
-                    <div class="col-sm-6 col-lg-3" style="cursor: pointer">
-                        <div class="feature-box fbox-center fbox-bg fbox-plain">
-                            <div class="fbox-icon">
-                                <a href="#"><i class="icon-map-marker2"></i></a>
-                            </div>
-                            <div class="fbox-content">
-                                <h3>Get Direction<span class="subtitle">Check In<br>Google Map</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3" style="cursor: pointer"
-                        onclick="window.open('tel:+91{{ $siteInformation->phone_no }}', '_blank')">
-                        <div class="feature-box fbox-center fbox-bg fbox-plain">
-                            <div class="fbox-icon">
-                                <a href=""><i class="icon-phone3"></i></a>
-                            </div>
-                            <div class="fbox-content">
-                                <h3>Speak to<br> Us<span class="subtitle"><a style="text-decoration: none;color:#000"
-                                            href="tel:+91{{ $siteInformation->phone_no }}"> (+91)
-                                            {{ $siteInformation->phone_no }}</a></span></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3" style="cursor: pointer"
-                        onclick="window.open('https://www.instagram.com/{{ $siteInformation->instagram_id }}/', '_blank')">
-                        <div class="feature-box fbox-center fbox-bg fbox-plain">
-                            <div class="fbox-icon">
-                                <a href="#"><i class="icon-instagram"></i></a>
-                            </div>
-                            <div class="fbox-content">
-                                <h3>Follow<br>Us<span class="subtitle">2.3M Followers</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-lg-3" style="cursor: pointer"
-                        onclick="window.open('https://www.facebook.com/{{ $siteInformation->facebook_id }}', '_blank')">
-                        <div class="feature-box fbox-center fbox-bg fbox-plain">
-                            <div class="fbox-icon">
-                                <a href="#"><i class="icon-facebook2"></i></a>
-                            </div>
-                            <div class="fbox-content">
-                                <h3>Follow<br>Us<span class="subtitle">2.3M Followers</span></h3>
                             </div>
                         </div>
                     </div>

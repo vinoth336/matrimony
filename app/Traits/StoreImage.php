@@ -42,7 +42,7 @@ trait StoreImage {
 
                 info("Thumbnail process done");
                 if($this->addWaterMark) {
-                    $img->insert(public_path('site/images/watermark/rajus_watermark.png'), 'center');
+                  $img->insert(public_path('site/images/watermark/yadava_match_watermark.png'), 'center');
                 }
 
                 info("Adding water mark images");
@@ -71,7 +71,6 @@ trait StoreImage {
         $existing_file = public_path('site/images/' . $this->storagePath . "/") . $image;
 
         $existing_fileThumbnail = public_path('site/images/' . $this->storagePath . '/thumbnails/' ) . $image;
-
 
         info("Thumbnails : " . $existing_fileThumbnail);
 
@@ -107,7 +106,7 @@ trait StoreImage {
             $constraint->upsize();
         })->orientate();
         info("Thumb Image resize is done");
-        $img->insert(public_path('site/images/watermark/rajus_watermark_thumbnail.png'), 'bottom-right');
+       $img->insert(public_path('site/images/watermark/yadava_match_watermark_thumbnail.png'), 'bottom-right');
 
         info("Thumb watermark added ");
         $img->save($thumbnailpath . '/' . $name);
@@ -120,5 +119,28 @@ trait StoreImage {
         if(!File::exists($filePath)) {
             File::makeDirectory($filePath);
         }
+    }
+
+    public function unlinkExistingImage($fileName = '')
+    {
+        $fileName = $fileName ?? $this->{$this->imageFieldName};
+        $existing_file = public_path('site/images/' . $this->storagePath . "/") . $fileName;
+
+        $existing_fileThumbnail = public_path('site/images/' . $this->storagePath . '/thumbnails/' ) . $fileName;
+
+        info("Thumbnails : " . $existing_fileThumbnail);
+
+        if (file_exists($existing_file)) {
+            @unlink($existing_file);
+        } else {
+            info(" File is not Exists " . $existing_file);
+        }
+
+        if (file_exists($existing_fileThumbnail)) {
+            @unlink($existing_fileThumbnail);
+        } else {
+            info(" File Thumbnails is not Exists " . $existing_fileThumbnail);
+        }
+        return true;
     }
 }

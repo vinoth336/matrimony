@@ -7,6 +7,7 @@ use App\Http\Requests\MemberRegistrationSaveRequest;
 use App\Mail\SendRegistrationEmailVerification;
 use App\Models\Member;
 use App\Models\MemberRegistrationRequest;
+use App\Models\RepresentBy;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -28,11 +29,13 @@ class MemberRegistraionController extends Controller
         DB::beginTransaction();
 
         try {
+            $representBy = RepresentBy::where('slug', $request->input('represent_by'))->first();
              $memberRegistrationRequest = MemberRegistrationRequest::create([
+                 'represent_by_id' => $representBy->id,
                 'first_name' => $request->input('first_name'),
                 'last_name' => $request->input('last_name'),
                 'dob' => $request->input('dob'),
-                'blood_id' => $request->input('blood'),
+                'blood_id' => $request->input('blood') ?? null,
                 'gender' => $request->input('gender'),
                 'religion' => $request->input('religion'),
                 'mother_tongue_id' => $request->input('mother_tongue'),
@@ -42,9 +45,7 @@ class MemberRegistraionController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'email_verified_at' => now()
             ]);
-
             $this->sendVerificationEmail($memberRegistrationRequest);
-
             DB::commit();
 
             return redirect()->route('public.registration_success', encrypt($memberRegistrationRequest->id))
@@ -126,10 +127,11 @@ class MemberRegistraionController extends Controller
 
             if(!$memberRegistrationRequest->is_verified) {
                 $member = Member::create([
+                    'represent_by_id' => $memberRegistrationRequest->represent_by_id,
                     'first_name' => $memberRegistrationRequest->first_name,
                     'last_name' => $memberRegistrationRequest->last_name,
                     'dob' => $memberRegistrationRequest->dob,
-                    'blood_id' => $memberRegistrationRequest->blood_id,
+                    'blood_id' => $memberRegistrationRequest->blood_id ?? null,
                     'gender' => $memberRegistrationRequest->gender,
                     'religion' => $memberRegistrationRequest->religion,
                     'mother_tongue_id' => $memberRegistrationRequest->mother_tongue_id,
@@ -147,8 +149,10 @@ class MemberRegistraionController extends Controller
             } else {
                 return view('users.verified');
             }
+            $url = route('public.login') . "?redirectTo=profile&successNavigation=dashboard" ;
 
-            return redirect()->route('public.login')->with('status', 'Email Verified Successfully, Please login to continue the process');
+            return redirect()->to($url)
+            ->with('status', 'Email Verified Successfully, Please login to continue the process');
         } catch (ModelNotFoundException $e) {
             return abort(404);
         } catch (Exception $e) {

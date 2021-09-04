@@ -5,10 +5,9 @@
         <div class="content-wrap">
             <div class="container-fluid px-2 clearfix">
                 <div class="row clearfix">
-                    @include('public.user.quick_filter')
                     <div class="col-md-6 profile_container scrollit" style="min-height:100vh;">
                         <div class="row">
-                            <h4 class="text-center"><br>Profiles Viewed By You</h4>
+                            <h4 class="px-3"><br>Profiles Viewed By You</h4>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
@@ -24,6 +23,7 @@
                             </div>
                         </div>
                     </div>
+                    @include('public.user.quick_filter')
                     @include('public.user.sidebar')
                 </div>
             </div>

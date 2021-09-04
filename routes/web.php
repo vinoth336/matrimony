@@ -36,6 +36,9 @@ Route::group(['namespace' => 'Members'], function () {
 
         Route::group(['middleware' => 'check_member_account_status'], function() {
             Route::post('/sendinterest/{memberCode}', 'MemberController@addInterest')->name('member.send_interest');
+            Route::post('/addPhoneNumberRequest/{memberCode}', 'MemberController@addPhoneNumberRequest')->name('member.phone_number_request');
+            Route::post('/addHoroscopeRequest/{memberCode}', 'MemberController@addHoroscopeRequest')->name('member.horoscope_request');
+
             Route::post('/addshortlist/{memberCode}', 'MemberController@addShortList')->name('member.add_profile_to_shortlist');
             Route::post('/addignore/{memberCode}', 'MemberController@addIgnore')->name('member.add_profile_to_ignore_list');
             Route::post('/accept_profile_interest/{memberCode}', 'MemberController@acceptProfileInterest')->name('member.accept_profile_request');
@@ -45,7 +48,10 @@ Route::group(['namespace' => 'Members'], function () {
             Route::post('/remove_from_short_list/{memberCode}', 'MemberController@removeFromShortList')->name('member.remove_from_short_list');
             Route::post('/delete_my_request/{memberCode}', 'MemberController@removeFromInterestList')->name('member.remove_from_interest_list');
             Route::get('/view/{memberCode}', 'MemberController@viewProfile')->name('member.view_profile');
+            Route::post('/accept_phone_number_request/{memberCode}', 'MemberController@acceptPhoneNumberRequest')->name('member.accept_phone_number_request');
+            Route::post('/reject_phone_number_request/{memberCode}', 'MemberController@rejecPhoneNumberRequest')->name('member.accept_phone_number_request');
 
+            Route::get('/search/profile', 'MemberController@searchByProfileId')->name('member.search_profile_id');
         });
         Route::get('/viewed_profiles', 'MemberController@viewMemberProfileViewed')->name('member.viewed_profile');
         Route::get('/interested_profiles', 'MemberController@viewMemberInterestedProfiles')->name('member.interested_profiles');
@@ -53,6 +59,9 @@ Route::group(['namespace' => 'Members'], function () {
         Route::get('/ignored_profiles', 'MemberController@viewMemberIgnoredProfiles')->name('member.ignored_profiles');
         Route::get('/interest_received', 'MemberController@viewInterestReceived')->name('member.interest_received');
         Route::get('/who_viewed_you', 'MemberController@memberViewedYourProfile')->name('member.who_viewed_you');
+        Route::get('/phone_number_request_received', 'MemberController@viewPhoneNumberRequestReceived')->name('member.phone_number_request_received');
+        Route::get('/phone_number_request_sent', 'MemberController@viewPhoneNumberRequestSent')->name('member.phone_number_request_sent');
+        Route::patch('/update_password', 'MemberController@changeMemberPassword')->name('member.update_password');
 
     });
 });
@@ -68,6 +77,15 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/member/{member}','Admin\AdminMemberController@edit')->name('admin.member.edit');
         Route::put('/member/{memberId}','Admin\AdminMemberController@update');
         Route::delete('/member/{member}','Admin\AdminMemberController@delete')->name('admin.member.delete');
+
+        Route::get('/member/import/member', 'Admin\AdminMemberController@importMember')->name('member.import_member');
+        Route::post('/member/import/member', 'Admin\AdminMemberController@uploadMemberProfile');
+        Route::get('/member/import/member_profile_photo', 'Admin\AdminMemberController@importProfilePhoto')->name('member.import_profile_photo');
+        Route::post('/member/import/member_profile_photo', 'Admin\AdminMemberController@uploadMemberProfilePhoto');
+        Route::get('/member/import/member_horoscope', 'Admin\AdminMemberController@importHoroscope')->name('member.import_horoscope');
+        Route::post('/member/import/member_horoscope', 'Admin\AdminMemberController@uploadMemberHoroscope');
+
+        Route::get('/member/export', 'Admin\AdminMemberController@export')->name('member.export');
         Route::get('site_information', 'SiteInformationController@index')->name('site_information.index');
         Route::post('site_information', 'SiteInformationController@store')->name('site_information.store');
         Route::resource('enquiries', 'EnquiriesController')->except('store');

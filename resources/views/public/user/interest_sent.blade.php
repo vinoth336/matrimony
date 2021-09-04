@@ -8,9 +8,9 @@
                     @include('public.user.quick_filter')
                     <div class="col-md-6 profile_container scrollit" style="min-height:100vh;">
                         <div class="row">
-                            <h4 class="text-center px-3"><br>Interest Sent By You</h4>
+                            <h4 class="px-3"><br>Interest Sent By You</h4>
                         </div>
-                        <div class="row">
+                        <div class="row topmargin-sm">
                             <div class="col-md-12">
                                 <ul class="grid-filter style-3 mb-0">
                                     <li class="@if($activeTab == 'waiting_for_response' || $activeTab == null) activeFilter @endif">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Members;
 use App\Http\Controllers\Controller;
 use App\Models\Blood;
 use App\Models\Faqs;
+use App\Models\RepresentBy;
 use App\Models\SiteInformation;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
@@ -24,11 +25,13 @@ class PublicController extends Controller
         $siteInformation = SiteInformation::first();
         $testmonials = Testimonial::orderBy('created_at', 'desc')->get();
         $faqs = Faqs::orderBy('sequence')->get();
+        $representBies = RepresentBy::orderBy('sequence')->get();
 
         return view('public.index')
         ->with('bloodList', $bloodList)
         ->with('testmonials', $testmonials)
         ->with('faqs', $faqs)
+        ->with('representBies', $representBies)
         ;
 
     }

@@ -16,11 +16,13 @@ class CheckProfileStatus
     public function handle($request, Closure $next)
     {
         $user = auth()->user();
-        if($user->payment_status != PAYMENT_STATUS_PAID ) {
-            if(!$request->ajax()) {
-                return redirect()->route('member.activate_account');
-            } else {
-                return response('For Continue This Process, Please Contact Admin To Activate Your Membership.', PAYMENT_REQUIRED);
+        if(config('app.PROFIT_BASED_MATRIMONY') == true) {
+            if($user->payment_status != PAYMENT_STATUS_PAID ) {
+                if(!$request->ajax()) {
+                    return redirect()->route('member.activate_account');
+                } else {
+                    return response('For Continue This Process, Please Contact Admin To Activate Your Membership.', PAYMENT_REQUIRED);
+                }
             }
         }
 

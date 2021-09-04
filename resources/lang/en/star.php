@@ -27,5 +27,7 @@ return [
     "Shathabhisha" => "சதயம் (Shathabhisha)"  ,
     "Poorva_bhadrapada" => "பூரட்டாதி (Poorva bhadrapada)"  ,
     "Uthra_bhadrapada" => "உத்திரட்டாதி (Uthra bhadrapada)"  ,
-    "Revathi" => "ரேவதி (Revathi)"
+    "Revathi" => "ரேவதி (Revathi)",
+    "Ayilyam-1" => 'ஆயில்யம் -1 (Ayilyam)',
+    'Aastham' => 'Aastham'
 ];

@@ -17,13 +17,13 @@
                         </div>
                         <div class="card-body ">
                             <ul class="nav nav-pills nav-pills-primary tablist" role="tablist">
-                                <li>
+                                <li class="active">
                                     <a class="btn @if($activeTab == 'basic-details') btn-success @endif" href="#dashboard" role="tab" data-toggle="basic-details">
                                         <i class="material-icons">dashboard</i>
                                         Basic Details
                                     </a>
                                 </li>
-                                <li class="active">
+                                <li >
                                     <a class="btn @if($activeTab == 'education-and-occupation-details') btn-success @endif" href="#schedule" role="tab"
                                         data-toggle="education-and-occupation-details">
                                         <i class="material-icons">schedule</i>
@@ -40,6 +40,12 @@
                                     <a class="btn @if($activeTab == 'horoscope-details') btn-success @endif" href="#schedule" role="tab" data-toggle="horoscope-details">
                                         <i class="material-icons">schedule</i>
                                         Horoscope
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="btn @if($activeTab == 'profile-photos') btn-success @endif" href="#profile-photos" role="tab" data-toggle="profile-photos">
+                                        <i class="material-icons">dashboard</i>
+                                        Profile Photos
                                     </a>
                                 </li>
                             </ul>
@@ -62,33 +68,26 @@
                                 @method('post')
                                 <div class="tab-container">
                                     <div class="tab-content @if($activeTab == 'basic-details') active @else hide  @endif" id="basic-details">
-                                            <div class="row">
-                                                <label class="col-sm-2 col-form-label">{{ __('Profile Photo') }}</label>
-                                                <div class="col-sm-7">
-                                                    <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                                                        <div class="fileinput-new thumbnail">
-                                                        <img src="{{ asset('material') . "/img/image_placeholder.jpg" }}" style="width: 100px" alt="...">
-                                                        </div>
-                                                        <div class="fileinput-preview fileinput-exists thumbnail">
-                                                                <img src="" />
-                                                        </div>
-                                                        <div>
-                                                        <span class="btn btn-rose btn-file">
-                                                            <span class="fileinput-new">Select image</span>
-                                                            <span class="fileinput-exists">Change</span>
-                                                            <input type="hidden" name="remove_image" value="" />
-                                                            <input type="file" name="profile_photo" accept="image/x-png,image/jpg,image/jpeg" >
-                                                        </span>
-                                                        <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
-                                                        </div>
-                                                    </div>
-                                                    @if ($errors->has('logo'))
-                                                            <span id="name-error" class="error text-danger"
-                                                                for="input-contact_person">{{ $errors->first('logo') }}</span>
+                                        <div class="row">
+                                            <label class="col-sm-2 col-form-label">{{ __('Represent By') }}</label>
+                                            <div class="col-sm-7">
+                                                <div
+                                                    class="form-group{{ $errors->has('first_name') ? ' has-danger' : '' }}">
+                                                    <select name="represent_by" class="selectpicker select form-control">
+                                                            @foreach($representBies as $representBy)
+                                                                <option value="{{ $representBy->slug }}" @if(old('represent_by', 'self') == $representBy->slug) selected @endif>
+                                                                        {{ $representBy->name }}
+                                                                </option>
+                                                            @endforeach
+                                                    </select>
+                                                    @if ($errors->has('represent_by'))
+                                                        <span id="name-error" class="error text-danger"
+                                                            for="input-represent_by">{{ $errors->first('represent_by') }}</span>
                                                     @endif
-                                                </div>
 
+                                                </div>
                                             </div>
+                                        </div>
                                             <div class="row">
                                                 <label class="col-sm-2 col-form-label">{{ __('First Name') }}</label>
                                                 <div class="col-sm-7">
@@ -138,25 +137,6 @@
                                                                 for="input-dob">{{ $errors->first('dob') }}</span>
                                                         @endif
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <label class="col-sm-2 col-form-label">{{ __('Blood Group') }}</label>
-                                                <div class="col-sm-7">
-                                                    <div class="form-group{{ $errors->has('blood') ? ' has-danger' : '' }}">
-                                                        <select class="selectpicker select form-control {{ $errors->has('blood') ? ' is-invalid' : '' }}" name="blood" required>
-                                                            @foreach ($bloodGroup as $blood)
-                                                                <option value="{{ $blood->id }}"
-                                                                    @if($blood->id == old('blood')) selected @endif>
-                                                                    {{ $blood->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                        @if ($errors->has('blood'))
-                                                            <span id="name-error" class="error text-danger"
-                                                                for="input-last_name">{{ $errors->first('blood') }}</span>
-                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -233,6 +213,22 @@
                                                         @if ($errors->has('phone_no'))
                                                             <span id="name-error" class="error text-danger"
                                                                 for="input-phone_no">{{ $errors->first('phone_no') }}</span>
+                                                        @endif
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <label class="col-sm-2 col-form-label">{{ __('Secondary Phone No') }}</label>
+                                                <div class="col-sm-7">
+                                                    <div class="form-group{{ $errors->has('secondary_phone_number') ? ' has-danger' : '' }}">
+                                                        <input
+                                                            class="form-control{{ $errors->has('secondary_phone_number') ? ' is-invalid' : '' }}"
+                                                            name="secondary_phone_number" id="input-contact_person" type="text"
+                                                            placeholder="{{ __('Secondary Phone No') }}" value="{{ old('secondary_phone_number') }}" />
+                                                        @if ($errors->has('secondary_phone_number'))
+                                                            <span id="name-error" class="error text-danger"
+                                                                for="input-secondary_phone_number">{{ $errors->first('secondary_phone_number') }}</span>
                                                         @endif
 
                                                     </div>
@@ -343,6 +339,24 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('Degree Details') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('degree_details') ? ' has-danger' : '' }}">
+                                                                <textarea
+                                                                    class="form-control{{ $errors->has('degree_details') ? ' is-invalid' : '' }}"
+                                                                    name="degree_details" id="input-degree_details" type="text" maxlength="500"
+                                                                    placeholder="{{ __('Degree Details') }}"
+                                                                    >{{ old('degree_details') }}</textarea>
+                                                                @if ($errors->has('degree_details'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-degree_details">{{ $errors->first('degree_details') }}</span>
+                                                                @endif
+                                                                <span class="text-danger text-small">Maximum 500 Characters</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -405,6 +419,23 @@
                                                         </div>
 
                                                     </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('Annual Income') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('annual_income') ? ' has-danger' : '' }}">
+                                                                <input
+                                                                    class="form-control{{ $errors->has('annual_income') ? ' is-invalid' : '' }}"
+                                                                    name="annual_income" id="input-annual_income" type="text"
+                                                                    placeholder="{{ __('Annual Income') }}"
+                                                                    value="{{ old('annual_income') }}" />
+                                                                @if ($errors->has('annual_income'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-annual_income">{{ $errors->first('annual_income') }}</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -418,7 +449,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12">
                                                     <h3>Family Details</h3>
-                                                    <div class="row">
+                                                    <div class="row hide">
                                                         <label class="col-sm-2 col-form-label">{{ __('Family Type') }}</label>
                                                         <div class="col-sm-7">
                                                             <div
@@ -455,6 +486,24 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('About Father') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('about_father') ? ' has-danger' : '' }}">
+                                                                <textarea
+                                                                    class="form-control{{ $errors->has('about_father') ? ' is-invalid' : '' }}"
+                                                                    name="about_father" id="input-about_father" type="text"
+                                                                    placeholder="{{ __('About Father') }}" maxlength="500"
+                                                                    >{{ old('about_father') }}</textarea>
+                                                                @if ($errors->has('about_father'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-about_father">{{ $errors->first('about_father') }}</span>
+                                                                @endif
+                                                                <span class="text-danger text-small">Maximum 500 Characters</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <label class="col-sm-2 col-form-label">{{ __('Mother Name') }}</label>
                                                         <div class="col-sm-7">
                                                             <div
@@ -468,6 +517,24 @@
                                                                     <span id="name-error" class="error text-danger"
                                                                         for="input-mother_name">{{ $errors->first('mother_name') }}</span>
                                                                 @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('About Mother') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('about_mother') ? ' has-danger' : '' }}">
+                                                                <textarea
+                                                                    class="form-control{{ $errors->has('about_mother') ? ' is-invalid' : '' }}"
+                                                                    name="about_mother" id="input-about_mother" type="text"
+                                                                    placeholder="{{ __('About Mother') }}" maxlength="500"
+                                                                    >{{ old('about_mother') }}</textarea>
+                                                                @if ($errors->has('about_mother'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-about_mother">{{ $errors->first('about_mother') }}</span>
+                                                                @endif
+                                                                <span class="text-danger text-small">Maximum 500 Characters</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -490,7 +557,25 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <label class="col-sm-2 col-form-label">{{ __('Sisters') }}</label>
+                                                        <label class="col-sm-2 col-form-label">{{ __('About Brothers') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('about_brothers') ? ' has-danger' : '' }}">
+                                                                <textarea
+                                                                    class="form-control{{ $errors->has('about_brothers') ? ' is-invalid' : '' }}"
+                                                                    name="about_brothers" id="input-about_brothers" type="text"
+                                                                    placeholder="{{ __('About Brothers') }}" maxlength="500"
+                                                                    >{{ old('about_brothers') }}</textarea>
+                                                                @if ($errors->has('about_brothers'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-about_brothers">{{ $errors->first('about_brothers') }}</span>
+                                                                @endif
+                                                                <span class="text-danger text-small">Maximum 500 Characters</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('No Of Sisters') }}</label>
                                                         <div class="col-sm-7">
                                                             <div
                                                                 class="form-group{{ $errors->has('sisters') ? ' has-danger' : '' }}">
@@ -508,6 +593,25 @@
                                                         </div>
 
                                                     </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('About Sisters') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('about_sisters') ? ' has-danger' : '' }}">
+                                                                <textarea
+                                                                    class="form-control{{ $errors->has('about_sisters') ? ' is-invalid' : '' }}"
+                                                                    name="about_sisters" id="input-about_sisters" type="text"
+                                                                    placeholder="{{ __('About Sisters') }}"
+                                                                    >{{ old('about_sisters') }}</textarea>
+                                                                @if ($errors->has('about_sisters'))
+                                                                    <span id="about_sisters-error" class="error text-danger"
+                                                                        for="input-about_sisters">{{ $errors->first('about_sisters') }}</span>
+                                                                @endif
+                                                                <span class="text-danger text-small">Maximum 500 Characters</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -704,6 +808,22 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('Horoscope Lock') }}</label>
+                                                        <div class="col-sm-7">
+                                                            <div
+                                                                class="form-group{{ $errors->has('star') ? ' has-danger' : '' }}">
+                                                                <select class="selectpicker select form-control" name="horoscope_lock" id="input-horoscope_lock">
+
+                                                                </select>
+                                                                @if ($errors->has('horoscope_lock'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-horoscope_lock">{{ $errors->first('horoscope_lock') }}</span>
+                                                                @endif
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="row">
                                                         <label class="col-sm-2 col-form-label">{{ __('Horoscope Images') }}</label>
@@ -738,9 +858,70 @@
                                             <div class="row">
                                                 <div class="ml-auto">
                                                     <button type="button" data-previous="family-location-details" data-current="horoscope-details" class="btn btn-info switch-previous-tab">{{ __('Previous') }}</button>
-                                                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                                    <button type="type" data-next="profile-photos" data-current="horoscope-details"
+                                                    class="btn btn-primary switch-tab">{{ __('NexT') }}</button>
                                                 </div>
                                             </div>
+                                    </div>
+                                    <div class="tab-content @if($activeTab == 'profile-photos') active @else hide  @endif" id="profile-photos">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <h3>Profile Photos</h3>
+                                                    <div class="row">
+                                                        <label class="col-sm-2 col-form-label">{{ __('Profile Photo Lock') }}</label>
+                                                        <div class="col-sm-6">
+                                                            <div
+                                                                class="form-group{{ $errors->has('rasi') ? ' has-danger' : '' }}">
+                                                                <select class="selectpicker select form-control" name="profile_photo_lock" id="input_profile_photo_lock" >
+                                                                    <option value='{{ VISIBLE_TO_ALL }}'>Visible To All</option>
+                                                                    <option value='{{ ONLY_ACCEPTED_PROFILES }}'>Visible Only For Accepted Profiles</option>
+                                                                </select>
+                                                                @if ($errors->has('horscope_lock'))
+                                                                    <span id="name-error" class="error text-danger"
+                                                                        for="input-horscope_lock">{{ $errors->first('horscope_lock') }}</span>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr>
+                                                    <div class="row">
+                                                            <div class="table-responsive m-auto" style="width: auto">
+                                                            <table id="profile_photo_add_section" class="table m-auto table-responsive" style="width:auto">
+                                                                <thead>
+                                                                        <tr>
+                                                                            <th>Photo</th>
+                                                                            <th>Is Profile Photo</th>
+                                                                            <th>Remove Photo</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                        <tr class="member_profile_photo_field_section">
+                                                                            <td>
+                                                                                <input type="hidden" name="rowno[]" value="1" />
+                                                                                <input id="member_profile_photo" name="profile_photos[]" type="file" class="file"  data-show-upload="false" accept="image/x-png,image/jpg,image/jpeg" >
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="radio" name="is_profile_photo" value="1" />
+                                                                            </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            </div>
+                                                            <div style="clear: both">
+                                                                <button type="button" class="btn btn-success" id="add_profile_photo_section" onclick="MemberProfilePhoto.addRow()" >
+                                                                    Add More photo
+                                                                </button>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <div class="bottommargin-sm"></div>
+                                        <div class="row">
+                                            <div class="ml-auto">
+                                                <button type="button" data-previous="horoscope-details" data-current="profile-photos" class="btn btn-info switch-previous-tab">{{ __('Previous') }}</button>
+                                                <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -798,5 +979,40 @@
                     }
                 });
             });
+
+            var randomKey = $("#profile_photo_add_section").find('.member_profile_photo_field_section').length + 1;
+    var MemberProfilePhoto = {
+        addRow : function() {
+            var totalEntry = $("#profile_photo_add_section").find('.member_profile_photo_field_section').length + 1;
+            if(totalEntry > 3) {
+                alert('Maximum 3 photos only allowed');
+                return false;
+            }
+            var content = `<tr class="member_profile_photo_field_section">
+                                <td>
+                                    <input type="hidden" name="rowno[${randomKey}]]" value="1" />
+                                    <input id="member_profile_photo" name="profile_photos[${randomKey}]" type="file" class="file"  data-show-upload="false" accept="image/x-png,image/jpg,image/jpeg" >
+                                </td>
+                                <td>
+                                    <input type="radio" name="is_profile_photo" value="${randomKey}" />
+                                </td>
+                                <td>
+                                    <button type="button" onclick="MemberProfilePhoto.removeRow(this)" class="btn btn-danger">
+                                        Remove
+                                    </button>
+                                </td>
+                        </tr>`;
+                $("#profile_photo_add_section").find('tbody').append(content);
+                randomKey++;
+        },
+        removeRow : function(target) {
+            var totalEntry = $("#profile_photo_add_section").find('.member_profile_photo_field_section').length;
+            if(totalEntry) {
+                $(target).closest('.member_profile_photo_field_section').remove();
+            } else {
+                alert("Action Restricted. Atleast one profile photo is mandatory");
+            }
+        }
+    };
         </script>
     @endsection

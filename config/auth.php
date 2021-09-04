@@ -78,6 +78,7 @@ return [
         'members' => [
             'driver' => 'eloquent',
             'model' => App\Models\Member::class,
+            'redirectTo' => '/login'
         ],
 
         // 'users' => [

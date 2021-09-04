@@ -21,7 +21,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                 <div class="row">
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div style="display: inline-block; padding-right:10px;">
-                            <img src="{{ $member->secureProfilePhoto() }}" class="alignCenter img my-0 " alt="Avatar"
+                            <img src="{{ $member->member_profile_photo ? $member->member_profile_photo->secureProfilePhoto() : $member->getDefaultProfilePhoto() }}" class="alignCenter img my-0 " alt="Avatar"
                                         style="max-width: 120px;">
                         </div>
                     </div>
@@ -29,10 +29,10 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                         <div class="heading-block border-0 mb-0" style="display:inline-block;padding-left:1.5rem">
                             <h4 class="alignLeft">{{ $member->fullName }}</h4>
                             <b >RG{{ $member->member_code }}</b><br>
-                            <a href="#" class="text-dark" data-toggle="modal" data-target=".upload_profile_photo">
-                                <i class="icon-edit2"></i>
-                                Edit Profile Photo
-                            </a>
+                            <a class="btn btn-success" href="whatsapp://send?text={{ whatsappShareContent($member) }}"
+                                data-action="share/whatsapp/share" target="_blank">
+                                    <i class="icon-whatsapp"></i>
+                                    Share to whatsapp</a>
                             <span></span>
                         </div>
                     </div>
@@ -40,37 +40,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
             </div>
         </div>
     </div>
-<div class="modal fade upload_profile_photo" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <form action="{{ route('member.upload_profile_photo') }}" method="POST" enctype="multipart/form-data">
-        @csrf
-    <div class="modal-dialog modal-lg">
-        <div class="modal-body">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="uploadProfilePhoto">Upload Profile Photo</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-row">
-                        <div class="col-md-6 form-group">
-                            <label class="col-sm-5 col-form-label">{{ __('File') }}</label>
-                            <div class="col-sm-12">
-                                <div class="form-group{{ $errors->has('profile_photo') ? ' has-danger' : '' }}">
-                                    <input type="file" name="profile_photo" accept="image/x-png,image/jpg,image/jpeg" required >
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    </form>
-</div>
+
 
 </section>
 <section id="content" class="mb-10">
@@ -110,6 +80,11 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                             <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
                                 <a href="#horoscope-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-19">
                                     Horoscope
+                                </a>
+                            </li>
+                            <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+                                <a href="#photo-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-20">
+                                    Photos
                                 </a>
                             </li>
                         </ul>
@@ -171,25 +146,6 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                                     for="input-dob">{{ $errors->first('dob') }}</span>
                                                             @endif
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 form-group">
-                                                    <label class="col-sm-5 col-form-label">{{ __('Blood Group') }}</label>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group{{ $errors->has('blood') ? ' has-danger' : '' }}">
-                                                            <select class="selectpicker form-control {{ $errors->has('blood') ? ' is-invalid' : '' }}" name="blood" required>
-                                                                @foreach ($bloodGroup as $blood)
-                                                                    <option value="{{ $blood->id }}"
-                                                                        @if($blood->id == old('blood', $member->blood->id)) selected @endif>
-                                                                        {{ $blood->name }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                            @if ($errors->has('blood'))
-                                                                <span id="name-error" class="error text-danger"
-                                                                    for="input-last_name">{{ $errors->first('blood') }}</span>
-                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -779,6 +735,23 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-6 form-group">
+                                                    <label class="col-sm-5 col-form-label">{{ __('Horoscope Lock') }}</label>
+                                                    <div class="col-sm-12">
+                                                        <div
+                                                            class="form-group{{ $errors->has('rasi') ? ' has-danger' : '' }}">
+
+                                                            <select class="selectpicker select form-control" name="horoscope_lock" id="input_horoscope_lock" >
+                                                                <option value='{{ VISIBLE_TO_ALL }}' @if($member->horscope_lock == VISIBLE_TO_ALL) selected @endif>Visible To All</option>
+                                                                <option value='{{ ONLY_ACCEPTED_PROFILES }}' @if($member->horscope_lock == ONLY_ACCEPTED_PROFILES) selected @endif>Visible Only For Accepted Profiles</option>
+                                                            </select>
+                                                            @if ($errors->has('horoscope_lock'))
+                                                                <span id="name-error" class="error text-danger"
+                                                                    for="input-horoscope_lock">{{ $errors->first('horoscope_lock') }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="col-sm-12 form-group @if($member->dhosam_remarks == null)  hide @endif" id="dhosam_remark_container">
                                                     <label class="col-sm-5 col-form-label">Other Dhosam</label>
                                                     <div class="col-sm-12">
@@ -787,6 +760,80 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                 </div>
                                             </div>
                                     </div>
+
+                                    <div class="tab-content" id="photo-details">
+                                        <div class="form-row">
+                                                <div class="col-md-6 form-group m-auto">
+                                                    <label class="col-sm-5 col-form-label">{{ __('Profile Photo Lock') }}</label>
+                                                    <div class="col-sm-12">
+                                                        <div
+                                                            class="form-group{{ $errors->has('rasi') ? ' has-danger' : '' }}">
+
+                                                            <select class="selectpicker select form-control" name="profile_photo_lock" id="input_horscope_lock" >
+                                                                <option value='{{ VISIBLE_TO_ALL }}' @if($member->profile_photo_lock == VISIBLE_TO_ALL) selected @endif>Visible To All</option>
+                                                                <option value='{{ ONLY_ACCEPTED_PROFILES }}' @if($member->profile_photo_lock == ONLY_ACCEPTED_PROFILES) selected @endif>Visible Only For Accepted Profiles</option>
+                                                            </select>
+                                                            @if ($errors->has('horscope_lock'))
+                                                                <span id="name-error" class="error text-danger"
+                                                                    for="input-horscope_lock">{{ $errors->first('horscope_lock') }}</span>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <div class="form-row">
+                                                <div class="table-responsive m-auto" style="width: auto">
+                                                <table id="profile_photo_add_section" class="table m-auto table-responsive" style="width:auto">
+                                                    <thead>
+                                                            <tr>
+                                                                <th>Photo</th>
+                                                                <th>Is Profile Photo</th>
+                                                                <th>Remove Photo</th>
+
+                                                            </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                            @forelse ($member->member_photos as $profilePhoto)
+                                                            <tr class="member_profile_photo_field_section">
+                                                                <td>
+                                                                    <input type="hidden" name="rowno[{{ $profilePhoto->id }}]" value="1" />
+                                                                    <div style="float:left">
+                                                                    <img src="{{ $profilePhoto->secureProfilePhoto() }}" class="alignCenter img my-0 " alt="Avatar" style="width: 100px; display: inline-block; margin-right: 10px;" />
+                                                                    </div>
+                                                                    <div style="float: left">
+                                                                        <input id="member_profile_photo" name="profile_photos[{{ $profilePhoto->id }}]" type="file" class="file"  data-show-upload="false" accept="image/x-png,image/jpg,image/jpeg" >
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="radio" name="is_profile_photo" @if($profilePhoto->is_profile_photo == 1) checked @endif value="{{ $profilePhoto->id }}" />
+                                                                </td>
+                                                                <td>
+                                                                    <input type="checkbox" name="remove_photos[{{ $profilePhoto->id }}]" value="{{ $profilePhoto->id }}" />
+                                                                </td>
+                                                        </tr>
+                                                            @empty
+                                                            <tr class="member_profile_photo_field_section">
+                                                                <td>
+                                                                    <input type="hidden" name="rowno[]" value="1" />
+                                                                    <input id="member_profile_photo" name="profile_photos[]" type="file" class="file"  data-show-upload="false" accept="image/x-png,image/jpg,image/jpeg" >
+                                                                </td>
+                                                                <td>
+                                                                    <input type="radio" name="is_profile_photo" value="0" checked />
+                                                                </td>
+                                                        </tr>
+                                                            @endforelse
+
+                                                    </tbody>
+                                                </table>
+                                                </div>
+                                                <div style="clear: both">
+                                                    <button type="button" class="btn btn-success" id="add_profile_photo_section" onclick="MemberProfilePhoto.addRow()" >
+                                                        Add More photo
+                                                    </button>
+                                                </div>
+                                        </div>
+                                        <div class="bottommargin-sm"></div>
+                                </div>
 
                                     <div class="row form-group " >
                                         <div class="ml-auto">
@@ -827,6 +874,46 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
            }
        }
     });
+
+    var randomKey = $("#profile_photo_add_section").find('.member_profile_photo_field_section').length + 1;
+    var MemberProfilePhoto = {
+        addRow : function() {
+            var totalEntry = $("#profile_photo_add_section").find('.member_profile_photo_field_section').length + 1;
+            if(totalEntry > 3) {
+                alert('Maximum 3 photos only allowed');
+                return false;
+            }
+            var content = `<tr class="member_profile_photo_field_section">
+                                <td>
+                                    <input type="hidden" name="rowno[${randomKey}]]" value="1" />
+                                    <input id="member_profile_photo" name="profile_photos[${randomKey}]" type="file" class="file"  data-show-upload="false" accept="image/x-png,image/jpg,image/jpeg" >
+                                </td>
+                                <td>
+                                    <input type="radio" name="is_profile_photo" value="${randomKey}" />
+                                </td>
+                                <td>
+                                    <button type="button" onclick="MemberProfilePhoto.removeRow(this)" class="btn btn-danger">
+                                        Remove
+                                    </button>
+                                </td>
+                        </tr>`;
+                $("#profile_photo_add_section").find('tbody').append(content);
+                randomKey++;
+        },
+        removeRow : function(target) {
+            var totalEntry = $("#profile_photo_add_section").find('.member_profile_photo_field_section').length;
+            if(totalEntry) {
+                $(target).closest('.member_profile_photo_field_section').remove();
+            } else {
+                alert("Action Restricted. Atleast one profile photo is mandatory");
+            }
+        }
+    };
+
+    function addProfilePhotoSection()
+    {
+
+    }
 </script>
 @endpush
 @endsection

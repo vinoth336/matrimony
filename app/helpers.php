@@ -70,3 +70,34 @@ function canShowContent($interestStatus, $content = null)
     }
 
 }
+
+function whatsappShareContent($profile)
+{
+    $profileEducations = $profile->educations;
+    $profileOccupation = $profile->occupation ?? null;
+    $profileFamily = $profile->family ?? null;
+    $profileLocation = $profile->location ?? null;
+    $profileHoroscope = $profile->horoscope ?? null;
+
+
+    $rasi =  $profileHoroscope ? $profileHoroscope->rasi()->first() : null;
+    $rasi = $rasi ? $rasi->name : null;
+    $star =  $profileHoroscope ? $profileHoroscope->star()->first() : null;
+    $star = $star ? $star->name : null;
+    $dhosam = $profile->dhosam()->first();
+    $dhosam = $dhosam ? $dhosam->name : null;
+    $content = "Name : " . $profile->name . "%0aAge : " . $profile->age . "%0aDob : " . $profile->dob . "%0a" ;
+    if($rasi) {
+        $content .= "Rasi : " . $rasi ?? null;
+    }
+    if($star) {
+        $content .= "%0aStar : " . $star ?? null;
+    }
+    if($dhosam) {
+        $content .= "%0aDhosam : " . $dhosam;
+    }
+    $content .="%0aView Profile : " . route('member.view_profile', $profile->member_code) ;
+    $content .= "%0a*Shared By * %0a*"  . config('app.name') . "*%0a" . config('app.url');
+
+    return $content;
+}

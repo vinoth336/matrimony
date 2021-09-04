@@ -14,6 +14,7 @@ class MemberRegistrationRequest extends Authenticatable implements MustVerifyEma
     use SoftDeletes, HasUuid, Notifiable;
 
     protected $fillable = [
+        'represent_by_id',
         'first_name',
         'last_name',
         'username',
