@@ -579,6 +579,106 @@ class MemberController extends Controller
             ->with('selected_tab', 'phone_number_request_sent')
             ;
     }
+    public function viewProfilePhotoRequestReceived(Request $request)
+    {
+        $member = auth()->user();
+        $bloodGroup = Blood::orderBy('id')->get();
+        $degrees = Degree::get();
+        $familyType = FamilyType::get();
+        $cities = City::get();
+        $memberHoroscope = $member->horoscope ?? optional();
+        $states = State::get();
+        $rasies = Zodiac::get();
+        $stars = Star::get();
+        $profiles = $member->profile_photo_request_received()->with('member');
+        if ($request->input('search')) {
+            $search = $request->input('search');
+            if ($search == 'accepted_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_APPROVED);
+            } elseif ($search == 'not_interested_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REJECT);
+            } else {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+            }
+        } else {
+            $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+        }
+        $profiles = $profiles->orderBy('updated_at', 'desc')->get();
+        $employeeIns = EmployeeIn::orderBy('name')->get();
+        $maritalStatus = MaritalStatus::orderBy('sequence')->get();
+        $dhosams = Dhosam::orderBy('sequence')->get();
+
+        return view('public.user.profile_photo_request_received')
+            ->with('member', $member)
+            ->with('bloodGroup', $bloodGroup)
+            ->with('degrees', $degrees)
+            ->with('familyType', $familyType)
+            ->with('cities', $cities)
+            ->with('states', $states)
+            ->with('memberHoroscope', $memberHoroscope)
+            ->with('rasies', $rasies)
+            ->with('stars', $stars)
+            ->with('profiles', $profiles)
+            ->with('employeeIns', $employeeIns)
+            ->with('showCreatedOn', true)
+            ->with('activeTab', $request->input('search') ?? null)
+            ->with('checkProfileStatus', true)
+            ->with('maritalStatus', $maritalStatus)
+            ->with('dhosams', $dhosams)
+            ->with('selected_tab', 'profile_photo_request_received')
+            ;
+    }
+
+    public function viewProfilePhotoRequestSent(Request $request)
+    {
+        $member = auth()->user();
+        $bloodGroup = Blood::orderBy('id')->get();
+        $degrees = Degree::get();
+        $familyType = FamilyType::get();
+        $cities = City::get();
+        $memberHoroscope = $member->horoscope ?? optional();
+        $states = State::get();
+        $rasies = Zodiac::get();
+        $stars = Star::get();
+        $profiles = $member->profile_photo_request_sent()->with('member_profile');
+        if ($request->input('search')) {
+            $search = $request->input('search');
+            if ($search == 'accepted_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_APPROVED);
+            } elseif ($search == 'not_interested_profiles') {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REJECT);
+            } else {
+                $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+            }
+        } else {
+            $profiles->where('request_status', PROFILE_PHONE_NUMBER_REQUEST);
+        }
+        $profiles = $profiles->orderBy('updated_at', 'desc')->get();
+        $employeeIns = EmployeeIn::orderBy('name')->get();
+        $maritalStatus = MaritalStatus::orderBy('sequence')->get();
+        $dhosams = Dhosam::orderBy('sequence')->get();
+
+        return view('public.user.profile_photo_request_sent')
+            ->with('member', $member)
+            ->with('bloodGroup', $bloodGroup)
+            ->with('degrees', $degrees)
+            ->with('familyType', $familyType)
+            ->with('cities', $cities)
+            ->with('states', $states)
+            ->with('memberHoroscope', $memberHoroscope)
+            ->with('rasies', $rasies)
+            ->with('stars', $stars)
+            ->with('profiles', $profiles)
+            ->with('employeeIns', $employeeIns)
+            ->with('showCreatedOn', true)
+            ->with('activeTab', $request->input('search') ?? null)
+            ->with('checkProfileStatus', true)
+            ->with('maritalStatus', $maritalStatus)
+            ->with('dhosams', $dhosams)
+            ->with('selected_tab', 'profile_photo_request_sent')
+            ;
+    }
+
 
     public function updateProfile(Request $request)
     {
@@ -638,7 +738,7 @@ class MemberController extends Controller
             $interestedProfile->profile_status = PROFILE_INTEREST;
             $interestedProfile->save();
             DB::commit();
-            dispatch(new SendNotificationToUser('profile_request_send', $intrestedMember, auth()->user()));
+            dispatch(new SendNotificationToUser('profile_request_send', auth()->user(), $intrestedMember));
 
             return response(['status' => 'success', 'msg' => 'Added Successfully']);
         } catch (Exception $e) {
@@ -657,12 +757,40 @@ class MemberController extends Controller
             $interestedProfile = $member->add_phone_number_request()->updateOrCreate(['profile_member_id' => $intrestedMember->id]);
             $interestedProfile->request_status = PROFILE_PHONE_NUMBER_REQUEST;
             $interestedProfile->save();
+            dispatch(new SendNotificationToUser('phone_number_request_received', $member, $intrestedMember));
             DB::commit();
-            dispatch(new SendNotificationToUser('profile_request_accept', $intrestedMember, auth()->user()));
 
-            return redirect()->back()->with(['status' => 'success', 'msg' => 'Added Successfully']);
+            if($request->ajax()) {
+                return response(['status' => 'success', 'msg' => 'Added Successfully']);
+            } else {
+                return redirect()->back()->with(['status' => 'success', 'msg' => 'Added Successfully']);
+            }
         } catch (Exception $e) {
-            Log::error('Error Occurred in MemberController@addInterest - ' . $e->getMessage());
+            Log::error('Error Occurred in MemberController@addPhoneNumberRequest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
+    public function addProfilePhotoRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $member->add_profile_photo_request()->updateOrCreate(['profile_member_id' => $intrestedMember->id]);
+            $interestedProfile->request_status = PROFILE_PHONE_NUMBER_REQUEST;
+            $interestedProfile->save();
+            dispatch(new SendNotificationToUser('photo_request_send', $member, $intrestedMember));
+            DB::commit();
+
+            if($request->ajax()) {
+                return response(['status' => 'success', 'msg' => 'Added Successfully']);
+            } else {
+                return redirect()->back()->with(['status' => 'success', 'msg' => 'Added Successfully']);
+            }
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@addProfilePhotoRequest - ' . $e->getMessage());
             return abort(500);
         }
     }
@@ -679,7 +807,7 @@ class MemberController extends Controller
             $interestedProfile->save();
             DB::commit();
 
-            dispatch(new SendNotificationToUser('horoscope_request_send', $intrestedMember, auth()->user()));
+            dispatch(new SendNotificationToUser('horoscope_request_send', auth()->user(), $intrestedMember));
 
             return redirect()->back()->with(['status' => 'success', 'msg' => 'Added Successfully']);
         } catch (Exception $e) {
@@ -851,12 +979,31 @@ class MemberController extends Controller
             $interestedProfile->request_status = PROFILE_PHONE_NUMBER_APPROVED;
             $interestedProfile->save();
             DB::commit();
+            dispatch(new SendNotificationToUser('phone_number_request_accepted', $member, $intrestedMember));
+            return response(['status' => 'success', 'msg' => 'Added Successfully']);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@acceptPhoneNumberRequest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
 
-            dispatch(new SendNotificationToUser('profile_request_accept', $member, $intrestedMember));
+    public function acceptProfilePhotoRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $intrestedMember->profile_photo_request_status()->firstOrFail();
+            $interestedProfile->request_status = PROFILE_PHONE_NUMBER_APPROVED;
+            $interestedProfile->save();
+            DB::commit();
+
+            dispatch(new SendNotificationToUser('photo_request_accept', $member, $intrestedMember));
 
             return response(['status' => 'success', 'msg' => 'Added Successfully']);
         } catch (Exception $e) {
-            Log::error('Error Occurred in MemberController@acceptProfileInterest - ' . $e->getMessage());
+            Log::error('Error Occurred in MemberController@acceptProfilePhotoRequest - ' . $e->getMessage());
             return abort(500);
         }
     }
@@ -876,7 +1023,27 @@ class MemberController extends Controller
 
             return response(['status' => 'success', 'msg' => 'Added Successfully']);
         } catch (Exception $e) {
-            Log::error('Error Occurred in MemberController@acceptProfileInterest - ' . $e->getMessage());
+            Log::error('Error Occurred in MemberController@rejecPhoneNumberRequest - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
+    public function rejecProfilePhotoRequest(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+            $interestedProfile = $intrestedMember->profile_photo_request_status()->firstOrFail();
+            $interestedProfile->request_status = PROFILE_PHONE_NUMBER_REJECT;
+            $interestedProfile->save();
+            DB::commit();
+
+            return response(['status' => 'success', 'msg' => 'Updated Successfully']);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@rejecProfilePhotoRequest - ' . $e->getMessage());
             return abort(500);
         }
     }

@@ -22,7 +22,6 @@ class SendNotiticationToUser extends Mailable
     {
         $this->notificationType = $notificationType;
         $this->profiles = $profiles instanceof \Illuminate\Database\Eloquent\Collection ? $profiles : [$profiles];
-
         $this->user = $user;
     }
 
@@ -34,7 +33,6 @@ class SendNotiticationToUser extends Mailable
     public function build()
     {
         if($this->notificationType == 'profile_request_send') {
-            info('am inside');
             return $this->to($this->user->email)
             ->view('mail.profile_interest_request_received')
             ->with([
@@ -50,32 +48,36 @@ class SendNotiticationToUser extends Mailable
             ]);
         } elseif ($this->notificationType == 'photo_request_send') {
             return $this->to($this->user->email)
-            ->view('mail.phone_number_request_received')
+            ->view('mail.profile_photo_request_received')
             ->with([
                 'user' => $this->user,
                 'profiles' => $this->profiles
             ]);
         } elseif ($this->notificationType == 'photo_request_accept') {
             return $this->to($this->user->email)
-            ->view("mail.phone_number_request_accepted")
+            ->view("mail.profile_photo_request_accepted")
             ->with([
                 'user' => $this->user,
                 'profiles' => $this->profiles
             ]);
-        } elseif ($this->notificationType == 'phone_number_request_send') {
+        } elseif ($this->notificationType == 'phone_number_request_received') {
             return $this->to($this->user->email)
             ->view('mail.phone_number_request_received')
             ->with([
                 'user' => $this->user,
                 'profiles' => $this->profiles
             ]);
-        } elseif ($this->notificationType == 'phone_number_request_accept') {
+        } elseif ($this->notificationType == 'phone_number_request_accepted') {
             return $this->to($this->user->email)
             ->view('mail.phone_number_request_accepted')
             ->with([
                 'user' => $this->user,
                 'profiles' => $this->profiles
             ]);
+        }  elseif ($this->notificationType == 'send_user_email_verification_pending') {
+            return $this->to($this->user->email)
+            ->view('mail.email_verification_pending')
+            ->with('hash', encrypt($this->user->id));
         }
     }
 }

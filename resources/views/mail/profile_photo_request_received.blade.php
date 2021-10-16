@@ -103,7 +103,6 @@
 
 <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
     <!-- HIDDEN PREHEADER TEXT -->
-    <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"> We're thrilled to have you here! Get ready to dive into your new account. </div>
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <!-- LOGO -->
         <tr>
@@ -132,49 +131,53 @@
                     </tr>
                     <tr>
                         <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p>Hi Indhu,<br>The following member have requested you for some profile details.
+                            <p>Hi {{ $user->name }},<br>The following member have requested to view your profile photo.
 							</p>
                         </td>
                     </tr>
-
+                    @foreach($profiles as $profile)
                     <tr>
                         <td bgcolor="#ffffff" align="left" style=" color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400;">
                         <div style="border: 1px solid #ccc; width: 80%; margin: auto;display: flex">
                         <div style="float: left">
-                           <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" style="width: 120px" />
-
+                           <img src="{{ $profile->secureProfilePhoto() }}" style="width: 120px" />
                          </div>
                          <div style="float: left;margin-left: 20px">
-                         	<table r>
+                         	<table>
                             	<tr>
                                 	<td style="padding-top: 20px"></td>
                                 </tr>
                             	<tr>
                                 	<td>
-                                    	<b>Vinothkumar Veeramani</b>
+                                    	<b>{{ $profile->name }}</b>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                    	24 yrs
+                                    	{{ $profile->age }}
                                     </td>
                                 </tr>
                                  <tr>
                                     <td>
-                                    	Karur
+                                        @php
+                                            $profileLocation = $profile->location ?? optional();
+                                        @endphp
+                                    	{{ $profile->address }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                    	View Profile
+                                    	<a style="background: #FFA73B; color: #fff; padding: 3px; text-align: center" href="{{ route('member.view_profile', $profile->member_code) }}" >
+                                            View Profile
+                                        </a>
                                     </td>
                                 </tr>
                             </table>
-
                          </div>
                          </div>
                         </td>
                     </tr>
+                    @endforeach
                     <tr>
                         <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
                             <p style="margin: 0;">Regards,<br> {{ $siteInformation->site_name }}</p>

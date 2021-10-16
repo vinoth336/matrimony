@@ -57,8 +57,13 @@
             </a>
         </li>
         <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+            <a href="{{ route('member.profile_photo_request_received') }}">
+                <i class="icon-camera"></i>Profile Photo Request
+            </a>
+        </li>
+        <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
             <a href="{{ route('member.phone_number_request_received') }}">
-                <i class="icon-forbidden"></i>Phone Number Request
+                <i class="icon-phone1"></i>Phone Number Request
             </a>
         </li>
         <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">

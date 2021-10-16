@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['namespace' => 'Members'], function () {
     Route::get('/', 'PublicController@index')->name('public.index');
+    Route::get('/terms', 'PublicController@showTermsAndCondition')->name('public.terms_and_condition');
+
     Route::post('enquiry', 'SaveEnquiryController@store')->name('enquiry.store');
     Route::get('/login', 'MemberLoginController@showLoginForm')->name('public.login');
     Route::post('/login', 'MemberLoginController@login');
@@ -37,6 +40,7 @@ Route::group(['namespace' => 'Members'], function () {
         Route::group(['middleware' => 'check_member_account_status'], function() {
             Route::post('/sendinterest/{memberCode}', 'MemberController@addInterest')->name('member.send_interest');
             Route::post('/addPhoneNumberRequest/{memberCode}', 'MemberController@addPhoneNumberRequest')->name('member.phone_number_request');
+            Route::post('/add_profile_photo_request/{memberCode}', 'MemberController@addProfilePhotoRequest')->name('member.profile_photo_request');
             Route::post('/addHoroscopeRequest/{memberCode}', 'MemberController@addHoroscopeRequest')->name('member.horoscope_request');
 
             Route::post('/addshortlist/{memberCode}', 'MemberController@addShortList')->name('member.add_profile_to_shortlist');
@@ -49,8 +53,9 @@ Route::group(['namespace' => 'Members'], function () {
             Route::post('/delete_my_request/{memberCode}', 'MemberController@removeFromInterestList')->name('member.remove_from_interest_list');
             Route::get('/view/{memberCode}', 'MemberController@viewProfile')->name('member.view_profile');
             Route::post('/accept_phone_number_request/{memberCode}', 'MemberController@acceptPhoneNumberRequest')->name('member.accept_phone_number_request');
-            Route::post('/reject_phone_number_request/{memberCode}', 'MemberController@rejecPhoneNumberRequest')->name('member.accept_phone_number_request');
-
+            Route::post('/accept_profile_photo_request/{memberCode}', 'MemberController@acceptProfilePhotoRequest')->name('member.accept_profile_photo_request');
+            Route::post('/reject_phone_number_request/{memberCode}', 'MemberController@rejecPhoneNumberRequest')->name('member.reject_phone_number_request');
+            Route::post('/reject_profile_photo_request/{memberCode}', 'MemberController@rejecProfilePhotoRequest')->name('member.reject_profile_photo_request');
             Route::get('/search/profile', 'MemberController@searchByProfileId')->name('member.search_profile_id');
         });
         Route::get('/viewed_profiles', 'MemberController@viewMemberProfileViewed')->name('member.viewed_profile');
@@ -61,6 +66,9 @@ Route::group(['namespace' => 'Members'], function () {
         Route::get('/who_viewed_you', 'MemberController@memberViewedYourProfile')->name('member.who_viewed_you');
         Route::get('/phone_number_request_received', 'MemberController@viewPhoneNumberRequestReceived')->name('member.phone_number_request_received');
         Route::get('/phone_number_request_sent', 'MemberController@viewPhoneNumberRequestSent')->name('member.phone_number_request_sent');
+        Route::get('/profile_photo_request_received', 'MemberController@viewProfilePhotoRequestReceived')->name('member.profile_photo_request_received');
+        Route::get('/profile_photo_request_sent', 'MemberController@viewProfilePhotoRequestSent')->name('member.profile_photo_request_sent');
+
         Route::patch('/update_password', 'MemberController@changeMemberPassword')->name('member.update_password');
 
     });
@@ -98,4 +106,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
         Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
     });
+});
+
+Route::get('run_pending_verification', function(){
+    return Artisan::call('email:user_verification_pending', []);
 });

@@ -23,6 +23,7 @@ class SendNotificationToUser implements ShouldQueue
     protected $notificationType;
     protected $profiles;
     protected $user;
+    protected $tries = 3;
 
     public function __construct($notificationType, $profiles, $user)
     {
@@ -38,6 +39,10 @@ class SendNotificationToUser implements ShouldQueue
      */
     public function handle()
     {
+        if($this->user->email == null) {
+                info("User mail is not have");
+                return true;
+        }
         if($this->notificationType == 'profile_request_send') {
             return Mail::send(new SendNotiticationToUser ($this->user, $this->profiles, $this->notificationType));
         } elseif ($this->notificationType == 'profile_request_accept') {
@@ -46,9 +51,9 @@ class SendNotificationToUser implements ShouldQueue
             return Mail::send(new SendNotiticationToUser($this->user, $this->profiles, $this->notificationType));
         } elseif ($this->notificationType == 'photo_request_accept') {
             return Mail::send(new SendNotiticationToUser($this->user, $this->profiles, $this->notificationType));
-        } elseif ($this->notificationType == 'phone_number_request_send') {
+        } elseif ($this->notificationType == 'phone_number_request_received') {
             return Mail::send(new SendNotiticationToUser($this->user, $this->profiles, $this->notificationType));
-        } elseif ($this->notificationType == 'phone_number_request_accept') {
+        } elseif ($this->notificationType == 'phone_number_request_accepted') {
             return Mail::send(new SendNotiticationToUser($this->user, $this->profiles, $this->notificationType));
         }
 

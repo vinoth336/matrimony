@@ -35,4 +35,9 @@ class PublicController extends Controller
         ;
 
     }
+
+    public function showTermsAndCondition(Request $request)
+    {
+        return view('public.terms_and_condition');
+    }
 }

@@ -148,7 +148,7 @@
         <div class="modal-content ">
             <!-- <input type="hidden" name="email_e" value="admin@filmscafe.in"> -->
             <div class="modal-header">
-              <h2 class="modal-title">Quick Action</h2>
+              <h4 class="modal-title" style="font-size: 18px !important">Quick Action</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -175,7 +175,7 @@
                                 </div>
                             </div>
                         </div>
-                        <ul class="sidenav ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header topmargin-sm">
+                        <ul class="sidenav ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header topmargin-sm" style="margin-top: 1rem !important">
                             <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
                                 <a href="{{ route('member.viewed_profile') }}">
                                     <i class="icon-eye"></i>Profile Viewed
@@ -207,6 +207,11 @@
                                     <label class="text-info float-right" style="font-size: 18px">
                                         {{ $member->ignored_profiles()->count() }}
                                     </label>
+                                </a>
+                            </li>
+                            <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
+                                <a href="{{ route('member.profile_photo_request_received') }}">
+                                    <i class="icon-camera"></i>Profile Photo Request
                                 </a>
                             </li>
                             <li class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
@@ -243,23 +248,16 @@
 </div>
 @push('js')
     <script>
-    document.addEventListener("backbutton", function(e) {
-        if($("#filter_modal").hasClass('show') || $("#quickaction_modal").hasClass('show')) {
-            e.preventDefault();
-            alert('am listioned');
-            $(".right_modal").find('.active').modal('hide');
+    $('.modal').on('shown.bs.modal', function (e) {
+        window.location.href = '#' + $(this).attr('id');
+    });
+    $('.modal').on('hidden.bs.modal', function (e) {
+        history.pushState('', document.title, window.location.pathname);
+    });
+    $(window).bind('hashchange', function() {
+        if(window.location.hash == ''){
+            $('.modal').modal('hide');
         }
-    }, false);
-
-    $(window).on("navigate", function (event, data) {
-  var direction = data.state.direction;
-  if (direction == 'back') {
-    alert('back');
-  }
-  if (direction == 'forward') {
-    // do something else
-    alert('front');
-  }
-});
+    });
     </script>
 @endpush

@@ -42,7 +42,7 @@ class MemberProfilePhoto extends Model
     public function secureProfilePhoto()
     {
         if ($this->attributes['profile_photo']) {
-            return asset('site/images/profile_photos/thumbnails/' . $this->profile_photo);
+            return asset('site/images/profile_photos/thumbnails') . "/" . rawurlencode($this->profile_photo);
         } else {
             return $this->getDefaultProfilePhoto();
         }
@@ -51,7 +51,7 @@ class MemberProfilePhoto extends Model
     public function secureFullSizeProfilePhoto()
     {
         if ($this->attributes['profile_photo']) {
-            return asset('site/images/profile_photos/' . $this->profile_photo);
+            return asset('site/images/profile_photos') . "/" . rawurlencode($this->profile_photo);
         } else {
             return null;
         }

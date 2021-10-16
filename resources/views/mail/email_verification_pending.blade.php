@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Verification Pending</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -103,7 +103,6 @@
 
 <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
     <!-- HIDDEN PREHEADER TEXT -->
-    <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"> We're thrilled to have you here! Get ready to dive into your new account. </div>
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <!-- LOGO -->
         <tr>
@@ -112,74 +111,56 @@
                     <tr>
                         <td align="center" valign="top" style="padding: 40px 10px 40px 10px;"> </td>
                     </tr>
-
                 </table>
             </td>
         </tr>
-
+        <tr>
+            <td bgcolor="#FFA73B" align="center" style="padding: 0px 10px 0px 10px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+                    <tr>
+                        <td bgcolor="#ffffff" align="center" valign="top" style="padding: 40px 20px 20px 20px; border-radius: 4px 4px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
+                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Hey!</h1>
+                            <img src="{{ asset('site/images/icons/verification_pending.png') }}" style="display: block; border: 0px;" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
         <tr>
             <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
-                <tr>
-                    	<td>
-                        	<a class="standard-logo" href="" style="text-decoration:none">
-                                <p >
-                                    <label style="color:#cc2c26;font-size: 22px">Yadava</label>
-                                    <label style="color: #c46a35;font-size: 22px">Match</label>
-                                </p>
-                            </a>
-                        </td>
-                    </tr>
                     <tr>
                         <td bgcolor="#ffffff" align="left" style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p>Hi {{ $user->name }},<br>Your profile interest request is accepted.
-							</p>
+                            <p>
+                                Your Email Verification Pending.
+                                <br>
+                            Use below link to activate your account.</p>
                         </td>
                     </tr>
-
-                    @foreach($profiles as $profile)
                     <tr>
-                        <td bgcolor="#ffffff" align="left" style=" color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400;">
-                        <div style="border: 1px solid #ccc; width: 80%; margin: auto;display: flex">
-                        <div style="float: left">
-                           <img src="{{ $profile->secureProfilePhoto() }}" style="width: 120px" />
-                         </div>
-                         <div style="float: left;margin-left: 20px">
-                         	<table>
-                            	<tr>
-                                	<td style="padding-top: 20px"></td>
-                                </tr>
-                            	<tr>
-                                	<td>
-                                    	<b>{{ $profile->name }}</b>
-                                    </td>
-                                </tr>
+                        <td bgcolor="#ffffff" align="left">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <td>
-                                    	{{ $profile->age }}
-                                    </td>
-                                </tr>
-                                 <tr>
-                                    <td>
-                                        @php
-                                            $profileLocation = $profile->location ?? optional();
-                                        @endphp
-                                    	{{ $profile->address }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                    	<a style="background: #FFA73B; color: #fff; padding: 3px; text-align: center" href="{{ route('member.view_profile', $profile->member_code) }}" >
-                                            View Profile
-                                        </a>
+                                    <td bgcolor="#ffffff" align="center" style="padding: 20px 30px 60px 30px;">
+                                        <table border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td align="center" style="border-radius: 3px;" bgcolor="#FFA73B">
+                                                <a href="{{ route('public.verify_email', $hash) }}?redirect_to=profile&success_navigation=dashboard" target="_blank" style="font-size: 20px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #FFA73B; display: inline-block;">
+                                                    Confirm Account
+                                                </a>
+                                            </td>
+                                            </tr>
+                                        </table>
                                     </td>
                                 </tr>
                             </table>
-                         </div>
-                         </div>
+                        </td>
+                    </tr> <!-- COPY -->
+                    <tr>
+                        <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
+                            <p style="margin: 0;">If you have any questions, just reply to this email—we're always happy to help out.</p>
                         </td>
                     </tr>
-                    @endforeach
                     <tr>
                         <td bgcolor="#ffffff" align="left" style="padding: 0px 30px 40px 30px; border-radius: 0px 0px 4px 4px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
                             <p style="margin: 0;">Regards,<br> {{ $siteInformation->site_name }}</p>

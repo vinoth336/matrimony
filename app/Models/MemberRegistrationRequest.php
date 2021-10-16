@@ -31,4 +31,9 @@ class MemberRegistrationRequest extends Authenticatable implements MustVerifyEma
     protected $dates = [
         'dob'
     ];
+
+    public function scopeVerificationPendingAccount($query)
+    {
+        return $query->where('is_verified', 0);
+    }
 }

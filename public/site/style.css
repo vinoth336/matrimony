@@ -15958,3 +15958,22 @@ label.radio {
     color: #e42c3e;
     font-weight: 400
 }
+
+.profile_photo_request {
+    z-index: 22;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.photo_request_send {
+    background: #356eb5 !important;
+    border-color: #356eb5 !important;
+}
+
+.photo_request_waiting_for_approval {
+    background: #28a745 !important;
+    border-color: #28a745 !important;
+}

@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             $siteInformation = SiteInformation::first();
-            $version = '1.0.8';
+            $version = '1.0.9';
             $view->with('siteInformation', $siteInformation);
             $view->with('version', $version);
         });

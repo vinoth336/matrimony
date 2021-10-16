@@ -10,11 +10,6 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <br>
-                                    <h5 class="px-3" style="text-align: justify">Based on your profile details, following are matched profiles</h5>
-                                </div>
-                                <div class="row">
-
                                     @foreach($profiles as $profile)
                                         @include('public.user.components.member_profile_summary')
                                     @endforeach

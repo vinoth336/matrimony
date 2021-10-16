@@ -3,13 +3,19 @@
     $showProfilePhoto = false;
     $profileInterestReceived = $profile->current_user_interest_received()->first();
     $responseStatus = $profileInterestReceived->request_status ?? null;
-
     $profileInterestRequest = $profile->current_user_interested_profiles()
     ->where('profile_status', PROFILE_INTEREST)->first();
     $requestStatus = $profileInterestRequest->request_status ?? null;
+    $isHavingProfilePhoto = $profile->isHavingProfilePhoto();
+    $profilePhotoRequestStatus = $profile->profile_photo_request_status()->count() ? $profile->profile_photo_request_status->request_status : null;
+
     if($responseStatus == PROFILE_REQUEST_APPROVED ||
-        $requestStatus == PROFILE_REQUEST_APPROVED || $profile->profilePhotoIsPubliclyVisible()) {
+        $requestStatus == PROFILE_REQUEST_APPROVED || $profile->profilePhotoIsPubliclyVisible() || $profilePhotoRequestStatus == PROFILE_PHONE_NUMBER_APPROVED) {
         $showProfilePhoto = true;
+    }
+    if($member->isAdminUser()) {
+        $showProfilePhoto = true;
+        $profileHoroscope = $profile->horoscope ?? optional();
     }
 @endphp
 
@@ -22,6 +28,22 @@
                     <img src="{{ $profile->secureProfilePhoto() }}" alt="{{ $profile->fullName }}">
                 @else
                     <img src="{{ $profile->getDefaultProfilePhoto() }}" alt="{{ $profile->fullName }}">
+
+                    @if($isHavingProfilePhoto)
+                        @if($profilePhotoRequestStatus == PROFILE_PHONE_NUMBER_REQUEST)
+                            <button type="button" class="btn btn-success" disabled>
+                                Request Rejected
+                            </button>
+                        @elseif($profilePhotoRequestStatus == PROFILE_PHONE_NUMBER_REJECT)
+                            <button type="button" class="btn btn-default" disabled>
+                                Request Rejected
+                            </button>
+                        @elseif($profilePhotoRequestStatus == null)
+                            <button type="btn" class="btn btn-success profile_photo_request photo_request_send" >
+                                Send Photo Request
+                            </button>
+                        @endif
+                    @endif
                 @endif
             </a>
         </div>
@@ -56,6 +78,15 @@
                     <li>Occupation : {{ optional($profile->occupation)->role }}</li>
                     @if($member->viewProfileLocation())
                         <li><i class="icon-map-marker1"></i>{{ $profileLocationCity }}, {{ $profileLocationState }}</li>
+                    @endif
+                    @if($member->isAdminUser())
+                        @if($profileHoroscope->horoscope_image)
+                        <li>
+                            <a class="text-primary" href="{{ asset('site/images/horoscope/' . $profileHoroscope->horoscope_image ) }}" target="_blank">
+                                View Horoscope
+                            </a>
+                        </li>
+                        @endif
                     @endif
                 </ul>
             </div>

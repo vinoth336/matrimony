@@ -236,6 +236,10 @@
                                         </span>
                                     </div>
                                 </div>
+                                <p>
+                                    By Clicking "Sign Up" You agree to {{ $siteInformation->site_name }}
+                                    <a href="{{ route('public.terms_and_condition') }}">Terms and Condition</a>
+                                </p>
                                 <input type="submit" class="btn btn-success btn-block" value="Signup">
                                 <input type="hidden" name="prefix" value="template-phone_noform-">
                                 <br>

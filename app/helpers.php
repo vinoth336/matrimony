@@ -44,7 +44,10 @@ function familyType()
 function generateMemberCodeNumber()
 {
     $code = mt_rand(1000000000, 9999999999); // better than rand()
-
+    if($code <= 0) {
+        $code = $code * -1;
+    }
+    $code = str_pad($code,8,'0',STR_PAD_LEFT);
     // call the same function if the MemberCode exists already
     if (MemberCodeNumberExists($code)) {
         return generateMemberCodeNumber();
@@ -63,6 +66,11 @@ function MemberCodeNumberExists($code)
 
 function canShowContent($interestStatus, $content = null)
 {
+    $user = auth()->user();
+    $isAdminUser = $user->isAdminUser();
+    if($isAdminUser) {
+        return $content;
+    }
     if($content) {
         return $interestStatus ? $content : 'Need Approval';
     } else {

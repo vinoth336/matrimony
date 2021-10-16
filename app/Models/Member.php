@@ -136,11 +136,6 @@ class Member extends Authenticatable
         return $this->hasMany(MemberInterestedProfile::class, 'member_id', 'id')->where('profile_status', PROFILE_INTEREST);
     }
 
-    public function phoneNumber_request()
-    {
-        return $this->hasMany(MemberRequestPhoneNumber::class, 'member_id', 'id');
-    }
-
     public function horoscope_request()
     {
         return $this->hasMany(MemberRequestHoroscope::class, 'member_id', 'id');
@@ -360,6 +355,27 @@ class Member extends Authenticatable
         ->where('profile_member_id', auth()->user()->id);
     }
 
+    public function profile_photo_request_received()
+    {
+        return $this->hasMany(MemberProfilePhotoRequest::class, 'profile_member_id', 'id');
+    }
+
+    public function profile_photo_request_sent()
+    {
+        return $this->hasMany(MemberProfilePhotoRequest::class, 'member_id', 'id');
+    }
+
+    public function add_profile_photo_request()
+    {
+        return $this->hasMany(MemberProfilePhotoRequest::class, 'member_id', 'id');
+    }
+
+    public function profile_photo_request_status()
+    {
+        return $this->belongsTo(MemberProfilePhotoRequest::class, 'id', 'member_id')
+        ->where('profile_member_id', auth()->user()->id);
+    }
+
     public function horoscopeRequestStatus()
     {
         return $this->belongsTo(Member::class, 'profile_member_id', 'id')
@@ -373,6 +389,15 @@ class Member extends Authenticatable
             } else {
                 return $this->getDefaultProfilePhoto();
             }
+    }
+
+    public function isHavingProfilePhoto()
+    {
+        if($this->member_profile_photo()->count()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function secureFullSizeProfilePhoto()

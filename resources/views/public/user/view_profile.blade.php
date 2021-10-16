@@ -22,8 +22,10 @@
     $profileInterestRequest = $profile->current_user_interested_profiles()
     ->where('profile_status', PROFILE_INTEREST)->first();
     $requestStatus = $profileInterestRequest->request_status ?? null;
+    $isHavingProfilePhoto = $profile->isHavingProfilePhoto();
+    $profilePhotoRequestStatus = $profile->profile_photo_request_status()->count() ? $profile->profile_photo_request_status->request_status : null;
     if($responseStatus == PROFILE_REQUEST_APPROVED ||
-            $requestStatus == PROFILE_REQUEST_APPROVED || $profile->profilePhotoIsPubliclyVisible()) {
+            $requestStatus == PROFILE_REQUEST_APPROVED || $profile->profilePhotoIsPubliclyVisible() || $profilePhotoRequestStatus == PROFILE_PHONE_NUMBER_APPROVED) {
         $isInterestAccepted = true;
         $showProfilePhoto = true;
     }
@@ -31,6 +33,13 @@
     if($responseStatus == PROFILE_REQUEST_APPROVED ||
             $requestStatus == PROFILE_REQUEST_APPROVED || $profile->horoscopeIsPubliclyVisible()) {
             $showHoroscope = true;
+    }
+
+    if($member->isAdminUser()) {
+        $showProfilePhoto = true;
+        $isAdminUser = true;
+        $showHoroscope = true;
+        $isInterestAccepted = true;
     }
     @endphp
     <section id="content">
@@ -155,7 +164,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                             <div class="col-sm-12">
                                                 <div class="form-group{{ $errors->has('phone_no') ? ' has-danger' : '' }}">
 
-                                                    @if($profilePhoneNumberRequestStatus && $profilePhoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED)
+                                                    @if(($profilePhoneNumberRequestStatus && $profilePhoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED) || $isAdminUser)
                                                         {{  $profile->phone_no }}
                                                     @elseif($isInterestAccepted)
                                                         {{ canShowContent($isInterestAccepted, $profile->phone_no) }}
@@ -440,16 +449,18 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                             <label class="col-sm-5 col-form-label">{{ __('Horoscope Images') }}</label>
                                             <div class="col-sm-12">
                                                 <div class="fileinput-preview fileinput-exists thumbnail">
-                                                    @if(($profile->phoneNumberRequestStatus && $profile->phoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED) || canShowContent($showHoroscope))
-                                                        <a href="{{ asset('site/images/horoscope/' . $profileHoroscope->horoscope_image ) }}" target="_blank">
-                                                            View Horoscope
-                                                        </a>
+                                                    @if($showHoroscope)
+                                                        @if($profileHoroscope->horoscope_image)
+                                                            <a href="{{ asset('site/images/horoscope/' . $profileHoroscope->horoscope_image ) }}" target="_blank">
+                                                                View Horoscope
+                                                            </a>
+                                                        @endif
                                                     @else
-                                                    <form method="POST" action="{{ route('member.phone_number_request', $profile->member_code) }}">
-                                                        @csrf
-                                                        @method('POST')
-                                                        <button class="btn btn-primary" id="send_horoscope_request">Send Request</button>
-                                                    </form>
+                                                        <form method="POST" action="{{ route('member.phone_number_request', $profile->member_code) }}">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <button class="btn btn-primary" id="send_horoscope_request">Send Request</button>
+                                                        </form>
                                                     @endif
                                                 </div>
                                             </div>
@@ -480,15 +491,26 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                 </div>
                                 <div class="form-row ">
                                     <div class="clear"></div>
-                                    @forelse ($profile->member_photos as $profilePhoto)
-                                        <div class="col-md-3">
-                                            <a class="grid-item" href="{{ $profilePhoto->securePhoto() }}" data-lightbox="gallery-item">
-                                            <img src="{{ $profilePhoto->secureProfilePhoto() }}" class="alignCenter img my-0 " alt="Avatar" style="width: 100px; display: inline-block; margin-right: 10px;" />
-                                            </a>
-                                        </div>
-                                    @empty
-                                        <h6>Image Not Updated</h6>
-                                    @endforelse
+                                    @if($isHavingProfilePhoto)
+                                            @if($showProfilePhoto)
+                                                @forelse ($profile->member_photos as $profilePhoto)
+                                                    <div class="col-md-3">
+                                                        <a class="grid-item" href="{{ $profilePhoto->securePhoto() }}" data-lightbox="gallery-item">
+                                                        <img src="{{ $profilePhoto->secureProfilePhoto() }}" class="alignCenter img my-0 " alt="Avatar" style="width: 100px; display: inline-block; margin-right: 10px;" />
+                                                        </a>
+                                                    </div>
+                                                @empty
+                                                    <h6>Photos Not Updated</h6>
+                                                @endforelse
+                                            @elseif($profilePhotoRequestStatus == null)
+                                                <br>
+                                                <button type="btn" class="btn btn-success photo_request_send m-auto" >
+                                                    Send Photo Request
+                                                </button>
+                                            @endif
+                                @else
+                                            Photos not updated
+                                @endif
                                 </div>
                             </div>
                         </div>

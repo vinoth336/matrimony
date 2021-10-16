@@ -45,6 +45,10 @@ var MemberDashboard = {
             memberDashboard.rejectPhoneNumberRequest(this);
         });
 
+        $(document).on('click', '.profile_photo_request', function() {
+            memberDashboard.sendProfilePhotoRequest(this);
+        });
+
 
 
     },
@@ -175,6 +179,54 @@ var MemberDashboard = {
         var profileContainer = $(profile).closest('.member_profile');
         $.ajax({
             url: "/block_profile/" + profileContainer.find('[name="member_code"]').val(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                alert('success');
+                profileContainer.fadeOut().remove();
+            },
+            error: function(jqXHR, exception) {
+                alert(jqXHR.responseText);
+            }
+        });
+    },
+    sendProfilePhotoRequest: function(profile) {
+        var profileContainer = $(profile).closest('.member_profile');
+        var btn = $(profile).closest('.profile_photo_request');
+        $.ajax({
+            url: "/add_profile_photo_request/" + profileContainer.find('[name="member_code"]').val(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                alert('success');
+                btn.removeClass('photo_request_send');
+                btn.addClass('.photo_request_sent')
+                btn.text('Waiting For Approval');
+            },
+            error: function(jqXHR, exception) {
+                alert(jqXHR.responseText);
+            }
+        });
+    },
+    acceptProfilePhotoRequest: function(profile) {
+        var profileContainer = $(profile).closest('.member_profile');
+        $.ajax({
+            url: "/accept_profile_photo_request/" + profileContainer.find('[name="member_code"]').val(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                alert('success');
+                profileContainer.fadeOut().remove();
+            },
+            error: function(jqXHR, exception) {
+                alert(jqXHR.responseText);
+            }
+        });
+    },
+    rejectProfilePhotoRequest: function(profile) {
+        var profileContainer = $(profile).closest('.member_profile');
+        $.ajax({
+            url: "/reject_profile_photo_request/" + profileContainer.find('[name="member_code"]').val(),
             type: "post",
             dataType: "json",
             success: function(data) {
