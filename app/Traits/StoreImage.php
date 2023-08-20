@@ -106,7 +106,7 @@ trait StoreImage {
             $constraint->upsize();
         })->orientate();
         info("Thumb Image resize is done");
-       $img->insert(public_path('site/images/watermark/yadava_match_watermark_thumbnail.png'), 'bottom-right');
+       $img->insert(public_path('site/images/watermark/watermark.png'), 'bottom-right');
 
         info("Thumb watermark added ");
         $img->save($thumbnailpath . '/' . $name);
