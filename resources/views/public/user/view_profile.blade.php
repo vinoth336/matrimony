@@ -15,6 +15,7 @@
     $isInterestAccepted = false;
     $showProfilePhoto = false;
     $showHoroscope = false;
+    $isAdminUser = false;
 
     $profileInterestReceived = $profile->current_user_interest_received()->first();
     $responseStatus = $profileInterestReceived->request_status ?? null;
