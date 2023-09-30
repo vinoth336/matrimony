@@ -105,16 +105,18 @@
 
 						<div id="logo">
 							<a @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="standard-logo"
-                                data-dark-logo="{{-- asset('site/images/logo/'.$siteInformation->logo) --}}">
-                                <p >
-                                    <label style="color:#cc2c26">Rajus</label>
-                                    <label style="color: #c46a35">Matrimony</label>
-                                </p>
+                                data-dark-logo="{{ asset('site/images/logo/'.$siteInformation->logo) }}">
+                                <img src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" />
+
+                                {{--<p >
+                                    <label style="color:#cc2c26">VN</label>
+                                    <label style="color: #c46a35">Match</label>
+                                </p>--}}
                             </a>
 							<a  @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="retina-logo" data-dark-logo="">
                                 <p style="width: 100%">
-                                    <label style="color:#cc2c26">Rajus</label>
-                                    <label style="color: #c46a35">Matrimony</label>
+                                    <label style="color:#cc2c26">VN</label>
+                                    <label style="color: #c46a35">Match</label>
                                 </p>
                             </a>
 						</div>

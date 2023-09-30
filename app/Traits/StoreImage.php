@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\SiteInformation;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\File;
 
@@ -41,8 +42,9 @@ trait StoreImage {
                 }
 
                 info("Thumbnail process done");
+                $siteInformation = SiteInformation::first();
                 if($this->addWaterMark) {
-                  $img->insert(public_path('site/images/watermark/yadava_match_watermark.png'), 'center');
+                  $img->insert(public_path('site/images/watermark/') . $siteInformation->watermark_image, 'center');
                 }
 
                 info("Adding water mark images");
@@ -106,7 +108,8 @@ trait StoreImage {
             $constraint->upsize();
         })->orientate();
         info("Thumb Image resize is done");
-       $img->insert(public_path('site/images/watermark/watermark.png'), 'bottom-right');
+        $siteInformation = SiteInformation::first();
+       $img->insert(public_path('site/images/watermark/') . $siteInformation->watermark_image, 'bottom-right');
 
         info("Thumb watermark added ");
         $img->save($thumbnailpath . '/' . $name);

@@ -55,9 +55,14 @@ class SiteInformationController extends Controller
         $siteInformation->working_hours_sun = $request->input('working_hours_sun');
         $image = $request->has('logo') ? $request->file('logo') : null;
         $siteInformation->storeImage($image);
-
+        $waterMarkImage = $request->has('watermark_image') ? $request->file('watermark_image') : null;
+        if ($waterMarkImage) {
+                $waterMarkDirectory = public_path('site/images/watermark');
+                $fileName = $waterMarkImage->getClientOriginalName();
+                $siteInformation->watermark_image = $fileName;
+                $waterMarkImage->move($waterMarkDirectory, $fileName);
+        }
         $siteInformation->save();
-
 
         return redirect()->route('site_information.index');
 

@@ -73,6 +73,33 @@
                                     </div>
                                 </div>
 
+                                    <div class="row">
+                                        <label class="col-sm-2 col-form-label">{{ __('WaterMark Image') }}</label>
+                                        <div class="col-sm-7">
+
+                                            <div class="fileinput @if(!$siteInformation->watermark_image) fileinput-new @else fileinput-exists @endif text-center" data-provides="fileinput">
+                                                <div class="fileinput-new thumbnail">
+                                                    <img src="{{ asset('site/images/watermark/' . $siteInformation->watermark_image) }}" style="width: 100px" alt="WaterMark Image">
+                                                </div>
+                                                <div class="fileinput-preview fileinput-exists thumbnail">
+                                                    <img src="{{ asset('site/images/watermark/' . $siteInformation->watermark_image) }}" />
+                                                </div>
+                                                <div>
+                                              <span class="btn btn-rose btn-file">
+                                                <span class="fileinput-new">Select image</span>
+                                                <span class="fileinput-exists">Change</span>
+                                                <input type="hidden" name="remove_watermark_image" value="" />
+                                                <input type="file" name="watermark_image" accept="image/x-png,image/jpg,image/jpeg" >
+                                              </span>
+                                                    <a href="#pablo" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Remove</a>
+                                                </div>
+                                            </div>
+                                            @if ($errors->has('watermark_image'))
+                                                <span id="name-error" class="error text-danger"
+                                                      for="input-contact_person">{{ $errors->first('watermark_image') }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 <div class="row">
                                     <label class="col-sm-2 col-form-label">{{ __('Meta Descrition') }}</label>
                                     <div class="col-sm-7">
