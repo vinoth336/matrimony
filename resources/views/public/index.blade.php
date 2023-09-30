@@ -268,7 +268,7 @@
                                     <h3>Who We Are</h3>
                                 </div>
                                 <p class="mb-0 justify-content-center">{{ config('app.name') }}
-                                    – Matrimonial Website for Yadava Brides & Grooms.
+                                    – Matrimonial Website for Vannar Brides & Grooms.
                                     Our purpose is to build a platform for our community to take advantage of
                                     matrimonial services and lead happy marriage life which has been missing for years.We
                                     are one of the dedicated Matrimony offering online matrimonial services for our
@@ -285,7 +285,7 @@
         </div>
     </section>
 
-    <section id="section-team" class="page-section topmargin">
+    {{--<section id="section-team" class="page-section topmargin">
         <div class="heading-block center">
             <h2>For Registration</h2>
             <span>People who have contributed enormously to our Site.</span>
@@ -384,7 +384,7 @@
             </div>
             <div class="clear"></div>
         </div>
-    </section>
+    </section>--}}
 
     <section id="content" style="margin-bottom: 30px;display: none">
         <div class="container clearfix" id="success_stories" style="padding-bottom: 0px;">
