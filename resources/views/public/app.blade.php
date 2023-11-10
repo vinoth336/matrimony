@@ -98,7 +98,7 @@
                     </div>
             </div>
         </div>
-		<header id="header" class="full-header transparent-header white"  data-sticky-logo-height="74" data-menu-padding="32">
+		<header id="header" class="full-header transparent-header white"  data-sticky-logo-height="50" data-menu-padding="32">
 			<div id="header-wrap">
 				<div class="container">
 					<div class="header-row">
@@ -115,8 +115,9 @@
                             </a>
 							<a  @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="retina-logo" data-dark-logo="">
                                 <p style="width: 100%">
-                                    <label style="color:#cc2c26">VN</label>
-                                    <label style="color: #c46a35">Match</label>
+                                   {{-- <label style="color:#cc2c26">VN</label>
+                                    <label style="color: #c46a35">Match</label>--}}
+                                    <img src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" />
                                 </p>
                             </a>
 						</div>
