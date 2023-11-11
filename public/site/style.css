@@ -2678,15 +2678,15 @@ html[xmlns] .slider-wrap {
 }
 
 .header-size-sm #header-wrap #logo img {
-    height: 60px
+    height: 40px
 }
 
 .header-size-md #header-wrap #logo img {
-    height: 80px
+    height: 40px
 }
 
 .header-size-lg #header-wrap #logo img {
-    height: 120px
+    height: 50px
 }
 
 #logo a.standard-logo {
@@ -2701,10 +2701,11 @@ html[xmlns] .slider-wrap {
 @media(min-width:992px) {
     .full-header #logo {
         padding-right: 30px;
-        border-right: 1px solid #eee
+        padding: 10px 30px 10px 0px;
+        /*border-right: 1px solid #eee*/
     }
     #header.transparent-header.full-header #logo {
-        border-right-color: rgba(0, 0, 0, .1)
+       /* border-right-color: rgba(0, 0, 0, .1)*/
     }
     .sticky-header-shrink #header-wrap #logo img {
         height: 60px

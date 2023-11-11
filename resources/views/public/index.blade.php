@@ -5,7 +5,7 @@
     //$services = $servicesForEnquiries;
     ?>
     <section id="slider" class=""
-        style="background-image: url('{{ asset('/site/images/site_images/bg.jpg') }}');background-repeat: no-repeat;background-size: cover;">
+        style="background-image: url('{{ $siteInformation->site_background_image ? asset("/site/images/site_background/" . $siteInformation->site_background_image) : asset('/site/images/site_images/bg.jpg') }}');background-repeat: no-repeat;background-size: cover;">
         <div class="container clearfix">
             <div class="row">
                 <div class="col-lg-6 ">

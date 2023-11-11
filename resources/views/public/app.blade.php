@@ -84,11 +84,10 @@
                     <div class="row justify-content-between align-items-center">
                             <div class="col-12">
                                     <p class="mb-0 py-2 text-right text-md-right">
-
-                                        {{-- <strong>Call:</strong>
+                                         <strong>Call:</strong>
                                             <a href="tel:{{ $siteInformation->phone_no }}">
                                                 {{ $siteInformation->phone_no }}
-                                            </a>| --}}
+                                            </a>|
                                             <strong>Email:</strong>
                                             <a href="mailto:{{ $siteInformation->email_id }}" class="__cf_email__">
                                                 {{ $siteInformation->email_id }}
@@ -98,7 +97,7 @@
                     </div>
             </div>
         </div>
-		<header id="header" class="full-header transparent-header white"  data-sticky-logo-height="50" data-menu-padding="32">
+		<header id="header" class="full-header transparent-header white"  data-sticky-logo-height="60" data-menu-padding="25">
 			<div id="header-wrap">
 				<div class="container">
 					<div class="header-row">
@@ -106,18 +105,11 @@
 						<div id="logo">
 							<a @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="standard-logo"
                                 data-dark-logo="{{ asset('site/images/logo/'.$siteInformation->logo) }}">
-                                <img src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" />
-
-                                {{--<p >
-                                    <label style="color:#cc2c26">VN</label>
-                                    <label style="color: #c46a35">Match</label>
-                                </p>--}}
+                                <img src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" style="height: 50px" />
                             </a>
 							<a  @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="retina-logo" data-dark-logo="">
-                                <p style="width: 100%">
-                                   {{-- <label style="color:#cc2c26">VN</label>
-                                    <label style="color: #c46a35">Match</label>--}}
-                                    <img src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" />
+                                <p style="width: 100%;">
+                                    <img data-sticky="testing" src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" />
                                 </p>
                             </a>
 						</div>

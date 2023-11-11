@@ -56,11 +56,18 @@ class SiteInformationController extends Controller
         $image = $request->has('logo') ? $request->file('logo') : null;
         $siteInformation->storeImage($image);
         $waterMarkImage = $request->has('watermark_image') ? $request->file('watermark_image') : null;
+        $siteBackgroundImage = $request->has('site_background_image') ? $request->file('site_background_image') : null;
         if ($waterMarkImage) {
                 $waterMarkDirectory = public_path('site/images/watermark');
                 $fileName = $waterMarkImage->getClientOriginalName();
                 $siteInformation->watermark_image = $fileName;
                 $waterMarkImage->move($waterMarkDirectory, $fileName);
+        }
+        if ($siteBackgroundImage) {
+            $siteBackgroundImageDirectory = public_path('site/images/site_background');
+            $fileName = $siteBackgroundImage->getClientOriginalName();
+            $siteInformation->site_background_image = $fileName;
+            $siteBackgroundImage->move($siteBackgroundImageDirectory, $fileName);
         }
         $siteInformation->save();
 
