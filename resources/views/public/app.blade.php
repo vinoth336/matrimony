@@ -97,7 +97,7 @@
                     </div>
             </div>
         </div>
-		<header id="header" class="full-header transparent-header white"  data-sticky-logo-height="60" data-menu-padding="25">
+		<header id="header" class="full-header transparent-header white"  data-sticky-logo-height="70" data-menu-padding="25">
 			<div id="header-wrap">
 				<div class="container">
 					<div class="header-row">
