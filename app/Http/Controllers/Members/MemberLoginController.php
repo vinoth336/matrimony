@@ -96,8 +96,6 @@ class MemberLoginController extends Controller
         $otp = Otp::where('phone_number', $member->phone_no)->first();
         if (!$otp || $otp->otp !== $request->get('otp') || $otp->expires_at < now()) {
 
-            dd($otp->otp, $request->get('otp'));
-
             return redirect()->to(route('phone_number.verify'))
                 ->withErrors(["message" => $otp->expires_at < now() ? "OTP was expired" : "Otp Is Not Valid"]);
         } else {
