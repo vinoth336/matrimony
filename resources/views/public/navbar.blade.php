@@ -2,32 +2,34 @@
     <ul class="menu-container">
 
 
-        @if(auth()->guard('member')->check() && auth()->user()->phone_number_verified_at)
+        @if(auth()->guard('member')->check())
             <li class="menu-item">
                 <a class="menu-link" href="{{ route('public.index') }}">
                     <div>Home</div>
                 </a>
             </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{ route('member.shortlisted_profiles') }}">
-                    <div>My ShortList</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{ route('member.interest_received') }}">
-                    <div>Response Received</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{ route('member.interested_profiles') }}">
-                    <div>Interest Request</div>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a class="menu-link" href="{{ route('member.viewed_profile') }}">
-                    <div>Profile Viewed</div>
-                </a>
-            </li>
+            @if(auth()->user()->phone_number_verified_at)
+                <li class="menu-item">
+                    <a class="menu-link" href="{{ route('member.shortlisted_profiles') }}">
+                        <div>My ShortList</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="{{ route('member.interest_received') }}">
+                        <div>Response Received</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="{{ route('member.interested_profiles') }}">
+                        <div>Interest Request</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="{{ route('member.viewed_profile') }}">
+                        <div>Profile Viewed</div>
+                    </a>
+                </li>
+            @endif
             <li class="menu-item sub-menu">
                 <a class="menu-link">
                     <div>Account</div>
