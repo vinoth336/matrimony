@@ -39,30 +39,6 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-md-4 col-sm-4" for="first_name">
-                                        Represent By
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-sm-8 col-md-8">
-                                        @php
-                                            $representByDefault = old('represent_by') ? old('represent_by') : request()->input()
-                                        @endphp
-                                        <select name="represent_by" class="form-control" required>
-                                                @foreach ($representBies as $representBy)
-                                                    <option value="{{ $representBy->slug }}" @if($representBy->slug == old('represent_by', request()->input('represent_by') ?? 'self'))
-                                                        selected
-                                                    @endif >{{ $representBy->name }}</option>
-                                                @endforeach
-                                        </select>
-                                        <span id="represent_byMsg" class="error">
-                                            @error('represent_by')
-                                                {{ $message }}
-                                            @enderror
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="control-label col-md-4 col-sm-4" for="first_name">
                                         First name
                                         <span class="text-danger">*</span>
                                     </label>
@@ -163,10 +139,9 @@
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4 col-md-4" for="email">
                                         Email
-                                        <span class="text-danger">*</span>
                                     </label>
                                     <div class="col-sm-8 col-md-8">
-                                        <input type="email" class="form-control"  required placeholder="Email" name="email"
+                                        <input type="email" class="form-control" placeholder="Email" name="email"
                                             value="{{ old('email') }}">
                                         <span id="emailMsg" class="error">
                                             @error('email')
@@ -185,21 +160,6 @@
                                             value="{{ old('phone_no') }}">
                                         <span id="phone_no_msg" class="error">
                                             @error('phone_no')
-                                                {{ $message }}
-                                            @enderror
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="control-label col-sm-4 col-md-4" for="username">
-                                        User name
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-sm-8 col-md-8">
-                                        <input type="text" class="form-control"  required name="username" placeholder="User name"
-                                            value="{{ old('username') }}">
-                                        <span id="usernameMsg" class="error">
-                                            @error('username')
                                                 {{ $message }}
                                             @enderror
                                         </span>

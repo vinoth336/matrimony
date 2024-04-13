@@ -1,5 +1,5 @@
 
-@if(auth()->guard('member')->check())
+@if(auth()->guard('member')->check() && auth()->user()->phone_number_verified_at)
 
 @include('public.user.mobile_side_filter')
 <div id="ofBar" class="d-md-none d-lg-none">

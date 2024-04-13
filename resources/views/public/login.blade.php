@@ -4,6 +4,11 @@
     <section id="content">
         <div class="content-wrap">
             <div class="container clearfix">
+                @if(session()->get('message'))
+                    <div class="alert alert-success">
+                        {{ session()->get('message') }}
+                    </div>
+                @endif
                 @if (session('status'))
                     <br>
                     <h4 class=" text-success text-center">
@@ -29,7 +34,7 @@
                                     <h3>Login to your Account</h3>
                                 </div>
                                 <div class="col-12 form-group">
-                                    <label for="login-form-username">Username:</label>
+                                    <label for="login-form-username">Phone Number:</label>
                                     <input type="text" id="login-form-username" name="username" value=""
                                         class="form-control" />
                                     <span class="text-danger">

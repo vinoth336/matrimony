@@ -2,7 +2,7 @@
     <ul class="menu-container">
 
 
-        @if(auth()->guard('member')->check())
+        @if(auth()->guard('member')->check() && auth()->user()->phone_number_verified_at)
             <li class="menu-item">
                 <a class="menu-link" href="{{ route('public.index') }}">
                     <div>Home</div>

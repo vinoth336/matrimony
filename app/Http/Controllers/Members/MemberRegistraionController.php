@@ -29,9 +29,9 @@ class MemberRegistraionController extends Controller
         DB::beginTransaction();
 
         try {
-            $representBy = RepresentBy::where('slug', $request->input('represent_by'))->first();
-             $memberRegistrationRequest = MemberRegistrationRequest::create([
-                 'represent_by_id' => $representBy->id,
+
+            $memberRegistrationRequest = MemberRegistrationRequest::create([
+                'represent_by_id' => null ,
                 'first_name' => $request->input('first_name'),
                 'last_name' => $request->input('last_name'),
                 'dob' => $request->input('dob'),
@@ -41,15 +41,39 @@ class MemberRegistraionController extends Controller
                 'mother_tongue_id' => $request->input('mother_tongue'),
                 'email' => $request->input('email'),
                 'phone_no' => $request->input('phone_no'),
-                'username' => $request->input('username'),
+                'username' => $request->input('phone_no'),
                 'password' => Hash::make($request->input('password')),
-                'email_verified_at' => now()
+                'email_verified_at' => null,
+                'phone_number_verified_at' => null,
+
             ]);
-            $this->sendVerificationEmail($memberRegistrationRequest);
+
+            $member = Member::create([
+                'represent_by_id' => $memberRegistrationRequest->represent_by_id,
+                'first_name' => $memberRegistrationRequest->first_name,
+                'last_name' => $memberRegistrationRequest->last_name,
+                'dob' => $memberRegistrationRequest->dob,
+                'blood_id' => $memberRegistrationRequest->blood_id ?? null,
+                'gender' => $memberRegistrationRequest->gender,
+                'religion' => $memberRegistrationRequest->religion,
+                'mother_tongue_id' => $memberRegistrationRequest->mother_tongue_id,
+                'email' => $memberRegistrationRequest->email,
+                'phone_no' => $memberRegistrationRequest->phone_no,
+                'username' => $memberRegistrationRequest->phone_no,
+                'password' => $memberRegistrationRequest->password,
+                'member_code' => generateMemberCodeNumber(),
+                'phone_number_verified_at' => null,
+                'email_verified_at' => null,
+            ]);
+            $this->sendVerificationEmail($member);
             DB::commit();
 
-            return redirect()->route('public.registration_success', encrypt($memberRegistrationRequest->id))
-            ->with(['status' => 'Registered Successfully, Please check your mail for the next process']);
+
+            return redirect()->route('public.login')
+                ->with("message", "Registered Successfully");
+
+           /* return redirect()->route('public.registration_success', encrypt($memberRegistrationRequest->id))
+            ->with(['status' => 'Registered Successfully, Please check your mail for the next process']);*/
 
         } catch (Exception $e) {
             DB::rollback();
@@ -123,26 +147,11 @@ class MemberRegistraionController extends Controller
         DB::beginTransaction();
         try{
             $id = decrypt($hash);
-            $memberRegistrationRequest = MemberRegistrationRequest::findOrFail($id);
+            $member = Member::findOrFail($id);
 
-            if(!$memberRegistrationRequest->is_verified) {
-                $member = Member::create([
-                    'represent_by_id' => $memberRegistrationRequest->represent_by_id,
-                    'first_name' => $memberRegistrationRequest->first_name,
-                    'last_name' => $memberRegistrationRequest->last_name,
-                    'dob' => $memberRegistrationRequest->dob,
-                    'blood_id' => $memberRegistrationRequest->blood_id ?? null,
-                    'gender' => $memberRegistrationRequest->gender,
-                    'religion' => $memberRegistrationRequest->religion,
-                    'mother_tongue_id' => $memberRegistrationRequest->mother_tongue_id,
-                    'email' => $memberRegistrationRequest->email,
-                    'phone_no' => $memberRegistrationRequest->phone_no,
-                    'username' => $memberRegistrationRequest->username,
-                    'password' => $memberRegistrationRequest->password,
-                    'member_code' => generateMemberCodeNumber()
-                ]);
-                $memberRegistrationRequest->is_verified = true;
-                $memberRegistrationRequest->save();
+            if(!$member->email_verified_at) {
+                $member->email_verified_at = true;
+                $member->save();
 
                 DB::commit();
 
@@ -167,6 +176,8 @@ class MemberRegistraionController extends Controller
 
     public function sendVerificationEmail($member)
     {
-        return Mail::send(new SendRegistrationEmailVerification($member));
+        if ($member->email) {
+            return Mail::send(new SendRegistrationEmailVerification($member));
+        }
     }
 }

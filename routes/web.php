@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,7 +19,7 @@ Route::group(['namespace' => 'Members'], function () {
     Route::get('/', 'PublicController@index')->name('public.index');
     Route::get('/terms', 'PublicController@showTermsAndCondition')->name('public.terms_and_condition');
 
-    Route::post('enquiry', 'SaveEnquiryController@store')->name('enquiry.store');
+    //Route::post('enquiry', 'SaveEnquiryController@store')->name('enquiry.store');
     Route::get('/login', 'MemberLoginController@showLoginForm')->name('public.login');
     Route::post('/login', 'MemberLoginController@login');
     Route::post('/logout', 'MemberLoginController@logout')->name('public.logout');
@@ -29,7 +30,10 @@ Route::group(['namespace' => 'Members'], function () {
         ->middleware('throttle:5,1')
         ->name('public.resend_email_verify');
 
-    Route::group(['middleware' => 'auth:member'], function () {
+    Route::get('/verify_phone_number', 'MemberLoginController@showVerifyPhoneNumberForm')->middleware('auth:member')->name('phone_number.verify');
+    Route::post('/resend_phone_number_otp', 'MemberLoginController@resendPhoneNumberOtp')->middleware('auth:member')->name('phone_number.resend_otp');
+    Route::post('/verify_phone_number', 'MemberLoginController@verifyPhoneNumber')->middleware('auth:member');
+    Route::group(['middleware' => ['auth:member', 'verify_phone_number']], function () {
         Route::get('/dashboard', 'MemberController@dashboard')->name('member.dashboard');
         Route::post('/dashboard', 'MemberController@dashboard');
         Route::get('/profile', 'MemberController@profile')->name('member.profile');
@@ -105,6 +109,21 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
         Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
         Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+
+
+        /*
+        Route::resource('plan', 'PlanController')->names(
+            [
+                'index' => 'admin.plan.index',
+                'create' => 'admin.plan.create',
+                'store' => 'admin.plan.store',
+                'update' => 'admin.plan.update',
+                'edit' => 'admin.plan.edit',
+                'show' => 'admin.plan.show',
+                'destroy' => 'admin.plan.destroy',
+            ]
+        );
+        */
     });
 });
 

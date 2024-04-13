@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Members;
 
+use App\Models\Otp;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -65,5 +66,64 @@ class MemberLoginController extends Controller
 
         //validate the request.
         $request->validate($rules);
+    }
+
+    public function showVerifyPhoneNumberForm(Request $request)
+    {
+        $member = auth()->user();
+        $otp = Otp::where('phone_number', $member->phone_no)->first();
+        if (!$otp || ($otp && $otp->expires_at <= now())) {
+            Otp::sendSMS($member->phone_no, $this->generateOtp($member->phone_no));
+        }
+
+        return view('public.user.verify_phone_number', ['member' => $member]);
+    }
+
+    public function resendPhoneNumberOtp(Request $request)
+    {
+        $member = auth()->user();
+
+        Otp::sendSMS($member->phone_no, $this->generateOtp($member->phone_no));
+
+        return \redirect()->to(route("phone_number.verify"))->with(
+            ['message' => 'OTP Re-Send Successfully']
+        );
+    }
+
+    public function verifyPhoneNumber(Request $request)
+    {
+        $member = auth()->user();
+        $otp = Otp::where('phone_number', $member->phone_no)->first();
+        if (!$otp || $otp->otp !== $request->get('otp') || $otp->expires_at < now()) {
+
+            dd($otp->otp, $request->get('otp'));
+
+            return redirect()->to(route('phone_number.verify'))
+                ->withErrors(["message" => $otp->expires_at < now() ? "OTP was expired" : "Otp Is Not Valid"]);
+        } else {
+            $member->phone_number_verified_at = now();
+            $member->save();
+            $otp->delete();
+
+            return redirect()->to(route('member.dashboard'))->with("message", "Phone Number Verified");
+        }
+    }
+
+    public function generateOtp($phoneNumber){
+        // Generate OTP
+        $otpNumber=mt_rand(1000,9999);
+        $otpModel=Otp::updateOrCreate(
+            [
+                'phone_number'=>$phoneNumber
+            ],
+
+            [
+                'phone_number'=>$phoneNumber,
+                'otp'=>$otpNumber,
+                'expires_at'=>now()->addMinutes(5)
+            ]
+        );
+
+        return $otpNumber;
     }
 }

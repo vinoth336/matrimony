@@ -114,7 +114,7 @@
                             </a>
 						</div>
 						<div class="header-misc">
-                            @if(auth()->guard('member')->check())
+                            @if(auth()->guard('member')->check() && auth()->user()->phone_number_verified_at)
                                 <a href="{{ route('member.dashboard') }}">
                                     <i class="icon-home2"></i>
                                 </a>
