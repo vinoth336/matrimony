@@ -63,7 +63,7 @@
                             </div>
                             <div class="row form-group">
                                 <div class="col-sm-6" style="padding-left: 0px">
-                                <label class="col-sm-12 col-form-label font-normal">{{ __('Rasi') }}</label>
+                                <label class="col-sm-6 col-form-label font-normal">{{ __('Rasi') }}</label>
                                 <div class="col-sm-12">
                                     <select class="selectpicker form-control" name="rasies[]" multiple>
                                         @php
@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="col-sm-6"  style="padding-right: 0px">
                                     <label class="col-sm-12 col-form-label font-normal">{{ __('Star') }}</label>
-                                <div class="col-sm-12">
+                                <div class="col-sm-6">
                                     <select class="selectpicker form-control" name="stars[]" multiple>
                                         @php
                                             $selectedStars = request()->has('stars') ? request()->input('stars') : [];
