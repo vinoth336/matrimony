@@ -8,6 +8,17 @@
                     @include('public.user.quick_filter')
                     <div class="col-md-6 profile_container scrollit" style="min-height:100vh">
                         <div class="row">
+                            @if(!$member->profile_completed)
+                            <div class="col-md-12 m-3 text-center">
+                                Your Profile information still not complete, so
+                                <a href="{{ route('member.profile') }}" class="btn btn-success">
+                                   click here to update
+                                </a>
+                            </div>
+                            @endif
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
                                     @foreach($profiles as $profile)

@@ -62,28 +62,28 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
 
                         <ul class="tab-nav clearfix ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header" role="tablist">
                             <li role="tab" tabindex="0" class="ui-tabs-tab ui-corner-top ui-tabs-active" aria-controls="tabs-33" aria-labelledby="ui-id-17">
-                                <a href="#basic-details" class="ui-tabs-anchor" id="ui-id-17">
+                                <a href="#basic-details" class="ui-tabs-anchor" id="tab-basic-details">
                                     <i class="icon-home2 mr-0"></i>
                                     Basic Information
                                 </a>
                             </li>
                             <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab">
-                                <a href="#education-and-occupation-details" class="ui-tabs-anchor" id="ui-id-18">
+                                <a href="#education-and-occupation-details" class="ui-tabs-anchor" id="tab-education-and-occupation-details">
                                     Education And Occupation
                                 </a>
                             </li>
-                            <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-                                <a href="#family-location-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-19">
+                            <li  role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+                                <a href="#family-location-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="tab-family-location-details">
                                     Family Details And Location
                                 </a>
                             </li>
                             <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-                                <a href="#horoscope-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-19">
+                                <a href="#horoscope-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="tab-horoscope-details">
                                     Horoscope
                                 </a>
                             </li>
                             <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-                                <a href="#photo-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-20">
+                                <a href="#photo-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="tab-photo-details">
                                     Photos
                                 </a>
                             </li>
@@ -246,7 +246,20 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row form-group " >
+                                                <div class="ml-auto">
+                                                    <a href="{{ route('member.dashboard') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
+                                                    <input type="hidden" name="next_tab" value="education-and-occupation-details" />
+                                                    <input type="hidden" name="current_tab" value="basic-details" />
+                                                    <button type="submit" class="btn btn-primary">{{ __('Save Basic And Continue Next') }}</button>
+                                                </div>
+                                            </div>
                                     </div>
+                            </form>
+                            <form method="post" action="{{ route('member.profile') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
                                     <div class="tab-content" id="education-and-occupation-details">
                                         <div class="form-row">
                                             <div class="col-md-12 form-group">
@@ -387,7 +400,20 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                             </div>
                                         </div>
 
+                                        <div class="row form-group " >
+                                            <div class="ml-auto">
+                                                <a href="{{ route('member.dashboard') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
+                                                <input type="hidden" name="next_tab" value="family-location-details" />
+                                                <input type="hidden" name="current_tab" value="education-and-occupation-details" />
+                                                <button type="submit" class="btn btn-primary">{{ __('Save Occupation And Continue Next') }}</button>
+                                            </div>
+                                        </div>
+
                                     </div>
+                            </form>
+                            <form method="post" action="{{ route('member.profile') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
                                     <div class="tab-content" id="family-location-details">
                                             <div class="row form-group">
                                                 <div class="col-sm-12">
@@ -625,7 +651,19 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
 
                                                     </div>
                                             </div>
+                                            <div class="row form-group " >
+                                                <div class="ml-auto">
+                                                    <a href="{{ route('member.dashboard') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
+                                                    <input type="hidden" name="next_tab" value="horoscope-details" />
+                                                    <input type="hidden" name="current_tab" value="family-location-details" />
+                                                    <button type="submit" class="btn btn-primary">{{ __('Save Family And Continue Next') }}</button>
+                                                </div>
+                                            </div>
                                     </div>
+                            </form>
+                            <form method="post" action="{{ route('member.profile') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
                                     <div class="tab-content" id="horoscope-details">
                                             <input type="hidden" id="others_dhosam_value" value="{{ DHOSHAM_OTHERS }}" />
                                             <div class="form-row">
@@ -759,8 +797,19 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                     </div>
                                                 </div>
                                             </div>
+                                        <div class="row form-group " >
+                                            <div class="ml-auto">
+                                                <a href="{{ route('member.dashboard') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
+                                                <input type="hidden" name="next_tab" value="photo-details" />
+                                                <input type="hidden" name="current_tab" value="horoscope-details" />
+                                                <button type="submit" class="btn btn-primary">{{ __('Save Horoscope And Continue Next') }}</button>
+                                            </div>
+                                        </div>
                                     </div>
-
+                            </form>
+                            <form method="post" action="{{ route('member.profile') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                                @csrf
+                                @method('put')
                                     <div class="tab-content" id="photo-details">
                                         <div class="form-row">
                                                 <div class="col-md-6 form-group m-auto">
@@ -833,14 +882,16 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                 </div>
                                         </div>
                                         <div class="bottommargin-sm"></div>
-                                </div>
 
-                                    <div class="row form-group " >
-                                        <div class="ml-auto">
-                                            <a href="{{ route('member.dashboard') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
-                                            <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                                        <div class="row form-group " >
+                                            <div class="ml-auto">
+                                                <a href="{{ route('member.dashboard') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
+                                                <input type="hidden" name="next_tab" value="basic-details" />
+                                                <input type="hidden" name="current_tab" value="photo-details" />
+                                                <button type="submit" class="btn btn-primary">{{ __('Save Photos And Continue Next') }}</button>
+                                            </div>
                                         </div>
-                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -853,6 +904,13 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
 <script>
     $(document).ready(function() {
         $('.selectsplitter').selectsplitter();
+
+        @if(request()->has('next_tab'))
+
+        setTimeout(function () {
+            $("#tab-{{ request()->get('next_tab') }}").trigger('click');
+        }, 1000);
+        @endif
     });
     $("#input_degree").on('change', function() {
        var vals = $(this).val();

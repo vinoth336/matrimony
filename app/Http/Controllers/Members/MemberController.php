@@ -686,17 +686,34 @@ class MemberController extends Controller
 
         try {
             $member = auth()->user();
-            $member = $this->saveBasicMemberInformation($request, $member);
-            $this->saveEducation($request, $member);
-            $this->saveOccupation($request, $member);
-            $this->saveFamily($request, $member);
-            $this->saveLocation($request, $member);
-            $this->saveHoroscope($request, $member);
+            if ($request->input('current_tab') == 'basic-details') {
+                $member = $this->saveBasicMemberInformation($request, $member);
+            }
+
+            if ($request->input('current_tab') == 'education-and-occupation-details') {
+                $this->saveEducation($request, $member);
+                $this->saveOccupation($request, $member);
+            }
+
+            if ($request->input('current_tab') == 'family-location-details') {
+                $this->saveFamily($request, $member);
+                $this->saveLocation($request, $member);
+            }
+
+            if ($request->input('current_tab') == 'horoscope-details') {
+                $this->saveHoroscope($request, $member);
+            }
+
+            if ($request->input('current_tab') == 'photo-details') {
+                $this->updateMemberPhotos($request, $member);
+            }
+
             $member->checkIsUserCompletedIsProfileEntry();
-            $this->updateMemberPhotos($request, $member);
+
             DB::commit();
 
-            return redirect()->route('member.profile')->with('status', 'Updated Successfully');
+            return redirect()->to(route('member.profile') . "?next_tab=" . $request->input('next_tab'))
+                ->with('status', 'Updated Successfully');
         } catch (Exception $e) {
             Log::error('Error Occurred in MemberController@updateProfile - ' . $e->getMessage());
             return abort(500);

@@ -237,10 +237,6 @@ class Member extends Authenticatable
             $needed_information['basic'][] = 'email';
         }
 
-        if ($this->profile_photo == null) {
-            $needed_information['basic'][] = 'profile_photo';
-        }
-
         if ($this->educations == null) {
             $needed_information['education'][] = 'all';
         }
@@ -296,6 +292,10 @@ class Member extends Authenticatable
             if ($this->horoscope->horoscope_image == null) {
                 $needed_information['horoscope'][] = 'horoscope_image';
             }
+        }
+
+        if ($this->member_profile_photo()->count() == 0) {
+            $needed_information['basic'][] = 'profile_photo';
         }
 
         if ($needed_information == null) {
