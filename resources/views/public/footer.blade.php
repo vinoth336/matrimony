@@ -120,6 +120,15 @@
     import BugsnagPerformance from '//d2wy8f7a9ursnm.cloudfront.net/v1/bugsnag-performance.min.js'
     BugsnagPerformance.start({ apiKey: '832a20695fd91da69643f9d760e33c40' })
 </script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SV1FZ5L05C"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SV1FZ5L05C');
+</script>
 @stack('js')
 
 @if(auth()->guard('member')->check())
