@@ -14,7 +14,7 @@ class MemberLoginController extends Controller
 
     public function showLoginForm()
     {
-        if(auth()->guard('member')->check()) {
+        if (auth()->guard('member')->check()) {
             return Redirect::to('dashboard');
         }
         return view('public.login');
@@ -25,16 +25,16 @@ class MemberLoginController extends Controller
     {
         if (Auth::guard('member')->attempt($request->only('username', 'password'), $request->filled('remember'))) {
             //Authentication passed...
-            if($request->input('redirectTo')) {
+            if ($request->input('redirectTo')) {
                 $url = route('member.profile') . "?successNavigation=dashboard";
 
                 return redirect()
-                 ->to($url)
-                 ->with('status', 'You are Logged in Successfully');
+                    ->to($url)
+                    ->with('status', 'You are Logged in Successfully');
             }
             return redirect()
-                 ->intended(route('member.dashboard'))
-                 ->with('status', 'You are Logged in Successfully');
+                ->intended(route('member.dashboard'))
+                ->with('status', 'You are Logged in Successfully');
         }
 
         //Authentication failed...
@@ -49,18 +49,19 @@ class MemberLoginController extends Controller
             ->route('public.index');
     }
 
-    private function loginFailed(){
+    private function loginFailed()
+    {
         return redirect()
             ->back()
             ->withInput()
-            ->with('error','Login failed, please try again!');
+            ->with('error', 'Login failed, please try again!');
     }
 
     private function validator(Request $request)
     {
         //validation rules.
         $rules = [
-            'username'    => 'required|username|exists:members,username',
+            'username' => 'required|username|exists:members,username',
             'password' => 'required|string|min:4|max:255',
         ];
 
@@ -71,6 +72,20 @@ class MemberLoginController extends Controller
     public function showVerifyPhoneNumberForm(Request $request)
     {
         $member = auth()->user();
+        if ($member->phone_number_verified_at) {
+
+            if ($request->input('redirectTo')) {
+                $url = route('member.profile') . "?successNavigation=dashboard";
+
+                return redirect()
+                    ->to($url)
+                    ->with('status', 'You are Logged in Successfully');
+            }
+            return redirect()
+                ->intended(route('member.dashboard'))
+                ->with('status', 'You are Logged in Successfully');
+        }
+
         $otp = Otp::where('phone_number', $member->phone_no)->first();
         if (!$otp || ($otp && $otp->expires_at <= now())) {
             Otp::sendSMS($member->phone_no, $this->generateOtp($member->phone_no));
@@ -107,18 +122,19 @@ class MemberLoginController extends Controller
         }
     }
 
-    public function generateOtp($phoneNumber){
+    public function generateOtp($phoneNumber)
+    {
         // Generate OTP
-        $otpNumber=mt_rand(1000,9999);
-        $otpModel=Otp::updateOrCreate(
+        $otpNumber = mt_rand(1000, 9999);
+        $otpModel = Otp::updateOrCreate(
             [
-                'phone_number'=>$phoneNumber
+                'phone_number' => $phoneNumber
             ],
 
             [
-                'phone_number'=>$phoneNumber,
-                'otp'=>$otpNumber,
-                'expires_at'=>now()->addMinutes(5)
+                'phone_number' => $phoneNumber,
+                'otp' => $otpNumber,
+                'expires_at' => now()->addMinutes(5)
             ]
         );
 
