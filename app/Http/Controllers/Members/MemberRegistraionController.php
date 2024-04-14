@@ -65,7 +65,7 @@ class MemberRegistraionController extends Controller
                 'phone_number_verified_at' => null,
                 'email_verified_at' => null,
             ]);
-            $this->sendVerificationEmail($member);
+            //$this->sendVerificationEmail($member);
             DB::commit();
 
 
