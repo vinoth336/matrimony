@@ -116,6 +116,10 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script type="module">
+    import BugsnagPerformance from '//d2wy8f7a9ursnm.cloudfront.net/v1/bugsnag-performance.min.js'
+    BugsnagPerformance.start({ apiKey: '832a20695fd91da69643f9d760e33c40' })
+</script>
 @stack('js')
 
 @if(auth()->guard('member')->check())
