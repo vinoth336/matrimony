@@ -85,9 +85,11 @@
                             <div class="col-12">
                                     <p class="mb-0 py-2 text-right text-md-right">
                                          <strong>Call:</strong>
-                                            <a href="tel:{{ $siteInformation->phone_no }}">
-                                                {{ $siteInformation->phone_no }}
-                                            </a>|
+                                            @foreach(explode(",", $siteInformation->phone_no) as $phoneNo)
+                                                <a href="tel:{{ $siteInformation->phone_no }}">
+                                                    {{ $siteInformation->phone_no }}
+                                                </a>|
+                                            @endforeach
                                             <strong>Email:</strong>
                                             <a href="mailto:{{ $siteInformation->email_id }}" class="__cf_email__">
                                                 {{ $siteInformation->email_id }}
