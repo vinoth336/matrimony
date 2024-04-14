@@ -86,8 +86,8 @@
                                     <p class="mb-0 py-2 text-right text-md-right">
                                          <strong>Call:</strong>
                                             @foreach(explode(",", $siteInformation->phone_no) as $phoneNo)
-                                                <a href="tel:{{ $siteInformation->phone_no }}">
-                                                    {{ $siteInformation->phone_no }}
+                                                <a href="tel:{{ $phoneNo }}">
+                                                    {{ $phoneNo }}
                                                 </a>|
                                             @endforeach
                                             <strong>Email:</strong>
