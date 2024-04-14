@@ -122,11 +122,9 @@
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                 <tr>
                     	<td>
-                        	<a class="standard-logo" href="{{ route('public.index') }}" style="text-decoration:none">
-                                <p >
-                                    <label style="color:#cc2c26;font-size: 22px">Yadava</label>
-                                    <label style="color: #c46a35;font-size: 22px">Match</label>
-                                </p>
+                            <a @if(auth()->guard('member')->check()) href="{{ route('member.dashboard') }}" @else href="{{ route('public.index') }}" @endif class="standard-logo"
+                               data-dark-logo="{{ asset('site/images/logo/'.$siteInformation->logo) }}">
+                                <img src="{{ asset('site/images/logo/'.$siteInformation->logo) }}" style="height: 50px" />
                             </a>
                         </td>
                     </tr>

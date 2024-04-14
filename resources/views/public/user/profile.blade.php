@@ -460,7 +460,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                                     class="form-group{{ $errors->has('brothers') ? ' has-danger' : '' }}">
                                                                     <input
                                                                         class="form-control{{ $errors->has('brothers') ? ' is-invalid' : '' }}"
-                                                                        name="brothers" id="input-contact_person" type="text"
+                                                                        name="brothers" id="input-contact_person" type="number"
                                                                         placeholder="{{ __('Brothers') }}"
                                                                         value="{{ old('brothers', $memberFamily->brothers) }}" data-required="true"
                                                                         aria-data-required="true" />
@@ -479,7 +479,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                                     class="form-group{{ $errors->has('sisters') ? ' has-danger' : '' }}">
                                                                     <input
                                                                         class="form-control{{ $errors->has('sisters') ? ' is-invalid' : '' }}"
-                                                                        name="sisters" id="input-sisters" type="text"
+                                                                        name="sisters" id="input-sisters" type="number"
                                                                         placeholder="{{ __('Sisters') }}"
                                                                         value="{{ old('sisters', $memberFamily->sisters) }}" data-required="true"
                                                                         aria-data-required="true" />

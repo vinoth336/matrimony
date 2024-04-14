@@ -62,24 +62,24 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-sm-6" style="padding-left: 0px">
-                                <label class="col-sm-6 col-form-label font-normal">{{ __('Rasi') }}</label>
-                                <div class="col-sm-12">
-                                    <select class="selectpicker form-control" name="rasies[]" multiple>
-                                        @php
-                                            $selectedRasies = request()->has('rasies') ? request()->input('rasies') : [];
-                                        @endphp
-                                    @foreach ($rasies as $rasi )
-                                        <option value="{{ $rasi->id }}" @if(in_array($rasi->id, old('rasies', $selectedRasies))) selected @endif>
-                                        {{ $rasi->name }}
-                                        </option>
-                                    @endforeach
-                                    </select>
+                                <div class="col-sm-12" style="padding-left: 0px">
+                                    <label class="col-sm-12 col-form-label font-normal">{{ __('Rasi') }}</label>
+                                    <div class="col-sm-12">
+                                        <select class="selectpicker form-control" name="rasies[]" multiple>
+                                            @php
+                                                $selectedRasies = request()->has('rasies') ? request()->input('rasies') : [];
+                                            @endphp
+                                        @foreach ($rasies as $rasi )
+                                            <option value="{{ $rasi->id }}" @if(in_array($rasi->id, old('rasies', $selectedRasies))) selected @endif>
+                                            {{ $rasi->name }}
+                                            </option>
+                                        @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                </div>
-                                <div class="col-sm-6"  style="padding-right: 0px">
+                                <div class="col-sm-12" >
                                     <label class="col-sm-12 col-form-label font-normal">{{ __('Star') }}</label>
-                                <div class="col-sm-6">
+                                <div class="col-sm-12">
                                     <select class="selectpicker form-control" name="stars[]" multiple>
                                         @php
                                             $selectedStars = request()->has('stars') ? request()->input('stars') : [];
