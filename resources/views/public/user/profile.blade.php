@@ -615,7 +615,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                                 class="form-group{{ $errors->has('pincode') ? ' has-danger' : '' }}">
                                                                 <input
                                                                     class="form-control{{ $errors->has('pincode') ? ' is-invalid' : '' }}"
-                                                                    name="pincode" id="input-contact_person" type="text"
+                                                                    name="pincode" id="input-contact_person" type="number"
                                                                     placeholder="{{ __('Pin Code') }}"
                                                                     value="{{ old('pincode', $memberLocation->pincode) }}" data-required="true"
                                                                     aria-data-required="true" />
