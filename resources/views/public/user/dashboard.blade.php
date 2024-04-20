@@ -37,7 +37,7 @@
         </div>
     </section>
 @push('js')
-<script type="text/javascript" src="{{ asset('site/js/matrimony_member.js') }}"></script>
+<script type="text/javascript" src="{{ asset('site/js/matrimony_member.js') }}?v={{ $version }}"></script>
 <script>
     $(document).ready(function(){
         // Setting Pagination Bulma Class
