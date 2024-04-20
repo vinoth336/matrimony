@@ -82,11 +82,13 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                     Horoscope
                                 </a>
                             </li>
-                            <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
-                                <a href="#photo-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="tab-photo-details">
-                                    Photos
-                                </a>
-                            </li>
+                            @if($member->gender == MALE)
+                                <li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" >
+                                    <a href="#photo-details" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="tab-photo-details">
+                                        Photos
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
 
                         <div class="tab-container">
@@ -758,7 +760,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                         <div
                                                             class="form-group{{ $errors->has('rasi') ? ' has-danger' : '' }}">
 
-                                                            <select class="selectpicker select form-control" name="dhosam" id="input_dhosam" >
+                                                            <select class="selectpicker select form-control" name="dhosam" id="input_dhosam" multiple >
                                                                 <option value=''>Select Dhosam Status</option>
                                                                 @foreach($dhosams as $dhosam)
                                                                     <option value="{{ $dhosam->slug }}" @if(old('dhosam', optional($member->dhosam)->slug) == $dhosam->slug))
@@ -807,7 +809,8 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                         </div>
                                     </div>
                             </form>
-                            <form method="post" action="{{ route('member.profile') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                            @if ($member->gender == MALE)
+                                <form method="post" action="{{ route('member.profile') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                     <div class="tab-content" id="photo-details">
@@ -893,6 +896,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                         </div>
                                 </div>
                             </form>
+                            @endif
                         </div>
                     </div>
                 </div>

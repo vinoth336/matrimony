@@ -376,6 +376,11 @@ class Member extends Authenticatable
         ->where('profile_member_id', auth()->user()->id);
     }
 
+    public function share_my_phone_number()
+    {
+        return $this->hasMany(MemberShareMyPhoneNumber::class, 'from_member_id', 'id');
+    }
+
     public function horoscopeRequestStatus()
     {
         return $this->belongsTo(Member::class, 'profile_member_id', 'id')

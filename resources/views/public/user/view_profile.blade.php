@@ -164,8 +164,14 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                             <label class="col-sm-5 col-form-label">{{ __('Mobile No') }}</label>
                                             <div class="col-sm-12">
                                                 <div class="form-group{{ $errors->has('phone_no') ? ' has-danger' : '' }}">
+                                                    <div class="member_profile">
+                                                        <input type="hidden" name="member_code" value="{{ $profile->member_code }}" />
+                                                        <div class="share_my_phone_number_container">
+                                                            {!! showPhoneNumberRequestStatus($profile) !!}
+                                                        </div>
+                                                    </div>
 
-                                                    @if(($profilePhoneNumberRequestStatus && $profilePhoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED) || $isAdminUser)
+                                                    {{--@if(($profilePhoneNumberRequestStatus && $profilePhoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED) || $isAdminUser)
                                                         {{  $profile->phone_no }}
                                                     @elseif($isInterestAccepted)
                                                         {{ canShowContent($isInterestAccepted, $profile->phone_no) }}
@@ -186,7 +192,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                             @endif
                                                         </button>
                                                         </form>
-                                                    @endif
+                                                    @endif--}}
                                                 </div>
                                             </div>
                                         </div>
@@ -527,4 +533,42 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
             </div>
         </div>
     </section>
+    @push('js')
+        <script>
+            var MemberProfile = {
+                eventSendInterest: function() {
+                    memberProfile = this;
+                    $(".profile_container").on('click', '.share_my_phone_number', function() {
+                        memberProfile.shareMyPhoneNumber(this);
+                    });
+                },
+                shareMyPhoneNumber : function(profile) {
+                    var profileContainer = $(profile).closest('.member_profile');
+                    $.ajax({
+                        url: "/share_my_phone_number/" + profileContainer.find('[name="member_code"]').val(),
+                        type: "post",
+                        dataType: "json",
+                        success: function(data) {
+                            alert(data.message);
+                            profileContainer.find('.share_my_phone_number_container').html(data.button_label);
+                            profileContainer.find('.share_my_phone_number_container').delay(100).fadeOut().fadeIn('slow');
+                        },
+                        error: function(jqXHR, exception) {
+                            alert("Something Went Wrong!!, Kindly Contact Admin");
+                            console.log(jqXHR.responseText);
+                        }
+                    });
+
+                },
+                init : function() {
+                    this.eventSendInterest()
+                }
+
+            };
+
+            $(document).ready(function() {
+                MemberProfile.init();
+            });
+        </script>
+    @endpush
 @endsection

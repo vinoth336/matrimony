@@ -46,6 +46,7 @@ Route::group(['namespace' => 'Members'], function () {
             Route::post('/addPhoneNumberRequest/{memberCode}', 'MemberController@addPhoneNumberRequest')->name('member.phone_number_request');
             Route::post('/add_profile_photo_request/{memberCode}', 'MemberController@addProfilePhotoRequest')->name('member.profile_photo_request');
             Route::post('/addHoroscopeRequest/{memberCode}', 'MemberController@addHoroscopeRequest')->name('member.horoscope_request');
+            Route::post('/share_my_phone_number/{memberCode}', 'MemberController@shareMyPhoneNumber')->name('member.share_my_phone_number');
 
             Route::post('/addshortlist/{memberCode}', 'MemberController@addShortList')->name('member.add_profile_to_shortlist');
             Route::post('/addignore/{memberCode}', 'MemberController@addIgnore')->name('member.add_profile_to_ignore_list');

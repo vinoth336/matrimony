@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Members;
 
+use App\Models\MemberShareMyPhoneNumber;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangeMemberPasswordRequest;
@@ -878,6 +879,50 @@ class MemberController extends Controller
         }
     }
 
+    public function shareMyPhoneNumber(Request $request, $memberCode)
+    {
+        DB::beginTransaction();
+        try {
+            $member = auth()->user();
+            $intrestedMember = Member::where('id', '!=', $member->id)
+                ->where('member_code', '=', $memberCode)->firstOrFail();
+
+            if ($member->share_my_phone_number()->where('to_member_id', $intrestedMember->id)->exists()) {
+                $profile = $member->share_my_phone_number()->where('to_member_id', $intrestedMember->id)->first();
+
+                return response(['status' => 'success',
+                    'message' => 'Request Already Sent',
+                    'button_label' => showPhoneNumberRequestStatus($intrestedMember)
+                ]);
+            }
+
+            $interestedProfile = MemberShareMyPhoneNumber::updateOrCreate([
+                'from_member_id' => $member->id,
+                'to_member_id' => $intrestedMember->id
+                ],
+                [
+                    'from_member_id' => $member->id,
+                    'to_member_id' => $intrestedMember->id,
+                    'status'=> 'accepted',
+                    'comments' => 'Accepted by admin'
+                ]
+            );
+            DB::commit();
+
+            dispatch(new SendNotificationToUser('phone_number_request_sent', auth()->user(), $intrestedMember));
+
+            return response([
+                'status' => 'success',
+                'message' => 'Added Successfully',
+                'button_label' => showPhoneNumberRequestStatus($intrestedMember)
+                ]);
+        } catch (Exception $e) {
+            Log::error('Error Occurred in MemberController@shareMyPhoneNumber - ' . $e->getMessage());
+            return abort(500);
+        }
+    }
+
+
     public function acceptProfileInterest(Request $request, $memberCode)
     {
         DB::beginTransaction();
@@ -1144,5 +1189,4 @@ class MemberController extends Controller
             return abort(500);
         }
     }
-
 }

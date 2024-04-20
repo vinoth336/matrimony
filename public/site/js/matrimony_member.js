@@ -17,6 +17,10 @@ var MemberDashboard = {
             memberDashboard.ignoreTheProfile(this);
         });
 
+        $(".profile_container").on('click', '.share_my_phone_number', function() {
+            memberDashboard.shareMyPhoneNumber(this);
+        });
+
         $(".profile_container").on('click', '.accept_profile_interest', function() {
             memberDashboard.acceptProfileInterest(this);
         });
@@ -99,6 +103,24 @@ var MemberDashboard = {
                 alert(jqXHR.responseText);
             }
         });
+    },
+    shareMyPhoneNumber : function(profile) {
+        var profileContainer = $(profile).closest('.member_profile');
+        $.ajax({
+            url: "/share_my_phone_number/" + profileContainer.find('[name="member_code"]').val(),
+            type: "post",
+            dataType: "json",
+            success: function(data) {
+                alert(data.message);
+                profileContainer.find('.share_my_phone_number_container').html(data.button_label);
+                profileContainer.find('.share_my_phone_number_container').delay(100).fadeOut().fadeIn('slow');
+            },
+            error: function(jqXHR, exception) {
+                alert("Something Went Wrong!!, Kindly Contact Admin");
+                console.log(jqXHR.responseText);
+            }
+        });
+
     },
     acceptProfileInterest: function(profile) {
         var profileContainer = $(profile).closest('.member_profile');
