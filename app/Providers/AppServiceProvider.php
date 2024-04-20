@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Console\Commands\ModelMakeCommand;
 use App\Models\SiteInformation;
+use App\Models\Star;
+use App\Models\State;
+use App\Models\Zodiac;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
