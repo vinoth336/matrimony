@@ -109,3 +109,37 @@ function whatsappShareContent($profile)
 
     return $content;
 }
+
+function shareMyPhoneNumberLabel($member, $toMember)
+{
+
+    return "Show Phone Number";
+
+}
+
+function showPhoneNumberRequestStatus($profile)
+{
+    $user = auth()->user();
+    $isAdminUser = $user->isAdminUser();
+    $requestStatus = $user->share_my_phone_number()->where('to_member_id', $profile->id)->first();
+    $status = $requestStatus->status ?? null;
+    if ($isAdminUser) {
+        return "<a href='tel:$profile->phone_no'>" . $profile->phone_number . "</a>";
+    }
+
+    if ($status == 'request') {
+        return "<button class='btn btn-warning  mx-4'>" . __('Request In progress') . "</button>";
+    } elseif ($status == 'sent') {
+        return "<button class='btn btn-warning  mx-4'>" . __('Request Sent') . "</button>";
+    }  elseif ($status == 'discussed') {
+        return "<button class='btn btn-warning  mx-4'>" . __('Informed To Their Family') . "</button>";
+    } elseif ($status == 'not-interest') {
+        return "<button class='btn btn-danger  mx-4'>" . __('Not Interested') . "</button>";
+    } elseif ($status == 'accepted') {
+        return "<a href='tel:$profile->phone_no'>" . $profile->phone_no . "</a>";
+    } else {
+        return '<button class="btn btn-primary btn-sm text-white mx-4 share_my_phone_number" ><i class="icon-share2"></i>'
+            .  shareMyPhoneNumberLabel($user, $profile) .
+            '</button>';
+    }
+}
