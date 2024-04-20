@@ -22,7 +22,7 @@
 <div class="entry event col-12 member_profile ">
     <input type="hidden" name="member_code" value="{{ $profile->member_code }}" />
     <div class="grid-inner row align-items-center no-gutters p-4">
-        <div class="entry-image col-md-4 mb-md-0 col-sm-6">
+        <div class="col-md-4 mb-md-0 d-none d-lg-block d-md-block">
             <a href="#">
                 @if($showProfilePhoto)
                     <img src="{{ $profile->secureProfilePhoto() }}" alt="{{ $profile->fullName }}">
@@ -76,6 +76,7 @@
                     <li>Education : {{ $profileDegrees }}</li>
                     <li>Annual Income : {{ $annualIncome }}</li>
                     <li>Occupation : {{ optional($profile->occupation)->role }}</li>
+                    <li>Phone Number : <a href="tel:{{ $profile->phone_no }}" >{{ $profile->phone_no }}</a></li>
                     @if($member->viewProfileLocation())
                         <li><i class="icon-map-marker1"></i>{{ $profileLocationCity }}, {{ $profileLocationState }}</li>
                     @endif

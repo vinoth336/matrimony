@@ -165,7 +165,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                             <div class="col-sm-12">
                                                 <div class="form-group{{ $errors->has('phone_no') ? ' has-danger' : '' }}">
 
-                                                    @if(($profilePhoneNumberRequestStatus && $profilePhoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED) || $isAdminUser)
+                                                    @if(($profilePhoneNumberRequestStatus && $profilePhoneNumberRequestStatus->request_status == PROFILE_PHONE_NUMBER_APPROVED) || $isAdminUser || true)
                                                         {{  $profile->phone_no }}
                                                     @elseif($isInterestAccepted)
                                                         {{ canShowContent($isInterestAccepted, $profile->phone_no) }}
