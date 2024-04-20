@@ -76,7 +76,9 @@
                     <li>Education : {{ $profileDegrees }}</li>
                     <li>Annual Income : {{ $annualIncome }}</li>
                     <li>Occupation : {{ optional($profile->occupation)->role }}</li>
+{{--
                     <li>Phone Number : <a href="tel:{{ $profile->phone_no }}" >{{ $profile->phone_no }}</a></li>
+--}}
                     @if($member->viewProfileLocation())
                         <li><i class="icon-map-marker1"></i>{{ $profileLocationCity }}, {{ $profileLocationState }}</li>
                     @endif
