@@ -44,7 +44,14 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             $siteInformation = SiteInformation::first();
             $version = '1.0.10';
+            $states = State::get();
+            $rasies = Zodiac::get();
+            $stars = Star::get();
             $view->with('siteInformation', $siteInformation);
+            $view->with('states', $states);
+            $view->with('stars', $stars);
+            $view->with('rasies', $rasies);
+
             $view->with('version', $version);
         });
 
