@@ -124,7 +124,7 @@ function showPhoneNumberRequestStatus($profile)
     $requestStatus = $user->share_my_phone_number()->where('to_member_id', $profile->id)->first();
     $status = $requestStatus->status ?? null;
     if ($isAdminUser) {
-        return "<a href='tel:$profile->phone_no'>" . $profile->phone_number . "</a>";
+        return "<a href='tel:$profile->phone_no'>" . $profile->phone_no . "</a>";
     }
 
     if ($status == 'request') {
