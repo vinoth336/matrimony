@@ -136,9 +136,9 @@ function showPhoneNumberRequestStatus($profile)
     } elseif ($status == 'not-interest') {
         return "<button class='btn btn-danger  mx-4'>" . __('Not Interested') . "</button>";
     } elseif ($status == 'accepted') {
-        return "<a href='tel:$profile->phone_no'>" . $profile->phone_no . "</a>";
+        return "<a href='tel:$profile->phone_no'><i class='icon-phone-volume pr-2'></i>" . $profile->phone_no . "</a>";
     } else {
-        return '<button class="btn btn-primary btn-sm text-white mx-4 share_my_phone_number" ><i class="icon-share2"></i>'
+        return '<button class="btn btn-primary btn-sm text-white mx-4 share_my_phone_number" ><i class="icon-phone-volume"></i>'
             .  shareMyPhoneNumberLabel($user, $profile) .
             '</button>';
     }
