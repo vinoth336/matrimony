@@ -89,6 +89,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/member/create','Admin\AdminMemberController@createMember');
         Route::get('/member/{member}','Admin\AdminMemberController@edit')->name('admin.member.edit');
         Route::put('/member/{memberId}','Admin\AdminMemberController@update');
+        Route::post('/member/{member}/reset_password','Admin\AdminMemberController@resetMemberPassword')->name("admin.member.reset_password");
         Route::delete('/member/{member}','Admin\AdminMemberController@delete')->name('admin.member.delete');
 
         Route::get('/member/import/member', 'Admin\AdminMemberController@importMember')->name('member.import_member');

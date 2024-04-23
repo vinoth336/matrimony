@@ -245,4 +245,22 @@ class AdminMemberController extends Controller
 
         return redirect()->route('admin.member.index')->with('status', 'Imported Member List Successfully');
     }
+
+    public function resetMemberPassword(Request $request, Member $member)
+    {
+        DB::beginTransaction();
+        try {
+        $member->update([
+            "password" => Hash::make(str_replace("-","", $member->dob))
+        ]);
+
+        DB::commit();
+
+        return response(["status" => true, "message" => "Password Updated Successfully"], 200);
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response(["status" => false, "message" => $e->getMessage()], 500);
+        }
+    }
 }

@@ -20,6 +20,13 @@
     <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
 
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()

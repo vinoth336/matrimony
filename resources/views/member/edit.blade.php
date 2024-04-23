@@ -324,7 +324,7 @@ $memberHoroscope = $member->horoscope ?? optional();
                                                 <label class="col-sm-2 col-form-label">{{ __('Password') }}</label>
                                                 <div class="col-sm-7">
                                                     <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
-                                                       <a href="" class="btn btn-primary">Change Password</a>
+                                                       <a href="Javascript:void(0)" id="reset_password" class="btn btn-primary">Change Password</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1011,5 +1011,25 @@ $memberHoroscope = $member->horoscope ?? optional();
                 });
             });
 
+
+            $("#reset_password").on('click', function() {
+                if(!confirm("Are you sure want to reset the member password")) {
+                    return false;
+                }
+
+                $.ajax({
+                    "url" : "{{ route("admin.member.reset_password", $member->id) }}",
+                    "type" : "post",
+                    "dataType" : "json",
+                    "success" : function() {
+                        alert("Updated Successfully")
+                    },
+                    "error" : function(request, status, error) {
+                        console.log(request);
+                        alert(request.responseJSON.message);
+                    }
+
+                })
+            })
         </script>
     @endsection
