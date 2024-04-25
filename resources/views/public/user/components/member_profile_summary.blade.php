@@ -65,8 +65,8 @@
                         $profileLocationCity = $profileLocation->city ? $profileLocation->city->name : null;
                         $profileLocationState = $profileLocation->state ? $profileLocation->state->name : null;
                         $profileOccupation = $profile->occupation ?? optional();
-                        $memberHoroscope = $member->horoscope ?? optional();
-                        $memberDosham = $member->doshams()->count() ? $member->doshams()->pluck('dhosams.name')->implode(", ") : null ;
+                        $memberHoroscope = $profile->horoscope ?? optional();
+                        $memberDosham = $profile->doshams()->count() ? $member->doshams()->pluck('dhosams.name')->implode(", ") : null ;
 
                         $memberAnnualIncome = array_search($profileOccupation->annual_income, ANNUAL_INCOME_RANGE_KEY_VALUE);
                         $annualIncome = ANNUAL_INCOME_RANGE[$memberAnnualIncome] ?? null;
