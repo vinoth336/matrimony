@@ -15,6 +15,21 @@
                 </div>
                 <div class="modal-body get_quote_view_modal_body">
                     <div class="" style="overflow: auto">
+                        @if($member->isAdminUser())
+                            <div class="row form-group">
+                                <label class="col-sm-12 col-form-label font-normal">{{ __('Gender') }}</label>
+                                <div class="col-sm-12">
+                                    <select class="selectpicker form-control" name="gender">
+                                        <option value="male" @if(old('gender', request()->input('gender')) == 'male') selected @endif>
+                                            Male
+                                        </option>
+                                        <option value="female" @if(old('gender') == 'female') selected @endif >
+                                            Female
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
                         <div class="row form-group">
                             <label class="col-sm-12 col-form-label font-normal">{{ __('Age') }}</label>
                             <div class="col-sm-12">
