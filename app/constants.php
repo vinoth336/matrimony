@@ -40,7 +40,9 @@ define('ANNUAL_INCOME_RANGE', [
     'below_2l' => '1 - 2 Lakhs',
     'below_5l' => '2 - 5 Lakhs',
     'below_10l' => '5 - 10 Lakhs',
-    'below_50l' => '10 - 50 Lakhs',
+    'below_15l' => '10 - 15 Lakhs',
+    'below_25l' => '15 - 25 Lakhs',
+    'below_50l' => '25 - 50 Lakhs',
     'below_1c' => '50 - 1 Crore',
     'above_1c' => 'Above 1 Crore'
 ]);
