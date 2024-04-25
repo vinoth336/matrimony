@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class Dhosam extends Model
+class Dosham extends Model
 {
     protected $fillable = ['name', 'sequence'];
     protected $table = 'dhosams';
@@ -16,7 +16,7 @@ class Dhosam extends Model
 
         static::creating(function ($model) {
             if (!$model->sequence) {
-                $model->sequence = Dhosam::count() + 1;
+                $model->sequence = Dosham::count() + 1;
             }
             if (!$model->slug) {
                 $model->slug = Str::slug($model->name);

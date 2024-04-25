@@ -4,7 +4,7 @@ namespace App\Imports;
 
 use App\Models\Blood;
 use App\Models\City;
-use App\Models\Dhosam;
+use App\Models\Dosham;
 use App\Models\MaritalStatus;
 use App\Models\Member;
 use App\Models\MotherTongue;
@@ -44,7 +44,7 @@ class ImportMember implements ToModel, WithHeadingRow
             $row['city'] = $row['city'] ? $city->id : null;
             $state = $row['state'] ? State::firstOrCreate(['name' => $row['state']]) : null;
             $row['state'] = $row['state'] ? $state->id : null;
-            $dhosam = $row['dhosam'] ? Dhosam::firstOrCreate(['name' => $row['dhosam']]) : null;
+            $dhosam = $row['dhosam'] ? Dosham::firstOrCreate(['name' => $row['dhosam']]) : null;
             $row['dhosam'] = $row['dhosam'] ? $dhosam->id : null;
             $maritalStatus = $row['marital_status'] ? MaritalStatus::firstOrCreate(['name' => $row['marital_status']]) : 1;
             $row['marital_status'] = $maritalStatus->id;

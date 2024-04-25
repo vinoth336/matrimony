@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Console\Commands\ModelMakeCommand;
+use App\Models\City;
+use App\Models\Dosham;
 use App\Models\SiteInformation;
 use App\Models\Star;
 use App\Models\State;
@@ -48,12 +50,17 @@ class AppServiceProvider extends ServiceProvider
             $siteInformation = SiteInformation::first();
             $version = '1.0.10';
             $states = State::get();
+            $cities = City::get();
             $rasies = Zodiac::get();
             $stars = Star::get();
+            $dhosams = Dosham::orderBy('sequence')->get();
+
             $view->with('siteInformation', $siteInformation);
             $view->with('states', $states);
+            $view->with('cities', $cities);
             $view->with('stars', $stars);
             $view->with('rasies', $rasies);
+            $view->with('dhosams', $dhosams);
 
             $view->with('version', $version);
         });

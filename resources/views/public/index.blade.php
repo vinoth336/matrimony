@@ -4,6 +4,17 @@
     $enquiry_form_class = 'form-group row';
     //$services = $servicesForEnquiries;
     ?>
+
+    <style>
+        .btn-light {
+            background: #fff !important;
+        }
+        .bootstrap-select>.dropdown-toggle.bs-placeholder, .bootstrap-select>.dropdown-toggle.bs-placeholder:active, .bootstrap-select>.dropdown-toggle.bs-placeholder:focus, .bootstrap-select>.dropdown-toggle.bs-placeholder:hover
+        {
+            color: #495057 !important;
+        }
+    </style>
+
     <section id="slider" class=""
         style="background-image: url('{{ $siteInformation->site_background_image ? asset("/site/images/site_background/" . $siteInformation->site_background_image) : asset('/site/images/site_images/bg.jpg') }}');background-repeat: no-repeat;background-size: cover;">
         <div class="container clearfix">
@@ -71,11 +82,12 @@
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4 col-md-4" for="dob">
                                         Date of birth
-                                        <span class="text-danger">*</span>
+                                        <span class="text-danger">*</span><br>
+                                        (DD-MM-YYYY)
                                     </label>
                                     <div class="col-sm-8 col-md-8">
                                         <input type="text" class="form-control datepicker" autocomplete="off" data-provide="datepicker" name="dob" id="dob"
-                                            value="{{ old('dob') }}">
+                                            value="{{ old('dob') }}" placeholder="DD-MM-YYYY">
                                         <span id="dobMsg" class="error">
                                             @error('dob')
                                                 {{ $message }}
@@ -83,6 +95,69 @@
                                         </span>
                                     </div>
                                 </div>
+
+
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="rasi">
+                                        Rasi
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="selectpicker select form-control" name="rasi" id="rasi" required>
+                                            <option value="">Select Rasi</option>
+                                            @foreach ($rasies as $rasi )
+                                                <option value="{{ $rasi->id }}" @if(old('rasi') == $rasi->id) selected @endif>
+                                                    {{ $rasi->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('rasi')
+                                            {{ $message }}
+                                        @enderror
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="dob">
+                                        Star
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="selectpicker select form-control" name="star" id="star" required>
+                                            <option value="">Select Star</option>
+                                            @foreach ($stars as $star )
+                                                <option value="{{ $star->id }}" @if(old('star') == $star->id) selected @endif>
+                                                    {{ $star->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <span id="dobMsg" class="error">
+                                            @error('star')
+                                            {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="dhosam">
+                                        Doshams
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="selectpicker select form-control" name="dhosam[]" id="dhosam" multiple >
+                                            @foreach($dhosams as $dhosam)
+                                                <option value="{{ $dhosam->id }}" @if(in_array($dhosam->id, old('dhosam', [])))
+                                                    selected @endif >{{ $dhosam->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('dosham')
+                                        {{ $message }}
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4 col-md-4" for="gender">
                                         Gender
@@ -109,7 +184,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
                                     <div class="col-sm-8 col-md-8">
-                                        <select class="form-control"  required name="religion" id="religion">
+                                        <select class="selectpicker select form-control"  required name="religion" id="religion">
                                             <option value="1" selected>Hindu</option>
                                         </select>
                                         <span id="religionMsg" class="error">
@@ -125,7 +200,7 @@
                                         <span class="text-danger">*</span>
                                     </label>
                                     <div class="col-sm-8 col-md-8">
-                                        <select class="form-control"  required name="mother_tongue" id="mother_tongue">
+                                        <select class="selectpicker select form-control"  required name="mother_tongue" id="mother_tongue">
                                             <option value="1" @if(old('mother_tongue') == 1) selected @endif>Tamil</option>
                                             <option value="2" @if(old('mother_tongue') == 2) selected @endif>Telugu</option>
                                         </select>
@@ -152,15 +227,79 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="control-label col-sm-4 col-md-4" for="phone_no">
+                                        State
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="selectpicker select form-control" name="state" id="state" required>
+                                            <option value="">Select State</option>
+                                            @foreach ($states as $state )
+                                                <option value="{{ $state->id }}" @if(old('state') == $state->id) selected @endif>
+                                                    {{ $state->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <span id="name-error" class="error text-danger"
+                                              for="input-state">
+                                            @error('state')
+                                            {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="city">
+                                        City
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <select class="selectpicker select form-control" name="city" id="city" required>
+                                            <option value="">Select City</option>
+                                            @foreach ($cities as $city )
+                                                <option value="{{ $city->id }}" @if(old('city') == $city->id) selected @endif>
+                                                    {{ $city->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <span id="name-error" class="error text-danger"
+                                              for="input-city">
+                                            @error('city')
+                                            {{ $message }}
+                                            @enderror
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="pincode">
+                                        Pincode
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="col-sm-8 col-md-8">
+                                        <input
+                                            class="form-control{{ $errors->has('pincode') ? ' is-invalid' : '' }}"
+                                            name="pincode" id="pincode" type="number"
+                                            placeholder="{{ __('Pin Code') }}"
+                                            value="{{ old('pincode') }}" data-required="true"
+                                            aria-data-required="true" />
+                                            <span id="name-error" class="error text-danger"
+                                                  for="input-pincode">
+                                                @error('pincode')
+                                                    {{ $message }}
+                                                @enderror
+                                            </span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="control-label col-sm-4 col-md-4" for="phone_no">
                                         Mobile No
                                         <span class="text-danger">*</span>
                                     </label>
                                     <div class="col-sm-8 col-md-8">
                                         <input type="number" class="form-control"  required placeholder="Mobile No" name="phone_no"
-                                            value="{{ old('phone_no') }}">
+                                               value="{{ old('phone_no') }}">
                                         <span id="phone_no_msg" class="error">
                                             @error('phone_no')
-                                                {{ $message }}
+                                            {{ $message }}
                                             @enderror
                                         </span>
                                     </div>

@@ -105,6 +105,16 @@ trait SaveMemberDetails
         $memberHoroscope->storeImage($image);
         $memberHoroscope->save();
 
+        if ($request->input('dhosam')) {
+            $member->doshams()->sync($request->input('dhosam'));
+        } else {
+            $member->doshams()->detach();
+        }
+
+        $member->horoscope_lock = $request->horoscope_lock ?? ONLY_ACCEPTED_PROFILES;
+        $member->dhosam_remarks = $request->dhosam_remarks ?? null;
+        $member->save();
+
         return $memberHoroscope;
     }
 
@@ -154,5 +164,8 @@ trait SaveMemberDetails
                         $ProfileImage->delete();
                 }
             }
+            $member->profile_photo_lock = $request->profile_photo_lock ?? ONLY_ACCEPTED_PROFILES;
+            $member->save();
+
     }
 }

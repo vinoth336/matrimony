@@ -65,6 +65,9 @@
                         $profileLocationCity = $profileLocation->city ? $profileLocation->city->name : null;
                         $profileLocationState = $profileLocation->state ? $profileLocation->state->name : null;
                         $profileOccupation = $profile->occupation ?? optional();
+                        $memberHoroscope = $member->horoscope ?? optional();
+                        $memberDosham = $member->doshams()->count() ? $member->doshams()->pluck('dhosams.name')->implode(", ") : null ;
+
                         $memberAnnualIncome = array_search($profileOccupation->annual_income, ANNUAL_INCOME_RANGE_KEY_VALUE);
                         $annualIncome = ANNUAL_INCOME_RANGE[$memberAnnualIncome] ?? null;
                     @endphp
@@ -80,9 +83,24 @@
                         <span class="p-1 share_my_phone_number_container ">
                             {!! showPhoneNumberRequestStatus($profile) !!}
                         </span>
-                        </li>
-                    @if($member->viewProfileLocation())
-                        <li><i class="icon-map-marker1"></i>{{ $profileLocationCity }}, {{ $profileLocationState }}</li>
+                    </li>
+                    <li>
+                        <div>
+                            <div class="ml-4">
+                                <b>Rasi</b>&nbsp;{{ optional($memberHoroscope->star)->name }} |
+
+                                <b>Star</b>&nbsp;{{ optional($memberHoroscope->rasi)->name }} |
+
+                                <b>Doshams</b>&nbsp;{{ $memberDosham }} |
+
+                            </div>
+
+                        </div>
+
+                    </li>
+                    @if($profileLocation->city_id)
+                        <li><br><i class="icon-map-marker1"></i>
+                          {{ $profileLocationCity }}, {{ $profileLocationState }}</li>
                     @endif
                     @if($member->isAdminUser())
                         @if($profileHoroscope->horoscope_image)
@@ -185,13 +203,13 @@
                 </h6>
                 <br>
             @endif
-            @if($member->isAdminUser())
-            <a class="btn btn-success" href="whatsapp://send?text={{ whatsappShareContent($profile) }}"
-                    data-action="share/whatsapp/share"
-                    target="_blank">
-                    <i class="icon-whatsapp"></i>
-                    Share to whatsapp
-                </a>
+                    @if($member->isAdminUser())
+                        <a class="btn btn-success" href="whatsapp://send?text={{ whatsappShareContent($profile) }}"
+                           data-action="share/whatsapp/share"
+                           target="_blank">
+                            <i class="icon-whatsapp"></i>
+                            Share to whatsapp
+                        </a>
             @elseif($requestFrom ?? false)
                 @if($showPhoneNumberRequestAcceptButton ?? false)
                     <button type="button" class="btn btn-success accept_phone_number_request">

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRegistrationSaveRequest;
 use App\Mail\SendRegistrationEmailVerification;
 use App\Models\Member;
+use App\Models\MemberHoroscope;
+use App\Models\MemberLocation;
 use App\Models\MemberRegistrationRequest;
 use App\Models\RepresentBy;
 use Carbon\Carbon;
@@ -63,8 +65,28 @@ class MemberRegistraionController extends Controller
                 'password' => $memberRegistrationRequest->password,
                 'member_code' => generateMemberCodeNumber(),
                 'phone_number_verified_at' => null,
+                'horoscope_lock' => VISIBLE_TO_ALL,
                 'email_verified_at' => null,
             ]);
+
+            $memberHoroscope = $member->horoscope ?? new MemberHoroscope();
+            $memberHoroscope->member_id = $member->id;
+            $memberHoroscope->rasi_id = $request->input('rasi');
+            $memberHoroscope->star_id = $request->input('star');
+            $memberHoroscope->save();
+
+            $location = $member->location ?? new MemberLocation();
+            $location->member_id = $member->id;
+            $location->city_id = $request->input('city');
+            $location->state_id = $request->input('state');
+            $location->pincode = $request->input('pincode');
+            $location->save();
+
+            if ($request->input('dhosam')) {
+                $member->doshams()->sync($request->input('dhosam'));
+            }
+            $member->save();
+
             //$this->sendVerificationEmail($member);
             DB::commit();
 

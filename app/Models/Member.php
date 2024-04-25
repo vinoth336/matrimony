@@ -115,9 +115,9 @@ class Member extends Authenticatable
         return $this->belongsTo(MaritalStatus::class, 'marital_status_id', 'id');
     }
 
-    public function dhosam()
+    public function doshams()
     {
-        return $this->belongsTo(Dhosam::class, 'dhosam_id', 'id');
+        return $this->belongsToMany(Dosham::class, 'member_dhosams', 'member_id', 'dhosam_id');
     }
 
 
@@ -311,7 +311,7 @@ class Member extends Authenticatable
 
     public function viewProfileLocation()
     {
-        return false;
+        return optional($this->location)->city_id ? true : false;
     }
 
 

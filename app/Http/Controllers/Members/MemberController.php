@@ -11,7 +11,7 @@ use App\Jobs\SendNotificationToUser;
 use App\Models\Blood;
 use App\Models\City;
 use App\Models\Degree;
-use App\Models\Dhosam;
+use App\Models\Dosham;
 use App\Models\EmployeeIn;
 use App\Models\FamilyType;
 use App\Models\MaritalStatus;
@@ -52,7 +52,7 @@ class MemberController extends Controller
         $profiles = $this->getProfiles($request, $member)->paginate(10)->withQueryString();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.dashboard')
             ->with('profiles', $profiles)
@@ -85,7 +85,7 @@ class MemberController extends Controller
         }
         $profiles->with(['educations' => function ($model) {
                 $model->with('degree');
-            }, 'occupation', 'location', 'dhosam', 'marital_status', 'horoscope']);
+            }, 'occupation', "location" => function($model) { $model->with(["city", "state"]);}, 'doshams', 'marital_status', 'horoscope']);
         $profiles = $this->whereCondition($request, $profiles);
         ///$profiles->inRandomOrder();
         return $profiles;
@@ -154,7 +154,7 @@ class MemberController extends Controller
         $stars = Star::get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.profile')
             ->with('member', $member)
@@ -189,7 +189,7 @@ class MemberController extends Controller
         $profile = Member::where('id', '!=', $member->id)
             ->where('member_code', '=', $memberCode)->firstOrFail();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         if(!$member->isAdminUser()) {
             $member->member_viewed_profiles()->updateOrCreate([
@@ -248,7 +248,7 @@ class MemberController extends Controller
 
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
 
         return view('public.user.viewed_profile')
@@ -296,7 +296,7 @@ class MemberController extends Controller
         $profiles = $profiles->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
 
         return view('public.user.interest_sent')
@@ -335,7 +335,7 @@ class MemberController extends Controller
             ->with('member_profile')->orderBy('created_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
 
         return view('public.user.shortlisted_profiles')
@@ -373,7 +373,7 @@ class MemberController extends Controller
             ->with('member_profile')->orderBy('created_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
 
         return view('public.user.ignored_profiles')
@@ -423,7 +423,7 @@ class MemberController extends Controller
         $profiles = $profiles->orderBy('updated_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.interest_received')
             ->with('member', $member)
@@ -460,7 +460,7 @@ class MemberController extends Controller
         $profiles = $member->member_profile_viewed()->with('member')->orderBy('created_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.who_viewed_profiles')
             ->with('member', $member)
@@ -508,7 +508,7 @@ class MemberController extends Controller
         $profiles = $profiles->orderBy('updated_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.phone_number_request_received')
             ->with('member', $member)
@@ -558,7 +558,7 @@ class MemberController extends Controller
         $profiles = $profiles->orderBy('updated_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.phone_number_request_sent')
             ->with('member', $member)
@@ -607,7 +607,7 @@ class MemberController extends Controller
         $profiles = $profiles->orderBy('updated_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.profile_photo_request_received')
             ->with('member', $member)
@@ -657,7 +657,7 @@ class MemberController extends Controller
         $profiles = $profiles->orderBy('updated_at', 'desc')->get();
         $employeeIns = EmployeeIn::orderBy('name')->get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.profile_photo_request_sent')
             ->with('member', $member)
@@ -1121,12 +1121,8 @@ class MemberController extends Controller
         $member->mother_tongue_id = $request->mother_tongue;
         $member->email = $request->email;
         $maritalStatus = MaritalStatus::where('slug', $request->marital_status)->first();
-        $dhosam = Dhosam::where('slug', $request->dhosam)->first();
+        $dhosam = Dosham::where('slug', $request->dhosam)->first();
         $member->marital_status_id = $maritalStatus->id ?? 1;
-        $member->dhosam_id = $dhosam->id ?? 1;
-        $member->dhosam_remarks = $request->dhosam_remarks;
-        $member->profile_photo_lock = $request->profile_photo_lock ?? ONLY_ACCEPTED_PROFILES;
-        $member->horoscope_lock = $request->horoscope_lock ?? ONLY_ACCEPTED_PROFILES;
         $member->save();
 
         //$image = $request->has('profile_photo') ? $request->file('profile_photo') : null;
@@ -1148,7 +1144,7 @@ class MemberController extends Controller
         $rasies = Zodiac::get();
         $stars = Star::get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
 
         return view('public.user.show_message_profile_view_not_allow')
             ->with('member', $member)

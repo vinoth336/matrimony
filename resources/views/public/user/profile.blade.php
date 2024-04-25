@@ -755,21 +755,39 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                             </div>
                                             <div class="form-row">
                                                 <div class="col-md-6 form-group">
-                                                    <label class="col-sm-5 col-form-label">{{ __('Dhosam') }}</label>
+                                                    <label class="col-sm-5 col-form-label">{{ __('Doshams') }}</label>
                                                     <div class="col-sm-12">
                                                         <div
-                                                            class="form-group{{ $errors->has('rasi') ? ' has-danger' : '' }}">
+                                                            class="form-group{{ $errors->has('dhosam') ? ' has-danger' : '' }}">
 
-                                                            <select class="selectpicker select form-control" name="dhosam" id="input_dhosam" multiple >
-                                                                <option value=''>Select Dhosam Status</option>
+                                                            @php
+                                                                $memberDosham = $member->doshams()->count() ? $member->doshams()->pluck('dhosams.id')->toArray() : [] ;
+                                                            @endphp
+                                                            <select class="selectpicker select form-control" name="dhosam[]" id="input_dhosam" multiple >
+                                                                <option value='' disabled>Select Doshams Status</option>
                                                                 @foreach($dhosams as $dhosam)
-                                                                    <option value="{{ $dhosam->slug }}" @if(old('dhosam', optional($member->dhosam)->slug) == $dhosam->slug))
+                                                                    <option value="{{ $dhosam->id }}" @if(in_array($dhosam->id, old('dhosam', $memberDosham)))
                                                                     selected @endif >{{ $dhosam->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                             @if ($errors->has('dhosam'))
                                                                 <span id="name-error" class="error text-danger"
                                                                     for="input-dhosam">{{ $errors->first('dhosam') }}</span>
+                                                            @endif
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 form-group">
+                                                    <label class="col-sm-5 col-form-label">{{ __('Dhosams Remarks') }}</label>
+                                                    <div class="col-sm-12">
+                                                        <div
+                                                            class="form-group{{ $errors->has('dhosam_remarks') ? ' has-danger' : '' }}">
+
+                                                            <textarea class="form-control" name="dhosam_remarks">{{ old('dhosam_remarks', $member->dhosam_remarks) }}</textarea>
+                                                            @if ($errors->has('dhosam'))
+                                                                <span id="name-error" class="error text-danger"
+                                                                      for="input-dhosam">{{ $errors->first('dhosam') }}</span>
                                                             @endif
 
                                                         </div>
@@ -783,7 +801,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
 
                                                             <select class="selectpicker select form-control" name="horoscope_lock" id="input_horoscope_lock" >
                                                                 <option value='{{ VISIBLE_TO_ALL }}' @if($member->horscope_lock == VISIBLE_TO_ALL) selected @endif>Visible To All</option>
-                                                                <option value='{{ ONLY_ACCEPTED_PROFILES }}' @if($member->horscope_lock == ONLY_ACCEPTED_PROFILES) selected @endif>Visible Only For Accepted Profiles</option>
+                                                                <option disabled value='{{ ONLY_ACCEPTED_PROFILES }}' @if($member->horscope_lock == ONLY_ACCEPTED_PROFILES) selected @endif>Visible Only For Accepted Profiles</option>
                                                             </select>
                                                             @if ($errors->has('horoscope_lock'))
                                                                 <span id="name-error" class="error text-danger"

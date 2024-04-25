@@ -92,8 +92,9 @@ function whatsappShareContent($profile)
     $rasi = $rasi ? $rasi->name : null;
     $star =  $profileHoroscope ? $profileHoroscope->star()->first() : null;
     $star = $star ? $star->name : null;
-    $dhosam = $profile->dhosam()->first();
-    $dhosam = $dhosam ? $dhosam->name : null;
+    $dhosam = $profile->doshams ? $profile->doshams->pluck('name')->implode(",") : null;
+    $profileLocation = $profile->location ?? optional();
+
     $content = "Name : " . $profile->name . "%0aAge : " . $profile->age . "%0aDob : " . $profile->dob . "%0a" ;
     if($rasi) {
         $content .= "Rasi : " . $rasi ?? null;
@@ -103,6 +104,12 @@ function whatsappShareContent($profile)
     }
     if($dhosam) {
         $content .= "%0aDhosam : " . $dhosam;
+    }
+    if($profileLocation->city_id) {
+        $content .= "%0aCity : " . $profileLocation->city->name;
+        if ($profileLocation->state_id) {
+            $content .= "%0aState : " . $profileLocation->state->name;
+        }
     }
     $content .="%0aView Profile : " . route('member.view_profile', $profile->member_code) ;
     $content .= "%0a*Shared By * %0a*"  . config('app.name') . "*%0a" . config('app.url');
