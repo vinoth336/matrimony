@@ -9,7 +9,7 @@ use App\Imports\ImportMember;
 use App\Models\Blood;
 use App\Models\City;
 use App\Models\Degree;
-use App\Models\Dhosam;
+use App\Models\Dosham;
 use App\Models\FamilyType;
 use App\Models\MaritalStatus;
 use App\Models\Member;
@@ -86,7 +86,7 @@ class AdminMemberController extends Controller
         $rasies = Zodiac::get();
         $stars = Star::get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
         $representBies = RepresentBy::orderBy('sequence')->get();
 
 
@@ -161,7 +161,7 @@ class AdminMemberController extends Controller
     public function saveBasicMemberInformation(Request $request, Member $member)
     {
         $maritalStatus = MaritalStatus::where('slug', $request->marital_status)->first();
-        $dhosam = Dhosam::where('slug', $request->dhosam)->first();
+        $dhosam = Dosham::where('slug', $request->dhosam)->first();
         $member->first_name = $request->first_name;
         $member->last_name = $request->last_name;
         $member->dob = $request->dob;
@@ -180,7 +180,7 @@ class AdminMemberController extends Controller
         $member->account_status = $request->account_status ? MEMBER_ACCOUNT_STATUS_ACTIVE : MEMBER_ACCOUNT_STATUS_DEACTIVATE;
         $member->payment_status = $request->payment_status ? PAYMENT_STATUS_PAID : PAYMENT_STATUS_NOT_PAID;
         $representBy = RepresentBy::where('slug', $request->input('represent_by'))->first();
-        $member->represent_by_id = $representBy->id;
+        //$member->represent_by_id = $representBy->id;
         $member->degree_details = $request->degree_details;
         $member->profile_photo_lock = $request->profile_photo_lock ?? ONLY_ACCEPTED_PROFILES;
         $member->horoscope_lock = $request->horoscope_lock ?? ONLY_ACCEPTED_PROFILES;
@@ -204,7 +204,7 @@ class AdminMemberController extends Controller
         $rasies = Zodiac::get();
         $stars = Star::get();
         $maritalStatus = MaritalStatus::orderBy('sequence')->get();
-        $dhosams = Dhosam::orderBy('sequence')->get();
+        $dhosams = Dosham::orderBy('sequence')->get();
         $representBies = RepresentBy::orderBy('sequence')->get();
 
 
