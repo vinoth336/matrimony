@@ -232,7 +232,7 @@
                                     </label>
                                     <div class="col-sm-8 col-md-8">
                                         <select class="selectpicker select form-control" name="state" id="state" required>
-                                            <option value="">Select State</option>
+                                            <option value="" selected>Select State</option>
                                             @foreach ($states as $state )
                                                 <option value="{{ $state->id }}" @if(old('state') == $state->id) selected @endif>
                                                     {{ $state->name }}
@@ -578,4 +578,5 @@
             });
         });
     </script>
+    <script type="text/javascript" src="{{ asset('site/js/city_state.js') }}"></script>
 @endsection

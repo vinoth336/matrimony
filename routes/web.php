@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'Members'], function () {
     Route::get('/', 'PublicController@index')->name('public.index');
     Route::get('/terms', 'PublicController@showTermsAndCondition')->name('public.terms_and_condition');
-
     //Route::post('enquiry', 'SaveEnquiryController@store')->name('enquiry.store');
     Route::get('/login', 'MemberLoginController@showLoginForm')->name('public.login');
     Route::post('/login', 'MemberLoginController@login');
@@ -92,6 +91,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/member/{member}/reset_password','Admin\AdminMemberController@resetMemberPassword')->name("admin.member.reset_password");
         Route::delete('/member/{member}','Admin\AdminMemberController@delete')->name('admin.member.delete');
 
+        Route::get('/member/view_phone_number_request', 'Admin\AdminMemberController@viewPhoneNumberRequest')->name('admin.member.view_phone_number_request');
+
+
         Route::get('/member/import/member', 'Admin\AdminMemberController@importMember')->name('member.import_member');
         Route::post('/member/import/member', 'Admin\AdminMemberController@uploadMemberProfile');
         Route::get('/member/import/member_profile_photo', 'Admin\AdminMemberController@importProfilePhoto')->name('member.import_profile_photo');
@@ -132,3 +134,6 @@ Route::group(['prefix' => 'admin'], function () {
 Route::get('run_pending_verification', function(){
     return Artisan::call('email:user_verification_pending', []);
 });
+
+//Common Controller
+Route::get('/get_cities', 'AjaxController@getCities')->name('public.get_cities');

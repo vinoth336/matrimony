@@ -11,7 +11,16 @@ $memberHoroscope = $member->horoscope ?? optional();
     .hide {
         display: none;
     }
+
+    .btn-light {
+        background: #fff !important;
+    }
+
+    .bootstrap-select > .dropdown-toggle.bs-placeholder, .bootstrap-select > .dropdown-toggle.bs-placeholder:active, .bootstrap-select > .dropdown-toggle.bs-placeholder:focus, .bootstrap-select > .dropdown-toggle.bs-placeholder:hover {
+        color: #495057 !important;
+    }
 </style>
+
 <section id="page-title" class="page-title-pattern page-title-dark skrollable skrollable-between" style="background: rgb(34,195,90);
 background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(54,127,173,1) 100%);padding:1rem 0;">
 
@@ -573,7 +582,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                         <div class="col-sm-12">
                                                             <div
                                                                 class="form-group{{ $errors->has('State') ? ' has-danger' : '' }}">
-                                                                <select class="selectpicker select form-control" name="state" >
+                                                                <select class="selectpicker select form-control" name="state" id="state" >
                                                                     <option value="">Select State</option>
                                                                     @foreach ($states as $state )
                                                                         <option value="{{ $state->id }}" @if(old('state', $memberLocation->state_id) == $state->id) selected @endif>
@@ -595,7 +604,7 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
                                                         <div class="col-sm-12">
                                                             <div
                                                                 class="form-group{{ $errors->has('last_name') ? ' has-danger' : '' }}">
-                                                                <select class="selectpicker select form-control" name="city" >
+                                                                <select class="selectpicker select form-control" name="city" id="city" >
                                                                     <option value="">Select City</option>
                                                                     @foreach ($cities as $city )
                                                                         <option value="{{ $city->id }}" @if(old('city', $memberLocation->city_id) == $city->id) selected @endif>
@@ -923,7 +932,8 @@ background: linear-gradient(0deg, rgba(34,195,90,0.9752275910364145) 27%, rgba(5
     </div>
 </section>
 @push('js')
-<script>
+    <script type="text/javascript" src="{{ asset('site/js/city_state.js') }}"></script>
+    <script>
     $(document).ready(function() {
         $('.selectsplitter').selectsplitter();
 

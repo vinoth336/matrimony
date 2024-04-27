@@ -150,3 +150,10 @@ function showPhoneNumberRequestStatus($profile)
             '</button>';
     }
 }
+
+function getCitiesBasedState($stateId)
+{
+    $cities = \App\Models\City::where('state_id', $stateId)->get();
+
+    return $cities;
+}
