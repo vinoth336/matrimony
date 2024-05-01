@@ -77,11 +77,12 @@ class MemberController extends Controller
 
     public function getProfiles(Request $request, $member)
     {
-        $profiles = Member::whereNotIn('members.id', [$member->id])
-            ->doesnthave('interest_sent_profiles')
-            ->doesnthave('current_user_interest_received');
+        $profiles = Member::whereNotIn('members.id', [$member->id]);
         if(!$member->isAdminUser()) {
             $profiles->where('gender', '!=', $member->gender);
+        } else {
+            $profiles->doesnthave('interest_sent_profiles')
+                ->doesnthave('current_user_interest_received');
         }
         $profiles->with(['educations' => function ($model) {
                 $model->with('degree');
