@@ -37,7 +37,7 @@
                                     <select class="selectpicker form-control" name="from_age" style="width: 50px">
                                         @for ($i = 20; $i <= 60; $i++)
                                             <option value="{{ $i }}"
-                                                    @if($i == old('from_age', request()->input('from_age') ?? 22)) selected @endif)>{{ $i }}</option>
+                                                    @if($i == old('from_age', request()->input('from_age') ?? 20)) selected @endif)>{{ $i }}</option>
                                         @endfor
                                     </select>
                                 </div>
@@ -47,9 +47,9 @@
                                 <div style="width: 40%; display: inline-block">
 
                                     <select class="selectpicker form-control" name="to_age">
-                                        @for ($i = 22; $i <= 40; $i++)
+                                        @for ($i = 20; $i <= 60; $i++)
                                             <option value="{{ $i }}"
-                                                    @if($i == old('to_age', request()->input('to_age') ?? 40)) selected @endif>{{ $i }}</option>
+                                                    @if($i == old('to_age', request()->input('to_age') ?? 60)) selected @endif>{{ $i }}</option>
                                         @endfor
                                     </select>
                                 </div>
