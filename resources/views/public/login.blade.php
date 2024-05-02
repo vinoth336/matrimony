@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-12 form-group">
                                     <label for="login-form-username">Phone Number:</label>
-                                    <input type="text" id="login-form-username" name="username" value=""
+                                    <input type="text" id="login-form-username" name="username"
                                         class="form-control" />
                                     <span class="text-danger">
                                         @error('username')
@@ -45,8 +45,10 @@
                                 </div>
                                 <div class="col-12 form-group">
                                     <label for="login-form-password">Password:</label>
-                                    <input type="password" id="login-form-password" name="password" value=""
+                                    <input type="password" id="login-form-password" name="password"
                                         class="form-control" />
+                                    <input type="checkbox" onclick="showPassword()" class="form-check-sign mt-3 mr-2" id="showPasswordCheckbox">
+                                    <label class="d-inline" for="showPasswordCheckbox">Show Password</label>
                                     <span class="text-danger">
                                         @error('password')
                                             {{ $message }}
@@ -66,5 +68,14 @@
         </div>
     </section>
 
-
+    <script>
+        function showPassword() {
+            var x = document.getElementById("login-form-password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 @endsection
