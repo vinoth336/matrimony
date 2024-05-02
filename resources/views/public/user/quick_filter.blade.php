@@ -45,7 +45,7 @@
                                 <label class="col-sm-12 col-form-label font-normal">{{ __('Age') }}</label>
                                 <div class="col-sm-5">
                                 <select class="selectpicker form-control" name="from_age">
-                                    @for ($i = 22; $i <= 40; $i++)
+                                    @for ($i = 20; $i <= 60; $i++)
                                             <option value="{{ $i }}" @if($i == old('from_age', request()->input('from_age') ?? 22)) selected @endif)>{{ $i }}</option>
                                     @endfor
                                 </select>

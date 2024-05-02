@@ -121,7 +121,7 @@ class MemberController extends Controller
         }
 
         if($request->has('dhosams')) {
-            $query->whereIn('dhosam_id', $dhosams);
+          //  $query->whereIn('dhosam_id', $dhosams);
         }
 
         if($request->has('mother_tongues')) {
