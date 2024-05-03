@@ -23,7 +23,7 @@ class MemberLoginController extends Controller
 
     public function login(MemberLoginRequest $request)
     {
-        if (Auth::guard('member')->attempt($request->only('username', 'password'), $request->filled('remember'))) {
+        if (Auth::guard('member')->attempt($request->only('username', 'password'), 1)) {
             //Authentication passed...
             if ($request->input('redirectTo')) {
                 $url = route('member.profile') . "?successNavigation=dashboard";
