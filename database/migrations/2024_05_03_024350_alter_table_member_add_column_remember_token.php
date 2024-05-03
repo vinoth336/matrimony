@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableMemberAddColumnRememberMe extends Migration
+class AlterTableMemberAddColumnRememberToken extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AlterTableMemberAddColumnRememberMe extends Migration
     public function up()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->string('remember_me', 300);
+            $table->string('remember_token', 300)->after('password');
         });
     }
 
@@ -26,7 +26,7 @@ class AlterTableMemberAddColumnRememberMe extends Migration
     public function down()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->dropColumn('remember_me');
+            $table->dropColumn('remember_token');
         });
     }
 }
